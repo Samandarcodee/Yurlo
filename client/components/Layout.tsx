@@ -10,11 +10,11 @@ export function Layout({ children }: LayoutProps) {
   const location = useLocation();
   
   const navItems = [
-    { path: "/", icon: Home, label: "Home" },
-    { path: "/add-meal", icon: Camera, label: "Add Meal" },
-    { path: "/assistant", icon: Brain, label: "AI Assistant" },
-    { path: "/analytics", icon: BarChart3, label: "Analytics" },
-    { path: "/settings", icon: Settings, label: "Settings" },
+    { path: "/", icon: Home, label: "Bosh sahifa" },
+    { path: "/add-meal", icon: Camera, label: "Ovqat qo'shish" },
+    { path: "/assistant", icon: Brain, label: "AI Yordamchi" },
+    { path: "/analytics", icon: BarChart3, label: "Tahlil" },
+    { path: "/settings", icon: Settings, label: "Sozlamalar" },
   ];
 
   return (
