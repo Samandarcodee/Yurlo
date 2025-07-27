@@ -28,13 +28,13 @@ export default function Index() {
     <div className="min-h-screen bg-gradient-to-br from-mint-50 via-white to-water-50">
       <div className="px-4 py-6 sm:px-6 lg:px-8 xl:px-12 space-y-6 sm:space-y-8 max-w-7xl mx-auto">
         {/* Header Greeting */}
-        <div className="text-center space-y-3 animate-fade-in-up pt-4">
-          <div className="inline-block p-3 bg-gradient-to-r from-mint-100 to-water-100 rounded-full mb-2">
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-mint-600 to-water-600 bg-clip-text text-transparent">
+        <div className="text-center space-y-2 sm:space-y-3 animate-fade-in-up pt-2 sm:pt-4">
+          <div className="inline-block p-2 sm:p-3 bg-gradient-to-r from-mint-100 to-water-100 rounded-full mb-1 sm:mb-2">
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-mint-600 to-water-600 bg-clip-text text-transparent">
               Salom, {userData.name} 👋
             </h1>
           </div>
-          <p className="text-muted-foreground text-sm font-medium tracking-wide">
+          <p className="text-muted-foreground text-xs sm:text-sm font-medium tracking-wide px-4">
             {new Date().toLocaleDateString('uz-UZ', {
               weekday: 'long',
               year: 'numeric',
