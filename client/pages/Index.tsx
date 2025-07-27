@@ -26,7 +26,7 @@ export default function Index() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-mint-50 via-white to-water-50">
-      <div className="p-6 space-y-8">
+      <div className="px-4 py-6 sm:px-6 lg:px-8 xl:px-12 space-y-6 sm:space-y-8 max-w-7xl mx-auto">
         {/* Header Greeting */}
         <div className="text-center space-y-3 animate-fade-in-up pt-4">
           <div className="inline-block p-3 bg-gradient-to-r from-mint-100 to-water-100 rounded-full mb-2">
