@@ -120,14 +120,14 @@ export default function Index() {
           <CardContent className="pt-6">
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-2">
-                <Droplets className="h-5 w-5 text-accent-500" />
+                <Droplets className="h-5 w-5 text-water-500" />
                 <span className="font-medium">Suv Iste'moli</span>
               </div>
-              <Badge variant="secondary" className="bg-accent-100 text-accent-700">
+              <Badge variant="secondary" className="bg-water-100 text-water-700">
                 {userData.waterIntake}/{userData.waterTarget} stakan
               </Badge>
             </div>
-            <Progress value={waterProgress} className="h-2 bg-accent-100" />
+            <Progress value={waterProgress} className="h-2 bg-water-100" />
             <p className="text-sm text-muted-foreground mt-2">
               {waterProgress >= 100 ? "Ajoyib! Siz kunlik maqsadingizga erishdingiz!" :
                `Maqsadga erishish uchun yana ${userData.waterTarget - userData.waterIntake} stakan kerak`}
