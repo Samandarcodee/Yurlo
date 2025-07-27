@@ -46,7 +46,7 @@ export function Layout({ children }: LayoutProps) {
                 )} />
                 <span className={cn(
                   "text-xs font-medium",
-                  isActive && "text-primary-foreground"
+                  isActive && "text-white"
                 )}>
                   {label}
                 </span>
