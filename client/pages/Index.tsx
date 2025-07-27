@@ -140,14 +140,14 @@ export default function Index() {
           <CardContent className="pt-6">
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-2">
-                <Activity className="h-5 w-5 text-health-500" />
+                <Activity className="h-5 w-5 text-sunshine-500" />
                 <span className="font-medium">Qadamlar</span>
               </div>
-              <Badge variant="secondary" className="bg-health-100 text-health-700">
+              <Badge variant="secondary" className="bg-sunshine-100 text-sunshine-700">
                 {userData.stepsToday.toLocaleString()}/{userData.stepsTarget.toLocaleString()}
               </Badge>
             </div>
-            <Progress value={stepsProgress} className="h-2 bg-health-100" />
+            <Progress value={stepsProgress} className="h-2 bg-sunshine-100" />
             <p className="text-sm text-muted-foreground mt-2">
               {stepsProgress >= 100 ? "Zo'r! Siz kunlik qadamlar maqsadini oshib ketdingiz!" :
                `Maqsadga erishish uchun yana ${(userData.stepsTarget - userData.stepsToday).toLocaleString()} qadam kerak`}
@@ -160,10 +160,10 @@ export default function Index() {
           <CardContent className="pt-6">
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-2">
-                <TrendingUp className="h-5 w-5 text-health-500" />
+                <TrendingUp className="h-5 w-5 text-mint-500" />
                 <span className="font-medium">Vazn Taraqqiyoti</span>
               </div>
-              <Badge variant="secondary" className="bg-health-100 text-health-700">
+              <Badge variant="secondary" className="bg-mint-100 text-mint-700">
                 {userData.currentWeight} kg
               </Badge>
             </div>
@@ -171,7 +171,7 @@ export default function Index() {
               <span>Hozirgi: {userData.currentWeight} kg</span>
               <span>Maqsad: {userData.targetWeight} kg</span>
             </div>
-            <p className="text-sm text-health-600 mt-2 font-medium">
+            <p className="text-sm text-mint-600 mt-2 font-medium">
               {userData.currentWeight > userData.targetWeight ?
                 `${(userData.currentWeight - userData.targetWeight).toFixed(1)} kg kamaytirishingiz kerak` :
                 "Maqsadga erishdingiz! 🎉"}
