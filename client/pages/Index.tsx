@@ -98,13 +98,13 @@ export default function Index() {
           </Link>
 
           <div className="grid grid-cols-2 gap-3">
-            <Button variant="outline" className="h-14 flex-col gap-1 border-accent-200 hover:bg-accent-50">
-              <Droplets className="h-5 w-5 text-accent-500" />
+            <Button variant="outline" className="h-14 flex-col gap-1 border-water-200 hover:bg-water-50">
+              <Droplets className="h-5 w-5 text-water-500" />
               <span className="text-sm font-medium">Suv Qo'shish</span>
             </Button>
 
-            <Button variant="outline" className="h-14 flex-col gap-1 border-health-200 hover:bg-health-50">
-              <Activity className="h-5 w-5 text-health-500" />
+            <Button variant="outline" className="h-14 flex-col gap-1 border-sunshine-200 hover:bg-sunshine-50">
+              <Activity className="h-5 w-5 text-sunshine-500" />
               <span className="text-sm font-medium">Faoliyat Qo'shish</span>
             </Button>
           </div>
