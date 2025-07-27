@@ -12,16 +12,16 @@ export default function Assistant() {
       </div>
 
       {/* Coming Soon Card */}
-      <Card className="bg-gradient-to-r from-health-100 to-health-50 border-health-200">
+      <Card className="bg-gradient-to-r from-water-100 to-water-50 border-water-200">
         <CardContent className="pt-6 text-center space-y-4">
           <div className="flex justify-center">
-            <div className="p-4 bg-health-200 rounded-full">
-              <MessageCircle className="h-8 w-8 text-health-700" />
+            <div className="p-4 bg-water-200 rounded-full">
+              <MessageCircle className="h-8 w-8 text-water-700" />
             </div>
           </div>
           <div>
-            <h2 className="text-xl font-semibold text-health-800 mb-2">Tez Orada!</h2>
-            <p className="text-health-600">
+            <h2 className="text-xl font-semibold text-water-800 mb-2">Tez Orada!</h2>
+            <p className="text-water-600">
               Sizning shaxsiy AI sog'liq yordamchingiz moslashtirilgan maslahatlar beradi,
               ovqatlanish bo'yicha savollaringizga javob beradi va sog'liq maqsadlaringizga erishishga yordam beradi.
             </p>
