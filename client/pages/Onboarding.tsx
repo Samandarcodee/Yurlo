@@ -66,7 +66,7 @@ export default function Onboarding() {
       const age = new Date().getFullYear() - parseInt(formData.birthYear);
       const heightNum = parseFloat(formData.height);
       const weightNum = parseFloat(formData.weight);
-      
+
       let bmr = 0;
       if (formData.gender === "male") {
         bmr = 88.362 + (13.397 * weightNum) + (4.799 * heightNum) - (5.677 * age);
@@ -92,24 +92,28 @@ export default function Onboarding() {
         createdAt: new Date().toISOString()
       };
 
-      // Backend'ga yuborish
-      const response = await fetch('/api/user/profile', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(userData),
-      });
+      // User context'ni yangilash (localStorage avtomatik yangilanadi)
+      updateUser(userData);
 
-      if (response.ok) {
-        // localStorage'ga saqlash
-        localStorage.setItem('userProfile', JSON.stringify(userData));
-        navigate('/');
-      } else {
-        console.error('Ma\'lumotlar saqlanmadi');
+      // Backend'ga yuborish (optional, agar backend mavjud bo'lsa)
+      try {
+        await fetch('/api/user/profile', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-telegram-id': 'demo_user_123'
+          },
+          body: JSON.stringify(userData),
+        });
+      } catch (backendError) {
+        console.log('Backend mavjud emas, localStorage ishlatiladi:', backendError);
       }
+
+      // Bosh sahifaga o'tish
+      navigate('/', { replace: true });
     } catch (error) {
       console.error('Xatolik:', error);
+      alert('Ma\'lumotlar saqlanmadi. Iltimos, qayta urinib ko\'ring.');
     }
     setLoading(false);
   };
