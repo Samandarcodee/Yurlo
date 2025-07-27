@@ -179,12 +179,12 @@ export default function AddMeal() {
 
       {/* AI Analysis Results */}
       {aiAnalysis && (
-        <Card className="bg-gradient-to-r from-health-100 to-health-50 border-health-200">
+        <Card className="bg-gradient-to-r from-mint-100 to-mint-50 border-mint-200">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-health-800">
+            <CardTitle className="flex items-center gap-2 text-mint-800">
               <CheckCircle className="h-5 w-5" />
               AI Tahlil Natijalari
-              <Badge variant="secondary" className="ml-auto bg-health-200 text-health-800">
+              <Badge variant="secondary" className="ml-auto bg-mint-200 text-mint-800">
                 {aiAnalysis.confidence}% ishonch
               </Badge>
             </CardTitle>
@@ -192,25 +192,25 @@ export default function AddMeal() {
           <CardContent className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div className="text-center p-3 bg-white/60 rounded-lg">
-                <p className="text-2xl font-bold text-health-800">{aiAnalysis.calories}</p>
-                <p className="text-sm text-health-600">Kaloriya</p>
+                <p className="text-2xl font-bold text-mint-800">{aiAnalysis.calories}</p>
+                <p className="text-sm text-mint-600">Kaloriya</p>
               </div>
               <div className="text-center p-3 bg-white/60 rounded-lg">
-                <p className="text-2xl font-bold text-health-800">{aiAnalysis.protein}g</p>
-                <p className="text-sm text-health-600">Oqsil</p>
+                <p className="text-2xl font-bold text-mint-800">{aiAnalysis.protein}g</p>
+                <p className="text-sm text-mint-600">Oqsil</p>
               </div>
               <div className="text-center p-3 bg-white/60 rounded-lg">
-                <p className="text-2xl font-bold text-health-800">{aiAnalysis.carbs}g</p>
-                <p className="text-sm text-health-600">Uglevodlar</p>
+                <p className="text-2xl font-bold text-mint-800">{aiAnalysis.carbs}g</p>
+                <p className="text-sm text-mint-600">Uglevodlar</p>
               </div>
               <div className="text-center p-3 bg-white/60 rounded-lg">
-                <p className="text-2xl font-bold text-health-800">{aiAnalysis.fat}g</p>
-                <p className="text-sm text-health-600">Yog'</p>
+                <p className="text-2xl font-bold text-mint-800">{aiAnalysis.fat}g</p>
+                <p className="text-sm text-mint-600">Yog'</p>
               </div>
             </div>
 
             {/* Meal Details Form */}
-            <div className="space-y-4 pt-4 border-t border-health-200">
+            <div className="space-y-4 pt-4 border-t border-mint-200">
               <div className="space-y-2">
                 <Label htmlFor="meal-name-edit">Ovqat Nomi</Label>
                 <Input
