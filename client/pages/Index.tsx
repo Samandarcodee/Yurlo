@@ -9,13 +9,13 @@ export default function Index() {
   // Mock data - in real app this would come from state/API
   const userData = {
     name: "Samandar",
-    caloriesConsumed: 1,247,
-    caloriesTarget: 2,100,
+    caloriesConsumed: 1247,
+    caloriesTarget: 2100,
     caloriesBurned: 312,
     waterIntake: 6,
     waterTarget: 8,
-    stepsToday: 7,234,
-    stepsTarget: 10,000,
+    stepsToday: 7234,
+    stepsTarget: 10000,
     currentWeight: 72.5,
     targetWeight: 70.0,
   };
