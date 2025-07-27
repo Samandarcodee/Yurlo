@@ -103,8 +103,8 @@ export default function Index() {
               <span className="text-sm font-medium">Suv Qo'shish</span>
             </Button>
 
-            <Button variant="outline" className="h-14 flex-col gap-1 border-sunshine-200 hover:bg-sunshine-50">
-              <Activity className="h-5 w-5 text-sunshine-500" />
+            <Button variant="outline" className="h-14 flex-col gap-1 border-mint-200 hover:bg-mint-50">
+              <Activity className="h-5 w-5 text-mint-500" />
               <span className="text-sm font-medium">Faoliyat Qo'shish</span>
             </Button>
           </div>
