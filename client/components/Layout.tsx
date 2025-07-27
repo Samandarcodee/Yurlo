@@ -40,12 +40,12 @@ export function Layout({ children }: LayoutProps) {
                     : "text-mint-600 hover:text-mint-800 hover:bg-mint-100/70 hover:scale-105"
                 )}
               >
-                <Icon size={20} className={cn(
-                  "transition-transform duration-200",
-                  isActive && "scale-110"
+                <Icon size={22} className={cn(
+                  "transition-all duration-300",
+                  isActive && "scale-125 drop-shadow-sm"
                 )} />
                 <span className={cn(
-                  "text-xs font-medium",
+                  "text-xs font-semibold tracking-wide",
                   isActive && "text-white"
                 )}>
                   {label}
