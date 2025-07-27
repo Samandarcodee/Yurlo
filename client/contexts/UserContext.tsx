@@ -142,9 +142,9 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
 // Custom hook: foydalanuvchi birinchi marta kirganda onboarding'ga yo'naltirish
 export const useOnboardingCheck = () => {
   const { user, isLoading, isFirstTime } = useUser();
-  
+
   return {
-    shouldShowOnboarding: !isLoading && isFirstTime && !user,
+    shouldShowOnboarding: !isLoading && (isFirstTime || !user),
     isReady: !isLoading
   };
 };
