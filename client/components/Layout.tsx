@@ -25,8 +25,8 @@ export function Layout({ children }: LayoutProps) {
       </main>
       
       {/* Bottom Navigation */}
-      <nav className="fixed bottom-0 left-0 right-0 bg-card border-t border-border/40 backdrop-blur-lg bg-card/90">
-        <div className="flex items-center justify-around px-2 py-2">
+      <nav className="fixed bottom-0 left-0 right-0 bg-card border-t border-mint-200 backdrop-blur-lg bg-mint-50/90">
+        <div className="flex items-center justify-around px-2 py-2 text-mint-700">
           {navItems.map(({ path, icon: Icon, label }) => {
             const isActive = location.pathname === path;
             return (
