@@ -24,6 +24,7 @@ interface OnboardingData {
 
 export default function Onboarding() {
   const navigate = useNavigate();
+  const { updateUser } = useUser();
   const [currentStep, setCurrentStep] = useState(1);
   const [loading, setLoading] = useState(false);
   
