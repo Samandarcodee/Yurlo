@@ -92,8 +92,12 @@ export default function Onboarding() {
         createdAt: new Date().toISOString()
       };
 
+      console.log('Onboarding completed, user data:', userData);
+
       // User context'ni yangilash (localStorage avtomatik yangilanadi)
       updateUser(userData);
+
+      console.log('User context updated, navigating to home...');
 
       // Backend'ga yuborish (optional, agar backend mavjud bo'lsa)
       try {
@@ -105,11 +109,13 @@ export default function Onboarding() {
           },
           body: JSON.stringify(userData),
         });
+        console.log('Data sent to backend successfully');
       } catch (backendError) {
         console.log('Backend mavjud emas, localStorage ishlatiladi:', backendError);
       }
 
       // Bosh sahifaga o'tish
+      console.log('Navigating to home page...');
       navigate('/', { replace: true });
     } catch (error) {
       console.error('Xatolik:', error);
