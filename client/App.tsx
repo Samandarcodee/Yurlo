@@ -12,6 +12,8 @@ import AddMeal from "./pages/AddMeal";
 import Assistant from "./pages/Assistant";
 import Analytics from "./pages/Analytics";
 import Settings from "./pages/Settings";
+import Onboarding from "./pages/Onboarding";
+import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
