@@ -93,6 +93,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
   }, []);
 
   const updateUser = (userData: UserProfile) => {
+    console.log('Updating user data:', userData);
     setUser(userData);
     localStorage.setItem('userProfile', JSON.stringify(userData));
     setIsFirstTime(false);
