@@ -14,7 +14,7 @@ export function Layout({ children }: LayoutProps) {
     { path: "/add-meal", icon: Camera, label: "Ovqat qo'shish" },
     { path: "/assistant", icon: Brain, label: "AI Yordamchi" },
     { path: "/analytics", icon: BarChart3, label: "Tahlil" },
-    { path: "/settings", icon: Settings, label: "Sozlamalar" },
+    { path: "/profile", icon: Settings, label: "Profil" },
   ];
 
   return (
