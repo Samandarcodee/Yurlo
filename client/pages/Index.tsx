@@ -92,37 +92,37 @@ export default function Index() {
         </Card>
 
         {/* Quick Actions */}
-        <div className="space-y-4 animate-fade-in-up">
-          <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
-            <div className="w-1 h-6 bg-gradient-to-b from-mint-500 to-water-500 rounded-full"></div>
+        <div className="space-y-3 sm:space-y-4 animate-fade-in-up">
+          <h2 className="text-lg sm:text-xl font-bold text-foreground flex items-center gap-2">
+            <div className="w-1 h-5 sm:h-6 bg-gradient-to-b from-mint-500 to-water-500 rounded-full"></div>
             Tezkor Amallar
           </h2>
-          <div className="grid grid-cols-1 gap-4">
+          <div className="grid grid-cols-1 gap-3 sm:gap-4">
             <Link to="/add-meal">
-              <Button className="w-full h-16 bg-gradient-to-r from-mint-500 to-mint-600 hover:from-mint-600 hover:to-mint-700 text-white shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-200 justify-start text-left rounded-2xl">
-                <div className="p-2 bg-white/20 rounded-xl mr-4">
-                  <Plus className="h-6 w-6" />
+              <Button className="w-full h-14 sm:h-16 lg:h-18 bg-gradient-to-r from-mint-500 to-mint-600 hover:from-mint-600 hover:to-mint-700 text-white shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-200 justify-start text-left rounded-xl sm:rounded-2xl">
+                <div className="p-1.5 sm:p-2 bg-white/20 rounded-lg sm:rounded-xl mr-3 sm:mr-4">
+                  <Plus className="h-5 w-5 sm:h-6 sm:w-6" />
                 </div>
                 <div>
-                  <p className="font-bold text-lg">Ovqat Qo'shish</p>
-                  <p className="text-sm opacity-90">Rasm yuklang yoki ovqat nomini kiriting</p>
+                  <p className="font-bold text-base sm:text-lg">Ovqat Qo'shish</p>
+                  <p className="text-xs sm:text-sm opacity-90">Rasm yuklang yoki ovqat nomini kiriting</p>
                 </div>
               </Button>
             </Link>
 
-            <div className="grid grid-cols-2 gap-4">
-              <Button variant="outline" className="h-16 flex-col gap-2 border-water-200 hover:bg-water-50 rounded-2xl card-shadow hover:shadow-lg transition-all duration-200 hover:scale-105">
-                <div className="p-2 bg-water-100 rounded-xl">
-                  <Droplets className="h-6 w-6 text-water-600" />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+              <Button variant="outline" className="h-14 sm:h-16 flex-col gap-1 sm:gap-2 border-water-200 hover:bg-water-50 rounded-xl sm:rounded-2xl card-shadow hover:shadow-lg transition-all duration-200 hover:scale-105">
+                <div className="p-1.5 sm:p-2 bg-water-100 rounded-lg sm:rounded-xl">
+                  <Droplets className="h-5 w-5 sm:h-6 sm:w-6 text-water-600" />
                 </div>
-                <span className="text-sm font-semibold text-water-700">Suv Qo'shish</span>
+                <span className="text-xs sm:text-sm font-semibold text-water-700">Suv Qo'shish</span>
               </Button>
 
-              <Button variant="outline" className="h-16 flex-col gap-2 border-mint-200 hover:bg-mint-50 rounded-2xl card-shadow hover:shadow-lg transition-all duration-200 hover:scale-105">
-                <div className="p-2 bg-mint-100 rounded-xl">
-                  <Activity className="h-6 w-6 text-mint-600" />
+              <Button variant="outline" className="h-14 sm:h-16 flex-col gap-1 sm:gap-2 border-mint-200 hover:bg-mint-50 rounded-xl sm:rounded-2xl card-shadow hover:shadow-lg transition-all duration-200 hover:scale-105">
+                <div className="p-1.5 sm:p-2 bg-mint-100 rounded-lg sm:rounded-xl">
+                  <Activity className="h-5 w-5 sm:h-6 sm:w-6 text-mint-600" />
                 </div>
-                <span className="text-sm font-semibold text-mint-700">Faoliyat Qo'shish</span>
+                <span className="text-xs sm:text-sm font-semibold text-mint-700">Faoliyat Qo'shish</span>
               </Button>
             </div>
           </div>
