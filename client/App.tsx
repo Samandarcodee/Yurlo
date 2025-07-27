@@ -19,25 +19,58 @@ import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
+const AppRoutes = () => {
+  const { shouldShowOnboarding, isReady } = useOnboardingCheck();
+
+  if (!isReady) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-mint-50 via-white to-water-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="inline-block p-4 bg-mint-100 rounded-full mb-4">
+            <div className="animate-spin w-8 h-8 border-4 border-mint-600 border-t-transparent rounded-full"></div>
+          </div>
+          <p className="text-mint-600 font-medium">Yuklanmoqda...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Agar foydalanuvchi birinchi marta kirsa, onboarding'ga yo'naltirish
+  if (shouldShowOnboarding) {
+    return (
+      <Routes>
+        <Route path="/onboarding" element={<Onboarding />} />
+        <Route path="*" element={<Navigate to="/onboarding" replace />} />
+      </Routes>
+    );
+  }
+
+  return (
+    <Layout>
+      <Routes>
+        <Route path="/" element={<Index />} />
+        <Route path="/onboarding" element={<Onboarding />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/add-meal" element={<AddMeal />} />
+        <Route path="/assistant" element={<Assistant />} />
+        <Route path="/analytics" element={<Analytics />} />
+        <Route path="/settings" element={<Settings />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </Layout>
+  );
+};
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <BrowserRouter>
-        <Layout>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/onboarding" element={<Onboarding />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/add-meal" element={<AddMeal />} />
-            <Route path="/assistant" element={<Assistant />} />
-            <Route path="/analytics" element={<Analytics />} />
-            <Route path="/settings" element={<Settings />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </Layout>
-      </BrowserRouter>
+      <UserProvider>
+        <BrowserRouter>
+          <AppRoutes />
+        </BrowserRouter>
+      </UserProvider>
     </TooltipProvider>
   </QueryClientProvider>
 );
