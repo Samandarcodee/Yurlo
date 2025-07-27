@@ -12,16 +12,16 @@ export default function Analytics() {
       </div>
 
       {/* Coming Soon Card */}
-      <Card className="bg-gradient-to-r from-health-100 to-health-50 border-health-200">
+      <Card className="bg-gradient-to-r from-sunshine-100 to-sunshine-50 border-sunshine-200">
         <CardContent className="pt-6 text-center space-y-4">
           <div className="flex justify-center">
-            <div className="p-4 bg-health-200 rounded-full">
-              <BarChart3 className="h-8 w-8 text-health-700" />
+            <div className="p-4 bg-sunshine-200 rounded-full">
+              <BarChart3 className="h-8 w-8 text-sunshine-700" />
             </div>
           </div>
           <div>
-            <h2 className="text-xl font-semibold text-health-800 mb-2">Kengaytirilgan Tahlil Tez Orada!</h2>
-            <p className="text-health-600">
+            <h2 className="text-xl font-semibold text-sunshine-800 mb-2">Kengaytirilgan Tahlil Tez Orada!</h2>
+            <p className="text-sunshine-600">
               Sog'liq yo'lingizni ko'rsatish uchun batafsil grafiklar, taraqqiyot kuzatuvi
               va tushunchalar bu yerda mavjud bo'ladi.
             </p>
