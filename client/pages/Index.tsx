@@ -129,9 +129,9 @@ export default function Index() {
         </div>
 
         {/* Progress Tracking */}
-        <div className="space-y-4 animate-fade-in-up">
-          <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
-            <div className="w-1 h-6 bg-gradient-to-b from-mint-500 to-water-500 rounded-full"></div>
+        <div className="space-y-3 sm:space-y-4 animate-fade-in-up">
+          <h2 className="text-lg sm:text-xl font-bold text-foreground flex items-center gap-2">
+            <div className="w-1 h-5 sm:h-6 bg-gradient-to-b from-mint-500 to-water-500 rounded-full"></div>
             Bugungi Taraqqiyot
           </h2>
 
