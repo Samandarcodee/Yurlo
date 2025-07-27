@@ -135,4 +135,14 @@
       outline-offset: 2px;
     }
   }
+
+  /* Prevent any yellow colors */
+  * {
+    color: inherit !important;
+  }
+
+  nav {
+    background-color: rgba(167, 243, 208, 0.1) !important;
+    border-color: rgb(167, 243, 208) !important;
+  }
 }
