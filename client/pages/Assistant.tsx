@@ -37,7 +37,7 @@ export default function Assistant() {
           <Card>
             <CardContent className="pt-6">
               <div className="flex items-start gap-3">
-                <Lightbulb className="h-5 w-5 text-amber-500 mt-1" />
+                <Lightbulb className="h-5 w-5 text-mint-500 mt-1" />
                 <div>
                   <h3 className="font-medium">Shaxsiy Maslahatlar</h3>
                   <p className="text-sm text-muted-foreground">
