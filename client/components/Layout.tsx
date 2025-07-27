@@ -35,9 +35,9 @@ export function Layout({ children }: LayoutProps) {
                 to={path}
                 className={cn(
                   "flex flex-col items-center gap-1 px-3 py-2 rounded-xl transition-all duration-200",
-                  isActive 
-                    ? "bg-primary text-primary-foreground shadow-lg" 
-                    : "text-muted-foreground hover:text-foreground hover:bg-accent/50"
+                  isActive
+                    ? "bg-mint-500 text-white shadow-lg"
+                    : "text-mint-600 hover:text-mint-800 hover:bg-mint-100/50"
                 )}
               >
                 <Icon size={20} className={cn(
