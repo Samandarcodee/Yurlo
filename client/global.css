@@ -9,14 +9,14 @@
    * A different format will require also updating the theme in tailwind.config.ts.
   */
   :root {
-    --background: 248 250 252;
-    --foreground: 31 41 55;
+    --background: 210 20% 98%;
+    --foreground: 214 32% 17%;
 
-    --card: 255 255 255;
-    --card-foreground: 31 41 55;
+    --card: 0 0% 100%;
+    --card-foreground: 214 32% 17%;
 
-    --popover: 255 255 255;
-    --popover-foreground: 31 41 55;
+    --popover: 0 0% 100%;
+    --popover-foreground: 214 32% 17%;
 
     --primary: 158 64% 80%;
     --primary-foreground: 140 62% 33%;
