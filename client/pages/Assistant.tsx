@@ -1,8 +1,19 @@
-import { MessageCircle, Lightbulb, Heart, Zap } from "lucide-react";
-import { Card, CardContent } from "@/components/ui/card";
+import { useEffect } from "react";
+import { MessageCircle, Lightbulb, Heart, Zap, Droplets, Utensils, Activity } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { useUser, useAIRecommendations } from "@/contexts/UserContext";
 
 export default function Assistant() {
+  const { user } = useUser();
+  const { recommendations, loading, fetchRecommendations } = useAIRecommendations();
+
+  useEffect(() => {
+    if (user) {
+      fetchRecommendations();
+    }
+  }, [user]);
   return (
     <div className="p-4 space-y-6">
       {/* Header */}
