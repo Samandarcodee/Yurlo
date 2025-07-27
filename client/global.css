@@ -102,6 +102,7 @@
 
   body {
     @apply bg-background text-foreground;
+    background-color: rgb(248 250 252) !important;
     -webkit-tap-highlight-color: transparent;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
