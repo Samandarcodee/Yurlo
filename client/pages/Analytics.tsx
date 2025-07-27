@@ -8,7 +8,9 @@ export default function Analytics() {
       {/* Header */}
       <div className="text-center space-y-2">
         <h1 className="text-2xl font-bold text-foreground">Tahlil</h1>
-        <p className="text-muted-foreground">Vaqt davomida sog'ligingiz taraqqiyotini kuzating</p>
+        <p className="text-muted-foreground">
+          Vaqt davomida sog'ligingiz taraqqiyotini kuzating
+        </p>
       </div>
 
       {/* Coming Soon Card */}
@@ -20,10 +22,12 @@ export default function Analytics() {
             </div>
           </div>
           <div>
-            <h2 className="text-xl font-semibold text-mint-800 mb-2">Kengaytirilgan Tahlil Tez Orada!</h2>
+            <h2 className="text-xl font-semibold text-mint-800 mb-2">
+              Kengaytirilgan Tahlil Tez Orada!
+            </h2>
             <p className="text-mint-600">
-              Sog'liq yo'lingizni ko'rsatish uchun batafsil grafiklar, taraqqiyot kuzatuvi
-              va tushunchalar bu yerda mavjud bo'ladi.
+              Sog'liq yo'lingizni ko'rsatish uchun batafsil grafiklar,
+              taraqqiyot kuzatuvi va tushunchalar bu yerda mavjud bo'ladi.
             </p>
           </div>
         </CardContent>
@@ -31,7 +35,9 @@ export default function Analytics() {
 
       {/* Features Preview */}
       <div className="space-y-3">
-        <h2 className="text-lg font-semibold text-foreground">Nimani Ko'rasiz</h2>
+        <h2 className="text-lg font-semibold text-foreground">
+          Nimani Ko'rasiz
+        </h2>
 
         <div className="grid gap-3">
           <Card>
@@ -39,9 +45,12 @@ export default function Analytics() {
               <div className="flex items-start gap-3">
                 <TrendingUp className="h-5 w-5 text-green-500 mt-1" />
                 <div>
-                  <h3 className="font-medium">Vazn va Kaloriya Tendensiyalari</h3>
+                  <h3 className="font-medium">
+                    Vazn va Kaloriya Tendensiyalari
+                  </h3>
                   <p className="text-sm text-muted-foreground">
-                    Iste'mol qilingan va yoqilgan kaloriyalar hamda vazn o'zgarishlarini ko'rsatuvchi vizual grafiklar
+                    Iste'mol qilingan va yoqilgan kaloriyalar hamda vazn
+                    o'zgarishlarini ko'rsatuvchi vizual grafiklar
                   </p>
                 </div>
               </div>
@@ -55,7 +64,8 @@ export default function Analytics() {
                 <div>
                   <h3 className="font-medium">Haftalik va Oylik Hisobotlar</h3>
                   <p className="text-sm text-muted-foreground">
-                    Vaqt davomida sog'liq ko'rsatkichlaringizning to'liq xulosalari
+                    Vaqt davomida sog'liq ko'rsatkichlaringizning to'liq
+                    xulosalari
                   </p>
                 </div>
               </div>
@@ -80,7 +90,8 @@ export default function Analytics() {
 
       <div className="text-center pt-4">
         <p className="text-sm text-muted-foreground">
-          Batafsil tahlilni ochish uchun ovqat va faoliyatlaringizni qayd qilishda davom eting! 📊
+          Batafsil tahlilni ochish uchun ovqat va faoliyatlaringizni qayd
+          qilishda davom eting! 📊
         </p>
       </div>
     </div>

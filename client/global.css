@@ -111,7 +111,9 @@
   }
 
   /* Enable text selection for inputs and content areas */
-  input, textarea, [contenteditable] {
+  input,
+  textarea,
+  [contenteditable] {
     -webkit-user-select: text;
     user-select: text;
   }
@@ -123,7 +125,9 @@
   }
 
   /* Prevent zoom on double tap */
-  button, a, [role="button"] {
+  button,
+  a,
+  [role="button"] {
     touch-action: manipulation;
   }
 
@@ -158,21 +162,27 @@
   }
 
   .gradient-mint {
-    background: linear-gradient(135deg,
+    background: linear-gradient(
+      135deg,
       rgba(204, 251, 241, 0.8) 0%,
       rgba(167, 243, 208, 0.9) 50%,
-      rgba(110, 231, 183, 0.8) 100%);
+      rgba(110, 231, 183, 0.8) 100%
+    );
   }
 
   .gradient-water {
-    background: linear-gradient(135deg,
+    background: linear-gradient(
+      135deg,
       rgba(224, 242, 254, 0.8) 0%,
       rgba(186, 230, 253, 0.9) 50%,
-      rgba(125, 211, 252, 0.8) 100%);
+      rgba(125, 211, 252, 0.8) 100%
+    );
   }
 
   .hover-lift {
-    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    transition:
+      transform 0.2s ease-in-out,
+      box-shadow 0.2s ease-in-out;
   }
 
   .hover-lift:hover {

@@ -6,8 +6,23 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { User, Calendar, Ruler, Weight, Activity, Target, Clock, Globe } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  User,
+  Calendar,
+  Ruler,
+  Weight,
+  Activity,
+  Target,
+  Clock,
+  Globe,
+} from "lucide-react";
 
 interface OnboardingData {
   name: string;
@@ -27,7 +42,7 @@ export default function Onboarding() {
   const { updateUser } = useUser();
   const [currentStep, setCurrentStep] = useState(1);
   const [loading, setLoading] = useState(false);
-  
+
   const [formData, setFormData] = useState<OnboardingData>({
     name: "Samandar", // Telegramdan olinadi
     gender: "",
@@ -38,24 +53,24 @@ export default function Onboarding() {
     goal: "",
     sleepTime: "",
     wakeTime: "",
-    language: "uz"
+    language: "uz",
   });
 
   const totalSteps = 4;
 
   const updateFormData = (field: keyof OnboardingData, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
   const nextStep = () => {
     if (currentStep < totalSteps) {
-      setCurrentStep(prev => prev + 1);
+      setCurrentStep((prev) => prev + 1);
     }
   };
 
   const prevStep = () => {
     if (currentStep > 1) {
-      setCurrentStep(prev => prev - 1);
+      setCurrentStep((prev) => prev - 1);
     }
   };
 
@@ -69,19 +84,24 @@ export default function Onboarding() {
 
       let bmr = 0;
       if (formData.gender === "male") {
-        bmr = 88.362 + (13.397 * weightNum) + (4.799 * heightNum) - (5.677 * age);
+        bmr = 88.362 + 13.397 * weightNum + 4.799 * heightNum - 5.677 * age;
       } else {
-        bmr = 447.593 + (9.247 * weightNum) + (3.098 * heightNum) - (4.330 * age);
+        bmr = 447.593 + 9.247 * weightNum + 3.098 * heightNum - 4.33 * age;
       }
 
       // Faollik koeffitsienti
       const activityMultiplier = {
         low: 1.2,
         medium: 1.55,
-        high: 1.725
+        high: 1.725,
       };
 
-      const dailyCalories = Math.round(bmr * activityMultiplier[formData.activityLevel as keyof typeof activityMultiplier]);
+      const dailyCalories = Math.round(
+        bmr *
+          activityMultiplier[
+            formData.activityLevel as keyof typeof activityMultiplier
+          ],
+      );
 
       const userData = {
         ...formData,
@@ -89,37 +109,40 @@ export default function Onboarding() {
         bmr: Math.round(bmr),
         dailyCalories,
         isFirstTime: false,
-        createdAt: new Date().toISOString()
+        createdAt: new Date().toISOString(),
       };
 
-      console.log('Onboarding completed, user data:', userData);
+      console.log("Onboarding completed, user data:", userData);
 
       // User context'ni yangilash (localStorage avtomatik yangilanadi)
       updateUser(userData);
 
-      console.log('User context updated, navigating to home...');
+      console.log("User context updated, navigating to home...");
 
       // Backend'ga yuborish (optional, agar backend mavjud bo'lsa)
       try {
-        await fetch('/api/user/profile', {
-          method: 'POST',
+        await fetch("/api/user/profile", {
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
-            'x-telegram-id': 'demo_user_123'
+            "Content-Type": "application/json",
+            "x-telegram-id": "demo_user_123",
           },
           body: JSON.stringify(userData),
         });
-        console.log('Data sent to backend successfully');
+        console.log("Data sent to backend successfully");
       } catch (backendError) {
-        console.log('Backend mavjud emas, localStorage ishlatiladi:', backendError);
+        console.log(
+          "Backend mavjud emas, localStorage ishlatiladi:",
+          backendError,
+        );
       }
 
       // Bosh sahifaga o'tish
-      console.log('Navigating to home page...');
-      navigate('/', { replace: true });
+      console.log("Navigating to home page...");
+      navigate("/", { replace: true });
     } catch (error) {
-      console.error('Xatolik:', error);
-      alert('Ma\'lumotlar saqlanmadi. Iltimos, qayta urinib ko\'ring.');
+      console.error("Xatolik:", error);
+      alert("Ma'lumotlar saqlanmadi. Iltimos, qayta urinib ko'ring.");
     }
     setLoading(false);
   };
@@ -153,7 +176,7 @@ export default function Onboarding() {
             </span>
           </div>
           <div className="h-2 bg-mint-100 rounded-full overflow-hidden">
-            <div 
+            <div
               className="h-full bg-gradient-to-r from-mint-500 to-water-500 transition-all duration-500"
               style={{ width: `${(currentStep / totalSteps) * 100}%` }}
             />
@@ -166,7 +189,8 @@ export default function Onboarding() {
               Caloria AI'ga Xush Kelibsiz! 🎉
             </CardTitle>
             <p className="text-sm text-muted-foreground mt-2">
-              Sizga moslashtirilgan tavsiyalar uchun ma'lumotlaringizni to'ldiring
+              Sizga moslashtirilgan tavsiyalar uchun ma'lumotlaringizni
+              to'ldiring
             </p>
           </CardHeader>
 
@@ -178,7 +202,9 @@ export default function Onboarding() {
                   <div className="inline-block p-3 bg-mint-100 rounded-full mb-3">
                     <User className="h-8 w-8 text-mint-600" />
                   </div>
-                  <h3 className="text-xl font-bold text-foreground">Asosiy Ma'lumotlar</h3>
+                  <h3 className="text-xl font-bold text-foreground">
+                    Asosiy Ma'lumotlar
+                  </h3>
                 </div>
 
                 <div className="space-y-4">
@@ -199,16 +225,23 @@ export default function Onboarding() {
                     <Label>Jinsingiz</Label>
                     <RadioGroup
                       value={formData.gender}
-                      onValueChange={(value) => updateFormData('gender', value)}
+                      onValueChange={(value) => updateFormData("gender", value)}
                       className="mt-2"
                     >
                       <div className="flex items-center space-x-2 p-3 border rounded-lg hover:bg-mint-50">
                         <RadioGroupItem value="male" id="male" />
-                        <Label htmlFor="male" className="flex-1 cursor-pointer">👨 Erkak</Label>
+                        <Label htmlFor="male" className="flex-1 cursor-pointer">
+                          👨 Erkak
+                        </Label>
                       </div>
                       <div className="flex items-center space-x-2 p-3 border rounded-lg hover:bg-mint-50">
                         <RadioGroupItem value="female" id="female" />
-                        <Label htmlFor="female" className="flex-1 cursor-pointer">👩 Ayol</Label>
+                        <Label
+                          htmlFor="female"
+                          className="flex-1 cursor-pointer"
+                        >
+                          👩 Ayol
+                        </Label>
                       </div>
                     </RadioGroup>
                   </div>
@@ -222,7 +255,9 @@ export default function Onboarding() {
                         type="number"
                         placeholder="1995"
                         value={formData.birthYear}
-                        onChange={(e) => updateFormData('birthYear', e.target.value)}
+                        onChange={(e) =>
+                          updateFormData("birthYear", e.target.value)
+                        }
                         className="pl-10"
                         min="1950"
                         max={new Date().getFullYear() - 10}
@@ -240,7 +275,9 @@ export default function Onboarding() {
                   <div className="inline-block p-3 bg-water-100 rounded-full mb-3">
                     <Ruler className="h-8 w-8 text-water-600" />
                   </div>
-                  <h3 className="text-xl font-bold text-foreground">Jismoniy O'lchamlar</h3>
+                  <h3 className="text-xl font-bold text-foreground">
+                    Jismoniy O'lchamlar
+                  </h3>
                 </div>
 
                 <div className="space-y-4">
@@ -253,7 +290,9 @@ export default function Onboarding() {
                         type="number"
                         placeholder="175"
                         value={formData.height}
-                        onChange={(e) => updateFormData('height', e.target.value)}
+                        onChange={(e) =>
+                          updateFormData("height", e.target.value)
+                        }
                         className="pl-10"
                         min="100"
                         max="250"
@@ -270,7 +309,9 @@ export default function Onboarding() {
                         type="number"
                         placeholder="70"
                         value={formData.weight}
-                        onChange={(e) => updateFormData('weight', e.target.value)}
+                        onChange={(e) =>
+                          updateFormData("weight", e.target.value)
+                        }
                         className="pl-10"
                         min="30"
                         max="300"
@@ -288,62 +329,92 @@ export default function Onboarding() {
                   <div className="inline-block p-3 bg-health-100 rounded-full mb-3">
                     <Target className="h-8 w-8 text-health-600" />
                   </div>
-                  <h3 className="text-xl font-bold text-foreground">Maqsad va Faollik</h3>
+                  <h3 className="text-xl font-bold text-foreground">
+                    Maqsad va Faollik
+                  </h3>
                 </div>
 
                 <div className="space-y-4">
                   <div>
                     <Label>Faollik darajangiz</Label>
-                    <Select value={formData.activityLevel} onValueChange={(value) => updateFormData('activityLevel', value)}>
+                    <Select
+                      value={formData.activityLevel}
+                      onValueChange={(value) =>
+                        updateFormData("activityLevel", value)
+                      }
+                    >
                       <SelectTrigger className="mt-1">
                         <SelectValue placeholder="Faollik darajasini tanlang" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="low">🛌 Kam faol (ofis ishi)</SelectItem>
-                        <SelectItem value="medium">🚶 O'rtacha faol (haftada 3-4 sport)</SelectItem>
-                        <SelectItem value="high">🏃 Juda faol (har kuni sport)</SelectItem>
+                        <SelectItem value="low">
+                          🛌 Kam faol (ofis ishi)
+                        </SelectItem>
+                        <SelectItem value="medium">
+                          🚶 O'rtacha faol (haftada 3-4 sport)
+                        </SelectItem>
+                        <SelectItem value="high">
+                          🏃 Juda faol (har kuni sport)
+                        </SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
 
                   <div>
                     <Label>Maqsadingiz</Label>
-                    <Select value={formData.goal} onValueChange={(value) => updateFormData('goal', value)}>
+                    <Select
+                      value={formData.goal}
+                      onValueChange={(value) => updateFormData("goal", value)}
+                    >
                       <SelectTrigger className="mt-1">
                         <SelectValue placeholder="Maqsadingizni tanlang" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="lose">📉 Vazn kamaytirish</SelectItem>
-                        <SelectItem value="maintain">⚖️ Vaznni saqlash</SelectItem>
-                        <SelectItem value="gain">📈 Vazn ko'paytirish</SelectItem>
+                        <SelectItem value="lose">
+                          📉 Vazn kamaytirish
+                        </SelectItem>
+                        <SelectItem value="maintain">
+                          ⚖️ Vaznni saqlash
+                        </SelectItem>
+                        <SelectItem value="gain">
+                          📈 Vazn ko'paytirish
+                        </SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
 
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <Label htmlFor="sleepTime">Uxlash vaqti (ixtiyoriy)</Label>
+                      <Label htmlFor="sleepTime">
+                        Uxlash vaqti (ixtiyoriy)
+                      </Label>
                       <div className="relative mt-1">
                         <Clock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                         <Input
                           id="sleepTime"
                           type="time"
                           value={formData.sleepTime}
-                          onChange={(e) => updateFormData('sleepTime', e.target.value)}
+                          onChange={(e) =>
+                            updateFormData("sleepTime", e.target.value)
+                          }
                           className="pl-10"
                         />
                       </div>
                     </div>
 
                     <div>
-                      <Label htmlFor="wakeTime">Uyg'onish vaqti (ixtiyoriy)</Label>
+                      <Label htmlFor="wakeTime">
+                        Uyg'onish vaqti (ixtiyoriy)
+                      </Label>
                       <div className="relative mt-1">
                         <Clock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                         <Input
                           id="wakeTime"
                           type="time"
                           value={formData.wakeTime}
-                          onChange={(e) => updateFormData('wakeTime', e.target.value)}
+                          onChange={(e) =>
+                            updateFormData("wakeTime", e.target.value)
+                          }
                           className="pl-10"
                         />
                       </div>
@@ -360,13 +431,20 @@ export default function Onboarding() {
                   <div className="inline-block p-3 bg-water-100 rounded-full mb-3">
                     <Globe className="h-8 w-8 text-water-600" />
                   </div>
-                  <h3 className="text-xl font-bold text-foreground">Tugallash</h3>
+                  <h3 className="text-xl font-bold text-foreground">
+                    Tugallash
+                  </h3>
                 </div>
 
                 <div className="space-y-4">
                   <div>
                     <Label>Til</Label>
-                    <Select value={formData.language} onValueChange={(value) => updateFormData('language', value)}>
+                    <Select
+                      value={formData.language}
+                      onValueChange={(value) =>
+                        updateFormData("language", value)
+                      }
+                    >
                       <SelectTrigger className="mt-1">
                         <SelectValue placeholder="Tilni tanlang" />
                       </SelectTrigger>
@@ -379,12 +457,30 @@ export default function Onboarding() {
                   </div>
 
                   <div className="bg-mint-50 p-4 rounded-xl">
-                    <h4 className="font-semibold text-mint-800 mb-2">✨ Siz uchun hisoblangan:</h4>
+                    <h4 className="font-semibold text-mint-800 mb-2">
+                      ✨ Siz uchun hisoblangan:
+                    </h4>
                     <div className="space-y-1 text-sm text-mint-700">
-                      <p>📅 Yosh: {formData.birthYear ? new Date().getFullYear() - parseInt(formData.birthYear) : '-'} yosh</p>
-                      <p>🔥 BMI: {formData.height && formData.weight ? 
-                        (parseFloat(formData.weight) / Math.pow(parseFloat(formData.height) / 100, 2)).toFixed(1) : '-'}</p>
-                      <p>📊 Kunlik kaloriya tavsiyasi hisoblash mumkin bo'ladi</p>
+                      <p>
+                        📅 Yosh:{" "}
+                        {formData.birthYear
+                          ? new Date().getFullYear() -
+                            parseInt(formData.birthYear)
+                          : "-"}{" "}
+                        yosh
+                      </p>
+                      <p>
+                        🔥 BMI:{" "}
+                        {formData.height && formData.weight
+                          ? (
+                              parseFloat(formData.weight) /
+                              Math.pow(parseFloat(formData.height) / 100, 2)
+                            ).toFixed(1)
+                          : "-"}
+                      </p>
+                      <p>
+                        📊 Kunlik kaloriya tavsiyasi hisoblash mumkin bo'ladi
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -402,7 +498,7 @@ export default function Onboarding() {
                   ← Orqaga
                 </Button>
               )}
-              
+
               {currentStep < totalSteps ? (
                 <Button
                   onClick={nextStep}

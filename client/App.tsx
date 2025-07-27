@@ -23,7 +23,11 @@ const AppRoutes = () => {
   const { shouldShowOnboarding, isReady } = useOnboardingCheck();
   const { user } = useUser();
 
-  console.log('Routing debug:', { shouldShowOnboarding, isReady, hasUser: !!user });
+  console.log("Routing debug:", {
+    shouldShowOnboarding,
+    isReady,
+    hasUser: !!user,
+  });
 
   if (!isReady) {
     return (

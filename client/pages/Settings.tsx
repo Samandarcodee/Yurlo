@@ -10,7 +10,9 @@ export default function Settings() {
       {/* Header */}
       <div className="text-center space-y-2">
         <h1 className="text-2xl font-bold text-foreground">Sozlamalar</h1>
-        <p className="text-muted-foreground">Caloria AI tajribangizni sozlang</p>
+        <p className="text-muted-foreground">
+          Caloria AI tajribangizni sozlang
+        </p>
       </div>
 
       {/* Profile Section */}
@@ -24,11 +26,15 @@ export default function Settings() {
         <CardContent className="space-y-4">
           <div className="flex items-center gap-3">
             <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center">
-              <span className="text-primary-foreground font-semibold text-lg">S</span>
+              <span className="text-primary-foreground font-semibold text-lg">
+                S
+              </span>
             </div>
             <div>
               <p className="font-medium">Samandar Qadirov</p>
-              <p className="text-sm text-muted-foreground">Bugundan beri faol</p>
+              <p className="text-sm text-muted-foreground">
+                Bugundan beri faol
+              </p>
             </div>
           </div>
           <Button variant="outline" className="w-full">
@@ -47,7 +53,9 @@ export default function Settings() {
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
-            <p className="text-sm text-muted-foreground">Afzal ko'rgan tilingizni tanlang</p>
+            <p className="text-sm text-muted-foreground">
+              Afzal ko'rgan tilingizni tanlang
+            </p>
             <div className="grid gap-2">
               <div className="flex items-center justify-between p-3 border rounded-lg hover:bg-muted/50 cursor-pointer">
                 <span>🇺🇸 English</span>
@@ -76,7 +84,9 @@ export default function Settings() {
           <div className="flex items-center justify-between">
             <div className="space-y-0.5">
               <Label>Ovqat Eslatmalari</Label>
-              <p className="text-sm text-muted-foreground">Ovqatlaringizni qayd qilishni eslatish</p>
+              <p className="text-sm text-muted-foreground">
+                Ovqatlaringizni qayd qilishni eslatish
+              </p>
             </div>
             <Switch defaultChecked />
           </div>
@@ -84,7 +94,9 @@ export default function Settings() {
           <div className="flex items-center justify-between">
             <div className="space-y-0.5">
               <Label>Taraqqiyot Hisobotlari</Label>
-              <p className="text-sm text-muted-foreground">Haftalik sog'liq xulosalari</p>
+              <p className="text-sm text-muted-foreground">
+                Haftalik sog'liq xulosalari
+              </p>
             </div>
             <Switch defaultChecked />
           </div>
@@ -92,7 +104,9 @@ export default function Settings() {
           <div className="flex items-center justify-between">
             <div className="space-y-0.5">
               <Label>Suv Eslatmalari</Label>
-              <p className="text-sm text-muted-foreground">Kun davomida suv ichishni eslating</p>
+              <p className="text-sm text-muted-foreground">
+                Kun davomida suv ichishni eslating
+              </p>
             </div>
             <Switch defaultChecked />
           </div>
@@ -100,7 +114,9 @@ export default function Settings() {
           <div className="flex items-center justify-between">
             <div className="space-y-0.5">
               <Label>Rag'batlantiruvchi Xabarlar</Label>
-              <p className="text-sm text-muted-foreground">Kunlik rag'batlantiruvchi maslahatlar</p>
+              <p className="text-sm text-muted-foreground">
+                Kunlik rag'batlantiruvchi maslahatlar
+              </p>
             </div>
             <Switch />
           </div>
@@ -115,9 +131,13 @@ export default function Settings() {
               <Shield className="h-5 w-5 text-muted-foreground" />
               <div className="flex-1">
                 <p className="font-medium">Maxfiylik va Xavfsizlik</p>
-                <p className="text-sm text-muted-foreground">Ma'lumotlarni himoya qilish sozlamalari</p>
+                <p className="text-sm text-muted-foreground">
+                  Ma'lumotlarni himoya qilish sozlamalari
+                </p>
               </div>
-              <Button variant="ghost" size="sm">→</Button>
+              <Button variant="ghost" size="sm">
+                →
+              </Button>
             </div>
           </CardContent>
         </Card>
@@ -128,9 +148,13 @@ export default function Settings() {
               <HelpCircle className="h-5 w-5 text-muted-foreground" />
               <div className="flex-1">
                 <p className="font-medium">Yordam va Qo'llab-quvvatlash</p>
-                <p className="text-sm text-muted-foreground">Ko'p beriladigan savollar va qo'llab-quvvatlash</p>
+                <p className="text-sm text-muted-foreground">
+                  Ko'p beriladigan savollar va qo'llab-quvvatlash
+                </p>
               </div>
-              <Button variant="ghost" size="sm">→</Button>
+              <Button variant="ghost" size="sm">
+                →
+              </Button>
             </div>
           </CardContent>
         </Card>
@@ -138,9 +162,7 @@ export default function Settings() {
 
       {/* App Info */}
       <div className="text-center pt-4 pb-8">
-        <p className="text-sm text-muted-foreground">
-          Caloria AI v1.0.0
-        </p>
+        <p className="text-sm text-muted-foreground">Caloria AI v1.0.0</p>
         <p className="text-xs text-muted-foreground mt-1">
           Yaxshi sog'liq uchun ❤️ bilan yaratilgan
         </p>

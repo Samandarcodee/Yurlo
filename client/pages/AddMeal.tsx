@@ -1,12 +1,26 @@
 import { useState } from "react";
-import { Camera, Upload, Search, Clock, Utensils, Zap, CheckCircle } from "lucide-react";
+import {
+  Camera,
+  Upload,
+  Search,
+  Clock,
+  Utensils,
+  Zap,
+  CheckCircle,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Slider } from "@/components/ui/slider";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 
 export default function AddMeal() {
@@ -39,7 +53,7 @@ export default function AddMeal() {
               protein: 25,
               carbs: 45,
               fat: 12,
-              confidence: 85
+              confidence: 85,
             });
             setMealName("Grilled Chicken Salad");
           }, 2000);
@@ -60,7 +74,7 @@ export default function AddMeal() {
           protein: 22,
           carbs: 35,
           fat: 15,
-          confidence: 78
+          confidence: 78,
         });
       }, 1500);
     }
@@ -73,7 +87,7 @@ export default function AddMeal() {
       portion: portionSize[0],
       time: mealTime,
       nutrition: aiAnalysis,
-      image: selectedImage
+      image: selectedImage,
     });
     // Show success message and navigate back
   };
@@ -83,12 +97,16 @@ export default function AddMeal() {
       {/* Header */}
       <div className="text-center space-y-2">
         <h1 className="text-2xl font-bold text-foreground">Ovqat Qo'shish</h1>
-        <p className="text-muted-foreground">Rasm yuklang yoki ovqat ma'lumotlarini kiriting</p>
+        <p className="text-muted-foreground">
+          Rasm yuklang yoki ovqat ma'lumotlarini kiriting
+        </p>
       </div>
 
       {/* Upload Section */}
       <div className="space-y-4">
-        <Label className="text-base font-medium">Ovqatingizni qanday qayd qilmoqchisiz?</Label>
+        <Label className="text-base font-medium">
+          Ovqatingizni qanday qayd qilmoqchisiz?
+        </Label>
 
         <div className="grid grid-cols-1 gap-3">
           {/* Photo Upload */}
@@ -100,8 +118,12 @@ export default function AddMeal() {
                     <Camera className="h-8 w-8 text-primary" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-foreground">Rasm Olish</h3>
-                    <p className="text-sm text-muted-foreground">AI sizning ovqatingizni avtomatik tahlil qiladi</p>
+                    <h3 className="font-semibold text-foreground">
+                      Rasm Olish
+                    </h3>
+                    <p className="text-sm text-muted-foreground">
+                      AI sizning ovqatingizni avtomatik tahlil qiladi
+                    </p>
                   </div>
                 </div>
                 <input
@@ -141,7 +163,9 @@ export default function AddMeal() {
                   className="w-full"
                   disabled={!mealName.trim() || isAnalyzing}
                 >
-                  {isAnalyzing ? "Tahlil qilinmoqda..." : "AI bilan Tahlil Qilish"}
+                  {isAnalyzing
+                    ? "Tahlil qilinmoqda..."
+                    : "AI bilan Tahlil Qilish"}
                 </Button>
               </div>
             </CardContent>
@@ -167,7 +191,9 @@ export default function AddMeal() {
                       <div className="animate-spin mb-2">
                         <Zap className="h-8 w-8 mx-auto" />
                       </div>
-                      <p className="text-sm">AI sizning ovqatingizni tahlil qilmoqda...</p>
+                      <p className="text-sm">
+                        AI sizning ovqatingizni tahlil qilmoqda...
+                      </p>
                     </div>
                   </div>
                 )}
@@ -184,7 +210,10 @@ export default function AddMeal() {
             <CardTitle className="flex items-center gap-2 text-mint-800">
               <CheckCircle className="h-5 w-5" />
               AI Tahlil Natijalari
-              <Badge variant="secondary" className="ml-auto bg-mint-200 text-mint-800">
+              <Badge
+                variant="secondary"
+                className="ml-auto bg-mint-200 text-mint-800"
+              >
                 {aiAnalysis.confidence}% ishonch
               </Badge>
             </CardTitle>
@@ -192,19 +221,27 @@ export default function AddMeal() {
           <CardContent className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div className="text-center p-3 bg-white/60 rounded-lg">
-                <p className="text-2xl font-bold text-mint-800">{aiAnalysis.calories}</p>
+                <p className="text-2xl font-bold text-mint-800">
+                  {aiAnalysis.calories}
+                </p>
                 <p className="text-sm text-mint-600">Kaloriya</p>
               </div>
               <div className="text-center p-3 bg-white/60 rounded-lg">
-                <p className="text-2xl font-bold text-mint-800">{aiAnalysis.protein}g</p>
+                <p className="text-2xl font-bold text-mint-800">
+                  {aiAnalysis.protein}g
+                </p>
                 <p className="text-sm text-mint-600">Oqsil</p>
               </div>
               <div className="text-center p-3 bg-white/60 rounded-lg">
-                <p className="text-2xl font-bold text-mint-800">{aiAnalysis.carbs}g</p>
+                <p className="text-2xl font-bold text-mint-800">
+                  {aiAnalysis.carbs}g
+                </p>
                 <p className="text-sm text-mint-600">Uglevodlar</p>
               </div>
               <div className="text-center p-3 bg-white/60 rounded-lg">
-                <p className="text-2xl font-bold text-mint-800">{aiAnalysis.fat}g</p>
+                <p className="text-2xl font-bold text-mint-800">
+                  {aiAnalysis.fat}g
+                </p>
                 <p className="text-sm text-mint-600">Yog'</p>
               </div>
             </div>
@@ -276,7 +313,10 @@ export default function AddMeal() {
             disabled={!mealTime}
           >
             <Utensils className="h-5 w-5 mr-2" />
-            Ovqatni Saqlash ({Math.round(aiAnalysis.calories * portionSize[0])} kal)
+            Ovqatni Saqlash ({Math.round(
+              aiAnalysis.calories * portionSize[0],
+            )}{" "}
+            kal)
           </Button>
         </div>
       )}

@@ -8,7 +8,7 @@ interface LayoutProps {
 
 export function Layout({ children }: LayoutProps) {
   const location = useLocation();
-  
+
   const navItems = [
     { path: "/", icon: Home, label: "Bosh sahifa" },
     { path: "/add-meal", icon: Camera, label: "Ovqat qo'shish" },
@@ -20,10 +20,8 @@ export function Layout({ children }: LayoutProps) {
   return (
     <div className="min-h-screen bg-background flex flex-col">
       {/* Main Content */}
-      <main className="flex-1 pb-20">
-        {children}
-      </main>
-      
+      <main className="flex-1 pb-20">{children}</main>
+
       {/* Bottom Navigation */}
       <nav className="fixed bottom-0 left-0 right-0 bg-white/80 border-t border-mint-200/50 backdrop-blur-xl shadow-2xl">
         <div className="flex items-center justify-around px-4 py-3">
@@ -37,17 +35,22 @@ export function Layout({ children }: LayoutProps) {
                   "flex flex-col items-center gap-2 px-4 py-3 rounded-2xl transition-all duration-300 transform",
                   isActive
                     ? "bg-gradient-to-r from-mint-500 to-mint-600 text-white shadow-lg scale-110"
-                    : "text-mint-600 hover:text-mint-800 hover:bg-mint-100/70 hover:scale-105"
+                    : "text-mint-600 hover:text-mint-800 hover:bg-mint-100/70 hover:scale-105",
                 )}
               >
-                <Icon size={22} className={cn(
-                  "transition-all duration-300",
-                  isActive && "scale-125 drop-shadow-sm"
-                )} />
-                <span className={cn(
-                  "text-xs font-semibold tracking-wide",
-                  isActive && "text-white"
-                )}>
+                <Icon
+                  size={22}
+                  className={cn(
+                    "transition-all duration-300",
+                    isActive && "scale-125 drop-shadow-sm",
+                  )}
+                />
+                <span
+                  className={cn(
+                    "text-xs font-semibold tracking-wide",
+                    isActive && "text-white",
+                  )}
+                >
                   {label}
                 </span>
               </Link>

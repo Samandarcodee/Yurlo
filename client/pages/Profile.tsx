@@ -7,23 +7,29 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { 
-  User, 
-  Edit, 
-  Calendar, 
-  Ruler, 
-  Weight, 
-  Activity, 
-  Target, 
-  Brain, 
-  Bell, 
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  User,
+  Edit,
+  Calendar,
+  Ruler,
+  Weight,
+  Activity,
+  Target,
+  Brain,
+  Bell,
   Globe,
   BarChart3,
   Flame,
   Calculator,
   Save,
-  Settings as SettingsIcon
+  Settings as SettingsIcon,
 } from "lucide-react";
 
 interface UserProfile {
@@ -51,7 +57,7 @@ export default function Profile() {
 
   useEffect(() => {
     // localStorage'dan profil ma'lumotlarini olish
-    const savedProfile = localStorage.getItem('userProfile');
+    const savedProfile = localStorage.getItem("userProfile");
     if (savedProfile) {
       const profileData = JSON.parse(savedProfile);
       setProfile(profileData);
@@ -61,88 +67,105 @@ export default function Profile() {
 
   const handleSave = async () => {
     if (!editedProfile) return;
-    
+
     setLoading(true);
     try {
       // BMR qayta hisoblash
       const age = new Date().getFullYear() - parseInt(editedProfile.birthYear);
       const heightNum = parseFloat(editedProfile.height);
       const weightNum = parseFloat(editedProfile.weight);
-      
+
       let bmr = 0;
       if (editedProfile.gender === "male") {
-        bmr = 88.362 + (13.397 * weightNum) + (4.799 * heightNum) - (5.677 * age);
+        bmr = 88.362 + 13.397 * weightNum + 4.799 * heightNum - 5.677 * age;
       } else {
-        bmr = 447.593 + (9.247 * weightNum) + (3.098 * heightNum) - (4.330 * age);
+        bmr = 447.593 + 9.247 * weightNum + 3.098 * heightNum - 4.33 * age;
       }
 
       const activityMultiplier = {
         low: 1.2,
         medium: 1.55,
-        high: 1.725
+        high: 1.725,
       };
 
-      const dailyCalories = Math.round(bmr * activityMultiplier[editedProfile.activityLevel as keyof typeof activityMultiplier]);
+      const dailyCalories = Math.round(
+        bmr *
+          activityMultiplier[
+            editedProfile.activityLevel as keyof typeof activityMultiplier
+          ],
+      );
 
       const updatedProfile = {
         ...editedProfile,
         age,
         bmr: Math.round(bmr),
-        dailyCalories
+        dailyCalories,
       };
 
       // Backend'ga yuborish
-      const response = await fetch('/api/user/profile', {
-        method: 'PUT',
+      const response = await fetch("/api/user/profile", {
+        method: "PUT",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(updatedProfile),
       });
 
       if (response.ok) {
-        localStorage.setItem('userProfile', JSON.stringify(updatedProfile));
+        localStorage.setItem("userProfile", JSON.stringify(updatedProfile));
         setProfile(updatedProfile);
         setEditing(false);
       }
     } catch (error) {
-      console.error('Profil yangilanmadi:', error);
+      console.error("Profil yangilanmadi:", error);
     }
     setLoading(false);
   };
 
   const getActivityLabel = (level: string) => {
     switch (level) {
-      case 'low': return '🛌 Kam faol';
-      case 'medium': return '🚶 O\'rtacha faol';
-      case 'high': return '🏃 Juda faol';
-      default: return level;
+      case "low":
+        return "🛌 Kam faol";
+      case "medium":
+        return "🚶 O'rtacha faol";
+      case "high":
+        return "🏃 Juda faol";
+      default:
+        return level;
     }
   };
 
   const getGoalLabel = (goal: string) => {
     switch (goal) {
-      case 'lose': return '📉 Vazn kamaytirish';
-      case 'maintain': return '⚖️ Vaznni saqlash';
-      case 'gain': return '📈 Vazn ko\'paytirish';
-      default: return goal;
+      case "lose":
+        return "📉 Vazn kamaytirish";
+      case "maintain":
+        return "⚖️ Vaznni saqlash";
+      case "gain":
+        return "📈 Vazn ko'paytirish";
+      default:
+        return goal;
     }
   };
 
   const getLanguageLabel = (lang: string) => {
     switch (lang) {
-      case 'uz': return '🇺🇿 O\'zbek';
-      case 'ru': return '🇷🇺 Русский';
-      case 'en': return '🇺🇸 English';
-      default: return lang;
+      case "uz":
+        return "🇺🇿 O'zbek";
+      case "ru":
+        return "🇷🇺 Русский";
+      case "en":
+        return "🇺🇸 English";
+      default:
+        return lang;
     }
   };
 
   const getBMICategory = (bmi: number) => {
-    if (bmi < 18.5) return { label: 'Kam vazn', color: 'text-blue-600' };
-    if (bmi < 25) return { label: 'Normal', color: 'text-green-600' };
-    if (bmi < 30) return { label: 'Ortiqcha vazn', color: 'text-yellow-600' };
-    return { label: 'Semizlik', color: 'text-red-600' };
+    if (bmi < 18.5) return { label: "Kam vazn", color: "text-blue-600" };
+    if (bmi < 25) return { label: "Normal", color: "text-green-600" };
+    if (bmi < 30) return { label: "Ortiqcha vazn", color: "text-yellow-600" };
+    return { label: "Semizlik", color: "text-red-600" };
   };
 
   if (!profile) {
@@ -164,7 +187,8 @@ export default function Profile() {
     );
   }
 
-  const bmi = parseFloat(profile.weight) / Math.pow(parseFloat(profile.height) / 100, 2);
+  const bmi =
+    parseFloat(profile.weight) / Math.pow(parseFloat(profile.height) / 100, 2);
   const bmiCategory = getBMICategory(bmi);
 
   return (
@@ -187,7 +211,9 @@ export default function Profile() {
                 <div className="p-1.5 sm:p-2 bg-white/50 rounded-lg sm:rounded-xl">
                   <User className="h-5 w-5 sm:h-6 sm:w-6" />
                 </div>
-                <span className="text-lg sm:text-xl font-bold">Profil Ma'lumotlari</span>
+                <span className="text-lg sm:text-xl font-bold">
+                  Profil Ma'lumotlari
+                </span>
               </CardTitle>
               <Button
                 variant="outline"
@@ -196,7 +222,7 @@ export default function Profile() {
                 className="border-mint-200 text-mint-600 hover:bg-white/80"
               >
                 <Edit className="h-4 w-4 mr-1" />
-                {editing ? 'Bekor qilish' : 'Tahrirlash'}
+                {editing ? "Bekor qilish" : "Tahrirlash"}
               </Button>
             </div>
           </CardHeader>
@@ -207,8 +233,12 @@ export default function Profile() {
                   <div>
                     <Label>Ism</Label>
                     <Input
-                      value={editedProfile?.name || ''}
-                      onChange={(e) => setEditedProfile(prev => prev ? {...prev, name: e.target.value} : null)}
+                      value={editedProfile?.name || ""}
+                      onChange={(e) =>
+                        setEditedProfile((prev) =>
+                          prev ? { ...prev, name: e.target.value } : null,
+                        )
+                      }
                       className="mt-1"
                     />
                   </div>
@@ -216,8 +246,12 @@ export default function Profile() {
                     <Label>Tug'ilgan yil</Label>
                     <Input
                       type="number"
-                      value={editedProfile?.birthYear || ''}
-                      onChange={(e) => setEditedProfile(prev => prev ? {...prev, birthYear: e.target.value} : null)}
+                      value={editedProfile?.birthYear || ""}
+                      onChange={(e) =>
+                        setEditedProfile((prev) =>
+                          prev ? { ...prev, birthYear: e.target.value } : null,
+                        )
+                      }
                       className="mt-1"
                     />
                   </div>
@@ -225,8 +259,12 @@ export default function Profile() {
                     <Label>Bo'y (sm)</Label>
                     <Input
                       type="number"
-                      value={editedProfile?.height || ''}
-                      onChange={(e) => setEditedProfile(prev => prev ? {...prev, height: e.target.value} : null)}
+                      value={editedProfile?.height || ""}
+                      onChange={(e) =>
+                        setEditedProfile((prev) =>
+                          prev ? { ...prev, height: e.target.value } : null,
+                        )
+                      }
                       className="mt-1"
                     />
                   </div>
@@ -234,8 +272,12 @@ export default function Profile() {
                     <Label>Vazn (kg)</Label>
                     <Input
                       type="number"
-                      value={editedProfile?.weight || ''}
-                      onChange={(e) => setEditedProfile(prev => prev ? {...prev, weight: e.target.value} : null)}
+                      value={editedProfile?.weight || ""}
+                      onChange={(e) =>
+                        setEditedProfile((prev) =>
+                          prev ? { ...prev, weight: e.target.value } : null,
+                        )
+                      }
                       className="mt-1"
                     />
                   </div>
@@ -244,9 +286,13 @@ export default function Profile() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <Label>Faollik darajasi</Label>
-                    <Select 
-                      value={editedProfile?.activityLevel || ''} 
-                      onValueChange={(value) => setEditedProfile(prev => prev ? {...prev, activityLevel: value} : null)}
+                    <Select
+                      value={editedProfile?.activityLevel || ""}
+                      onValueChange={(value) =>
+                        setEditedProfile((prev) =>
+                          prev ? { ...prev, activityLevel: value } : null,
+                        )
+                      }
                     >
                       <SelectTrigger className="mt-1">
                         <SelectValue />
@@ -260,17 +306,27 @@ export default function Profile() {
                   </div>
                   <div>
                     <Label>Maqsad</Label>
-                    <Select 
-                      value={editedProfile?.goal || ''} 
-                      onValueChange={(value) => setEditedProfile(prev => prev ? {...prev, goal: value} : null)}
+                    <Select
+                      value={editedProfile?.goal || ""}
+                      onValueChange={(value) =>
+                        setEditedProfile((prev) =>
+                          prev ? { ...prev, goal: value } : null,
+                        )
+                      }
                     >
                       <SelectTrigger className="mt-1">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="lose">📉 Vazn kamaytirish</SelectItem>
-                        <SelectItem value="maintain">⚖️ Vaznni saqlash</SelectItem>
-                        <SelectItem value="gain">📈 Vazn ko'paytirish</SelectItem>
+                        <SelectItem value="lose">
+                          📉 Vazn kamaytirish
+                        </SelectItem>
+                        <SelectItem value="maintain">
+                          ⚖️ Vaznni saqlash
+                        </SelectItem>
+                        <SelectItem value="gain">
+                          📈 Vazn ko'paytirish
+                        </SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -282,7 +338,7 @@ export default function Profile() {
                   className="w-full h-12 bg-gradient-to-r from-mint-500 to-water-500 hover:from-mint-600 hover:to-water-600"
                 >
                   <Save className="h-4 w-4 mr-2" />
-                  {loading ? 'Saqlanmoqda...' : 'Saqlash'}
+                  {loading ? "Saqlanmoqda..." : "Saqlash"}
                 </Button>
               </div>
             ) : (
@@ -290,49 +346,73 @@ export default function Profile() {
                 <div className="space-y-2 p-3 sm:p-4 bg-white/40 rounded-xl sm:rounded-2xl">
                   <div className="flex items-center gap-2">
                     <User className="h-4 w-4 text-mint-600" />
-                    <span className="text-xs sm:text-sm text-mint-600 font-semibold">Ism</span>
+                    <span className="text-xs sm:text-sm text-mint-600 font-semibold">
+                      Ism
+                    </span>
                   </div>
-                  <p className="text-lg sm:text-xl font-bold text-mint-800">{profile.name}</p>
+                  <p className="text-lg sm:text-xl font-bold text-mint-800">
+                    {profile.name}
+                  </p>
                 </div>
 
                 <div className="space-y-2 p-3 sm:p-4 bg-white/40 rounded-xl sm:rounded-2xl">
                   <div className="flex items-center gap-2">
                     <Calendar className="h-4 w-4 text-mint-600" />
-                    <span className="text-xs sm:text-sm text-mint-600 font-semibold">Yosh</span>
+                    <span className="text-xs sm:text-sm text-mint-600 font-semibold">
+                      Yosh
+                    </span>
                   </div>
-                  <p className="text-lg sm:text-xl font-bold text-mint-800">{profile.age} yosh</p>
+                  <p className="text-lg sm:text-xl font-bold text-mint-800">
+                    {profile.age} yosh
+                  </p>
                 </div>
 
                 <div className="space-y-2 p-3 sm:p-4 bg-white/40 rounded-xl sm:rounded-2xl">
                   <div className="flex items-center gap-2">
                     <Ruler className="h-4 w-4 text-mint-600" />
-                    <span className="text-xs sm:text-sm text-mint-600 font-semibold">Bo'y</span>
+                    <span className="text-xs sm:text-sm text-mint-600 font-semibold">
+                      Bo'y
+                    </span>
                   </div>
-                  <p className="text-lg sm:text-xl font-bold text-mint-800">{profile.height} sm</p>
+                  <p className="text-lg sm:text-xl font-bold text-mint-800">
+                    {profile.height} sm
+                  </p>
                 </div>
 
                 <div className="space-y-2 p-3 sm:p-4 bg-white/40 rounded-xl sm:rounded-2xl">
                   <div className="flex items-center gap-2">
                     <Weight className="h-4 w-4 text-mint-600" />
-                    <span className="text-xs sm:text-sm text-mint-600 font-semibold">Vazn</span>
+                    <span className="text-xs sm:text-sm text-mint-600 font-semibold">
+                      Vazn
+                    </span>
                   </div>
-                  <p className="text-lg sm:text-xl font-bold text-mint-800">{profile.weight} kg</p>
+                  <p className="text-lg sm:text-xl font-bold text-mint-800">
+                    {profile.weight} kg
+                  </p>
                 </div>
 
                 <div className="space-y-2 p-3 sm:p-4 bg-white/40 rounded-xl sm:rounded-2xl">
                   <div className="flex items-center gap-2">
                     <Activity className="h-4 w-4 text-mint-600" />
-                    <span className="text-xs sm:text-sm text-mint-600 font-semibold">Faollik</span>
+                    <span className="text-xs sm:text-sm text-mint-600 font-semibold">
+                      Faollik
+                    </span>
                   </div>
-                  <p className="text-sm sm:text-base font-bold text-mint-800">{getActivityLabel(profile.activityLevel)}</p>
+                  <p className="text-sm sm:text-base font-bold text-mint-800">
+                    {getActivityLabel(profile.activityLevel)}
+                  </p>
                 </div>
 
                 <div className="space-y-2 p-3 sm:p-4 bg-white/40 rounded-xl sm:rounded-2xl">
                   <div className="flex items-center gap-2">
                     <Target className="h-4 w-4 text-mint-600" />
-                    <span className="text-xs sm:text-sm text-mint-600 font-semibold">Maqsad</span>
+                    <span className="text-xs sm:text-sm text-mint-600 font-semibold">
+                      Maqsad
+                    </span>
                   </div>
-                  <p className="text-sm sm:text-base font-bold text-mint-800">{getGoalLabel(profile.goal)}</p>
+                  <p className="text-sm sm:text-base font-bold text-mint-800">
+                    {getGoalLabel(profile.goal)}
+                  </p>
                 </div>
               </div>
             )}
@@ -347,8 +427,12 @@ export default function Profile() {
                 <Calculator className="h-6 w-6 text-water-600" />
               </div>
               <h3 className="font-bold text-lg mb-1">BMI</h3>
-              <p className="text-2xl font-bold text-foreground">{bmi.toFixed(1)}</p>
-              <p className={`text-sm font-medium ${bmiCategory.color}`}>{bmiCategory.label}</p>
+              <p className="text-2xl font-bold text-foreground">
+                {bmi.toFixed(1)}
+              </p>
+              <p className={`text-sm font-medium ${bmiCategory.color}`}>
+                {bmiCategory.label}
+              </p>
             </CardContent>
           </Card>
 
@@ -358,7 +442,9 @@ export default function Profile() {
                 <Flame className="h-6 w-6 text-health-600" />
               </div>
               <h3 className="font-bold text-lg mb-1">BMR</h3>
-              <p className="text-2xl font-bold text-foreground">{profile.bmr}</p>
+              <p className="text-2xl font-bold text-foreground">
+                {profile.bmr}
+              </p>
               <p className="text-sm text-muted-foreground">kcal/kun</p>
             </CardContent>
           </Card>
@@ -369,7 +455,9 @@ export default function Profile() {
                 <BarChart3 className="h-6 w-6 text-mint-600" />
               </div>
               <h3 className="font-bold text-lg mb-1">Kunlik Kaloriya</h3>
-              <p className="text-2xl font-bold text-foreground">{profile.dailyCalories}</p>
+              <p className="text-2xl font-bold text-foreground">
+                {profile.dailyCalories}
+              </p>
               <p className="text-sm text-muted-foreground">kcal/kun</p>
             </CardContent>
           </Card>
@@ -391,33 +479,41 @@ export default function Profile() {
                 <Globe className="h-5 w-5 text-muted-foreground" />
                 <div>
                   <p className="font-medium">Til</p>
-                  <p className="text-sm text-muted-foreground">Interfeys tili</p>
+                  <p className="text-sm text-muted-foreground">
+                    Interfeys tili
+                  </p>
                 </div>
               </div>
-              <Badge variant="secondary">{getLanguageLabel(profile.language)}</Badge>
+              <Badge variant="secondary">
+                {getLanguageLabel(profile.language)}
+              </Badge>
             </div>
-            
+
             <Separator />
-            
+
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <Bell className="h-5 w-5 text-muted-foreground" />
                 <div>
                   <p className="font-medium">Bildirishnomalar</p>
-                  <p className="text-sm text-muted-foreground">Ovqat va suv eslatmalari</p>
+                  <p className="text-sm text-muted-foreground">
+                    Ovqat va suv eslatmalari
+                  </p>
                 </div>
               </div>
               <Switch defaultChecked />
             </div>
-            
+
             <Separator />
-            
+
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <Brain className="h-5 w-5 text-muted-foreground" />
                 <div>
                   <p className="font-medium">AI Maslahatlar</p>
-                  <p className="text-sm text-muted-foreground">Shaxsiy AI tavsiyalari</p>
+                  <p className="text-sm text-muted-foreground">
+                    Shaxsiy AI tavsiyalari
+                  </p>
                 </div>
               </div>
               <Switch defaultChecked />

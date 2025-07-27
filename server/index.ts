@@ -2,12 +2,12 @@ import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import { handleDemo } from "./routes/demo";
-import { 
-  createOrUpdateProfile, 
-  getUserProfile, 
-  updateProfileFields, 
-  deleteProfile, 
-  getAIRecommendations 
+import {
+  createOrUpdateProfile,
+  getUserProfile,
+  updateProfileFields,
+  deleteProfile,
+  getAIRecommendations,
 } from "./routes/user";
 
 export function createServer() {

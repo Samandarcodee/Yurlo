@@ -1,5 +1,13 @@
 import { useEffect } from "react";
-import { MessageCircle, Lightbulb, Heart, Zap, Droplets, Utensils, Activity } from "lucide-react";
+import {
+  MessageCircle,
+  Lightbulb,
+  Heart,
+  Zap,
+  Droplets,
+  Utensils,
+  Activity,
+} from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -7,7 +15,8 @@ import { useUser, useAIRecommendations } from "@/contexts/UserContext";
 
 export default function Assistant() {
   const { user } = useUser();
-  const { recommendations, loading, fetchRecommendations } = useAIRecommendations();
+  const { recommendations, loading, fetchRecommendations } =
+    useAIRecommendations();
 
   useEffect(() => {
     if (user) {
@@ -19,7 +28,9 @@ export default function Assistant() {
       <div className="p-4 space-y-6">
         <div className="text-center space-y-2">
           <h1 className="text-2xl font-bold text-foreground">AI Yordamchi</h1>
-          <p className="text-muted-foreground">Shaxsiy tavsiyalar yuklanmoqda...</p>
+          <p className="text-muted-foreground">
+            Shaxsiy tavsiyalar yuklanmoqda...
+          </p>
         </div>
         <div className="flex justify-center">
           <div className="animate-spin w-8 h-8 border-4 border-water-600 border-t-transparent rounded-full"></div>
@@ -52,15 +63,21 @@ export default function Assistant() {
                   <div className="p-1.5 sm:p-2 bg-white/50 rounded-lg sm:rounded-xl">
                     <Lightbulb className="h-5 w-5 sm:h-6 sm:w-6" />
                   </div>
-                  <span className="text-lg sm:text-xl font-bold">Bugungi Maslahatlar</span>
+                  <span className="text-lg sm:text-xl font-bold">
+                    Bugungi Maslahatlar
+                  </span>
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
-                {recommendations.dailyTips?.map((tip: string, index: number) => (
-                  <div key={index} className="p-3 bg-white/40 rounded-xl">
-                    <p className="text-sm font-medium text-water-800">{tip}</p>
-                  </div>
-                ))}
+                {recommendations.dailyTips?.map(
+                  (tip: string, index: number) => (
+                    <div key={index} className="p-3 bg-white/40 rounded-xl">
+                      <p className="text-sm font-medium text-water-800">
+                        {tip}
+                      </p>
+                    </div>
+                  ),
+                )}
               </CardContent>
             </Card>
 
@@ -101,15 +118,21 @@ export default function Assistant() {
                   <div className="p-1.5 sm:p-2 bg-health-100 rounded-lg sm:rounded-xl">
                     <Activity className="h-5 w-5 sm:h-6 sm:w-6 text-health-600" />
                   </div>
-                  <span className="text-lg sm:text-xl font-bold">Jismoniy Faollik</span>
+                  <span className="text-lg sm:text-xl font-bold">
+                    Jismoniy Faollik
+                  </span>
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
-                {recommendations.exerciseAdvice?.map((advice: string, index: number) => (
-                  <div key={index} className="p-3 bg-health-50 rounded-xl">
-                    <p className="text-sm font-medium text-health-800">{advice}</p>
-                  </div>
-                ))}
+                {recommendations.exerciseAdvice?.map(
+                  (advice: string, index: number) => (
+                    <div key={index} className="p-3 bg-health-50 rounded-xl">
+                      <p className="text-sm font-medium text-health-800">
+                        {advice}
+                      </p>
+                    </div>
+                  ),
+                )}
               </CardContent>
             </Card>
 
@@ -120,15 +143,21 @@ export default function Assistant() {
                   <div className="p-1.5 sm:p-2 bg-mint-100 rounded-lg sm:rounded-xl">
                     <Heart className="h-5 w-5 sm:h-6 sm:w-6 text-mint-600" />
                   </div>
-                  <span className="text-lg sm:text-xl font-bold">Ovqatlanish Maslahatlari</span>
+                  <span className="text-lg sm:text-xl font-bold">
+                    Ovqatlanish Maslahatlari
+                  </span>
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
-                {recommendations.nutritionAdvice?.map((advice: string, index: number) => (
-                  <div key={index} className="p-3 bg-mint-50 rounded-xl">
-                    <p className="text-sm font-medium text-mint-800">{advice}</p>
-                  </div>
-                ))}
+                {recommendations.nutritionAdvice?.map(
+                  (advice: string, index: number) => (
+                    <div key={index} className="p-3 bg-mint-50 rounded-xl">
+                      <p className="text-sm font-medium text-mint-800">
+                        {advice}
+                      </p>
+                    </div>
+                  ),
+                )}
               </CardContent>
             </Card>
           </>
