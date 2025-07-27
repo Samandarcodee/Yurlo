@@ -43,9 +43,9 @@ export default function Index() {
       </div>
 
       {/* Calorie Balance Card */}
-      <Card className="bg-gradient-to-r from-health-100 to-health-50 border-health-200">
+      <Card className="bg-gradient-to-r from-mint-100 to-mint-50 border-mint-200">
         <CardHeader className="pb-3">
-          <CardTitle className="flex items-center gap-2 text-health-800">
+          <CardTitle className="flex items-center gap-2 text-mint-800">
             <Target className="h-5 w-5" />
             Bugungi Kaloriya Balansi
           </CardTitle>
@@ -53,16 +53,16 @@ export default function Index() {
         <CardContent className="space-y-4">
           <div className="grid grid-cols-3 gap-4 text-center">
             <div className="space-y-1">
-              <p className="text-sm text-health-600 font-medium">Iste'mol</p>
-              <p className="text-2xl font-bold text-health-800">{userData.caloriesConsumed.toLocaleString()}</p>
+              <p className="text-sm text-mint-600 font-medium">Iste'mol</p>
+              <p className="text-2xl font-bold text-mint-800">{userData.caloriesConsumed.toLocaleString()}</p>
             </div>
             <div className="space-y-1">
-              <p className="text-sm text-health-600 font-medium">Yoqilgan</p>
-              <p className="text-2xl font-bold text-health-600">{userData.caloriesBurned}</p>
+              <p className="text-sm text-mint-600 font-medium">Yoqilgan</p>
+              <p className="text-2xl font-bold text-mint-600">{userData.caloriesBurned}</p>
             </div>
             <div className="space-y-1">
-              <p className="text-sm text-health-600 font-medium">Qolgan</p>
-              <p className={`text-2xl font-bold ${caloriesRemaining > 0 ? 'text-health-500' : 'text-red-500'}`}>
+              <p className="text-sm text-mint-600 font-medium">Qolgan</p>
+              <p className={`text-2xl font-bold ${caloriesRemaining > 0 ? 'text-mint-500' : 'text-red-500'}`}>
                 {caloriesRemaining > 0 ? caloriesRemaining : 0}
               </p>
             </div>
@@ -70,14 +70,14 @@ export default function Index() {
 
           <div className="space-y-2">
             <div className="flex justify-between text-sm">
-              <span className="text-health-600">Maqsadga jarayon</span>
-              <span className="text-health-800 font-medium">
+              <span className="text-mint-600">Maqsadga jarayon</span>
+              <span className="text-mint-800 font-medium">
                 {Math.round((userData.caloriesConsumed / userData.caloriesTarget) * 100)}%
               </span>
             </div>
             <Progress
               value={(userData.caloriesConsumed / userData.caloriesTarget) * 100}
-              className="h-3 bg-health-50"
+              className="h-3 bg-mint-50"
             />
           </div>
         </CardContent>
