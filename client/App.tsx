@@ -21,6 +21,9 @@ const queryClient = new QueryClient();
 
 const AppRoutes = () => {
   const { shouldShowOnboarding, isReady } = useOnboardingCheck();
+  const { user } = useUser();
+
+  console.log('Routing debug:', { shouldShowOnboarding, isReady, hasUser: !!user });
 
   if (!isReady) {
     return (
@@ -49,7 +52,7 @@ const AppRoutes = () => {
     <Layout>
       <Routes>
         <Route path="/" element={<Index />} />
-        <Route path="/onboarding" element={<Onboarding />} />
+        <Route path="/onboarding" element={<Navigate to="/" replace />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/add-meal" element={<AddMeal />} />
         <Route path="/assistant" element={<Assistant />} />
