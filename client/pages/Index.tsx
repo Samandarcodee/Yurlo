@@ -4,20 +4,25 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
+import { useUser } from "@/contexts/UserContext";
 
 export default function Index() {
-  // Mock data - in real app this would come from state/API
+  const { user } = useUser();
+
+  // Foydalanuvchi ma'lumotlari yoki default qiymatlar
   const userData = {
-    name: "Samandar",
-    caloriesConsumed: 1247,
-    caloriesTarget: 2100,
-    caloriesBurned: 312,
-    waterIntake: 6,
+    name: user?.name || "Foydalanuvchi",
+    caloriesConsumed: 1247, // Bu keyingi versiyalarda tracking'dan keladi
+    caloriesTarget: user?.dailyCalories || 2100,
+    caloriesBurned: 312, // Bu activity tracking'dan keladi
+    waterIntake: 6, // Bu water tracking'dan keladi
     waterTarget: 8,
-    stepsToday: 7234,
+    stepsToday: 7234, // Bu step tracking'dan keladi
     stepsTarget: 10000,
-    currentWeight: 72.5,
-    targetWeight: 70.0,
+    currentWeight: parseFloat(user?.weight || "70"),
+    targetWeight: user?.goal === 'lose' ? parseFloat(user?.weight || "70") - 5 :
+                  user?.goal === 'gain' ? parseFloat(user?.weight || "70") + 5 :
+                  parseFloat(user?.weight || "70"),
   };
 
   const caloriesRemaining = userData.caloriesTarget - userData.caloriesConsumed + userData.caloriesBurned;
