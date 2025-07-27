@@ -7,8 +7,8 @@ export default function Analytics() {
     <div className="p-4 space-y-6">
       {/* Header */}
       <div className="text-center space-y-2">
-        <h1 className="text-2xl font-bold text-foreground">Analytics</h1>
-        <p className="text-muted-foreground">Track your health progress over time</p>
+        <h1 className="text-2xl font-bold text-foreground">Tahlil</h1>
+        <p className="text-muted-foreground">Vaqt davomida sog'ligingiz taraqqiyotini kuzating</p>
       </div>
 
       {/* Coming Soon Card */}
@@ -20,10 +20,10 @@ export default function Analytics() {
             </div>
           </div>
           <div>
-            <h2 className="text-xl font-semibold text-health-800 mb-2">Advanced Analytics Coming Soon!</h2>
+            <h2 className="text-xl font-semibold text-health-800 mb-2">Kengaytirilgan Tahlil Tez Orada!</h2>
             <p className="text-health-600">
-              Detailed charts, progress tracking, and insights will be available here 
-              to help you visualize your health journey.
+              Sog'liq yo'lingizni ko'rsatish uchun batafsil grafiklar, taraqqiyot kuzatuvi
+              va tushunchalar bu yerda mavjud bo'ladi.
             </p>
           </div>
         </CardContent>
@@ -31,17 +31,17 @@ export default function Analytics() {
 
       {/* Features Preview */}
       <div className="space-y-3">
-        <h2 className="text-lg font-semibold text-foreground">What You'll See</h2>
-        
+        <h2 className="text-lg font-semibold text-foreground">Nimani Ko'rasiz</h2>
+
         <div className="grid gap-3">
           <Card>
             <CardContent className="pt-6">
               <div className="flex items-start gap-3">
                 <TrendingUp className="h-5 w-5 text-green-500 mt-1" />
                 <div>
-                  <h3 className="font-medium">Weight & Calorie Trends</h3>
+                  <h3 className="font-medium">Vazn va Kaloriya Tendensiyalari</h3>
                   <p className="text-sm text-muted-foreground">
-                    Visual charts showing your calories in vs out and weight changes
+                    Iste'mol qilingan va yoqilgan kaloriyalar hamda vazn o'zgarishlarini ko'rsatuvchi vizual grafiklar
                   </p>
                 </div>
               </div>
@@ -53,9 +53,9 @@ export default function Analytics() {
               <div className="flex items-start gap-3">
                 <Calendar className="h-5 w-5 text-blue-500 mt-1" />
                 <div>
-                  <h3 className="font-medium">Weekly & Monthly Reports</h3>
+                  <h3 className="font-medium">Haftalik va Oylik Hisobotlar</h3>
                   <p className="text-sm text-muted-foreground">
-                    Comprehensive summaries of your health metrics over time
+                    Vaqt davomida sog'liq ko'rsatkichlaringizning to'liq xulosalari
                   </p>
                 </div>
               </div>
@@ -67,9 +67,9 @@ export default function Analytics() {
               <div className="flex items-start gap-3">
                 <Target className="h-5 w-5 text-purple-500 mt-1" />
                 <div>
-                  <h3 className="font-medium">Goal Progress Tracking</h3>
+                  <h3 className="font-medium">Maqsad Taraqqiyotini Kuzatish</h3>
                   <p className="text-sm text-muted-foreground">
-                    Monitor your progress towards weight and fitness goals
+                    Vazn va fitnes maqsadlaringizga erishish jarayonini kuzating
                   </p>
                 </div>
               </div>
@@ -80,7 +80,7 @@ export default function Analytics() {
 
       <div className="text-center pt-4">
         <p className="text-sm text-muted-foreground">
-          Keep logging your meals and activities to unlock detailed analytics! 📊
+          Batafsil tahlilni ochish uchun ovqat va faoliyatlaringizni qayd qilishda davom eting! 📊
         </p>
       </div>
     </div>
