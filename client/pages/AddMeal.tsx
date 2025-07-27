@@ -82,14 +82,14 @@ export default function AddMeal() {
     <div className="p-4 space-y-6">
       {/* Header */}
       <div className="text-center space-y-2">
-        <h1 className="text-2xl font-bold text-foreground">Add Meal</h1>
-        <p className="text-muted-foreground">Upload a photo or enter meal details</p>
+        <h1 className="text-2xl font-bold text-foreground">Ovqat Qo'shish</h1>
+        <p className="text-muted-foreground">Rasm yuklang yoki ovqat ma'lumotlarini kiriting</p>
       </div>
 
       {/* Upload Section */}
       <div className="space-y-4">
-        <Label className="text-base font-medium">How would you like to log your meal?</Label>
-        
+        <Label className="text-base font-medium">Ovqatingizni qanday qayd qilmoqchisiz?</Label>
+
         <div className="grid grid-cols-1 gap-3">
           {/* Photo Upload */}
           <Card className="border-dashed border-2 border-primary/30 hover:border-primary/50 transition-colors">
@@ -100,8 +100,8 @@ export default function AddMeal() {
                     <Camera className="h-8 w-8 text-primary" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-foreground">Take a Photo</h3>
-                    <p className="text-sm text-muted-foreground">AI will analyze your meal automatically</p>
+                    <h3 className="font-semibold text-foreground">Rasm Olish</h3>
+                    <p className="text-sm text-muted-foreground">AI sizning ovqatingizni avtomatik tahlil qiladi</p>
                   </div>
                 </div>
                 <input
@@ -125,23 +125,23 @@ export default function AddMeal() {
                     <Search className="h-5 w-5 text-secondary-foreground" />
                   </div>
                   <div className="flex-1">
-                    <Label htmlFor="meal-name">Enter meal name</Label>
+                    <Label htmlFor="meal-name">Ovqat nomini kiriting</Label>
                     <Input
                       id="meal-name"
-                      placeholder="e.g., Chicken Caesar Salad"
+                      placeholder="masalan, Tovuqli salat"
                       value={mealName}
                       onChange={(e) => setMealName(e.target.value)}
                       className="mt-1"
                     />
                   </div>
                 </div>
-                <Button 
-                  onClick={handleTextAnalysis} 
-                  variant="outline" 
+                <Button
+                  onClick={handleTextAnalysis}
+                  variant="outline"
                   className="w-full"
                   disabled={!mealName.trim() || isAnalyzing}
                 >
-                  {isAnalyzing ? "Analyzing..." : "Analyze with AI"}
+                  {isAnalyzing ? "Tahlil qilinmoqda..." : "AI bilan Tahlil Qilish"}
                 </Button>
               </div>
             </CardContent>
@@ -154,11 +154,11 @@ export default function AddMeal() {
         <Card>
           <CardContent className="pt-6">
             <div className="space-y-3">
-              <Label>Uploaded Image</Label>
+              <Label>Yuklangan Rasm</Label>
               <div className="relative rounded-lg overflow-hidden">
-                <img 
-                  src={selectedImage} 
-                  alt="Meal" 
+                <img
+                  src={selectedImage}
+                  alt="Ovqat"
                   className="w-full h-48 object-cover"
                 />
                 {isAnalyzing && (
@@ -167,7 +167,7 @@ export default function AddMeal() {
                       <div className="animate-spin mb-2">
                         <Zap className="h-8 w-8 mx-auto" />
                       </div>
-                      <p className="text-sm">AI is analyzing your meal...</p>
+                      <p className="text-sm">AI sizning ovqatingizni tahlil qilmoqda...</p>
                     </div>
                   </div>
                 )}
@@ -183,9 +183,9 @@ export default function AddMeal() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-health-800">
               <CheckCircle className="h-5 w-5" />
-              AI Analysis Results
+              AI Tahlil Natijalari
               <Badge variant="secondary" className="ml-auto bg-health-200 text-health-800">
-                {aiAnalysis.confidence}% confident
+                {aiAnalysis.confidence}% ishonch
               </Badge>
             </CardTitle>
           </CardHeader>
@@ -193,36 +193,36 @@ export default function AddMeal() {
             <div className="grid grid-cols-2 gap-4">
               <div className="text-center p-3 bg-white/60 rounded-lg">
                 <p className="text-2xl font-bold text-health-800">{aiAnalysis.calories}</p>
-                <p className="text-sm text-health-600">Calories</p>
+                <p className="text-sm text-health-600">Kaloriya</p>
               </div>
               <div className="text-center p-3 bg-white/60 rounded-lg">
                 <p className="text-2xl font-bold text-health-800">{aiAnalysis.protein}g</p>
-                <p className="text-sm text-health-600">Protein</p>
+                <p className="text-sm text-health-600">Oqsil</p>
               </div>
               <div className="text-center p-3 bg-white/60 rounded-lg">
                 <p className="text-2xl font-bold text-health-800">{aiAnalysis.carbs}g</p>
-                <p className="text-sm text-health-600">Carbs</p>
+                <p className="text-sm text-health-600">Uglevodlar</p>
               </div>
               <div className="text-center p-3 bg-white/60 rounded-lg">
                 <p className="text-2xl font-bold text-health-800">{aiAnalysis.fat}g</p>
-                <p className="text-sm text-health-600">Fat</p>
+                <p className="text-sm text-health-600">Yog'</p>
               </div>
             </div>
 
             {/* Meal Details Form */}
             <div className="space-y-4 pt-4 border-t border-health-200">
               <div className="space-y-2">
-                <Label htmlFor="meal-name-edit">Meal Name</Label>
+                <Label htmlFor="meal-name-edit">Ovqat Nomi</Label>
                 <Input
                   id="meal-name-edit"
                   value={mealName}
                   onChange={(e) => setMealName(e.target.value)}
-                  placeholder="Enter or edit meal name"
+                  placeholder="Ovqat nomini kiriting yoki tahrirlang"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label>Portion Size: {portionSize[0]} serving{portionSize[0] !== 1 ? 's' : ''}</Label>
+                <Label>Porsiya Miqdori: {portionSize[0]} porsiya</Label>
                 <Slider
                   value={portionSize}
                   onValueChange={setPortionSize}
@@ -240,25 +240,25 @@ export default function AddMeal() {
               </div>
 
               <div className="space-y-2">
-                <Label>Meal Time</Label>
+                <Label>Ovqat Vaqti</Label>
                 <Select value={mealTime} onValueChange={setMealTime}>
                   <SelectTrigger>
-                    <SelectValue placeholder="Select meal time" />
+                    <SelectValue placeholder="Ovqat vaqtini tanlang" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="breakfast">🌅 Breakfast</SelectItem>
-                    <SelectItem value="lunch">☀️ Lunch</SelectItem>
-                    <SelectItem value="dinner">🌙 Dinner</SelectItem>
-                    <SelectItem value="snack">🍎 Snack</SelectItem>
+                    <SelectItem value="breakfast">🌅 Nonushta</SelectItem>
+                    <SelectItem value="lunch">☀️ Tushlik</SelectItem>
+                    <SelectItem value="dinner">🌙 Kechki ovqat</SelectItem>
+                    <SelectItem value="snack">🍎 Gazak</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="notes">Notes (Optional)</Label>
+                <Label htmlFor="notes">Izoh (Ixtiyoriy)</Label>
                 <Textarea
                   id="notes"
-                  placeholder="Add any additional notes about your meal..."
+                  placeholder="Ovqatingiz haqida qo'shimcha izoh qo'shing..."
                   className="h-20"
                 />
               </div>
@@ -270,13 +270,13 @@ export default function AddMeal() {
       {/* Save Button */}
       {aiAnalysis && (
         <div className="fixed bottom-20 left-4 right-4">
-          <Button 
+          <Button
             onClick={saveMeal}
             className="w-full h-12 text-lg font-semibold"
             disabled={!mealTime}
           >
             <Utensils className="h-5 w-5 mr-2" />
-            Save Meal ({Math.round(aiAnalysis.calories * portionSize[0])} cal)
+            Ovqatni Saqlash ({Math.round(aiAnalysis.calories * portionSize[0])} kal)
           </Button>
         </div>
       )}
