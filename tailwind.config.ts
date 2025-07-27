@@ -83,18 +83,7 @@ export default {
           800: "rgb(7 89 133)",
           900: "rgb(12 74 110)",
         },
-        sunshine: {
-          50: "rgb(255 251 235)",
-          100: "rgb(254 243 199)",
-          200: "rgb(253 230 138)",
-          300: "rgb(252 211 77)",
-          400: "rgb(251 191 36)",
-          500: "rgb(245 158 11)",
-          600: "rgb(217 119 6)",
-          700: "rgb(180 83 9)",
-          800: "rgb(146 64 14)",
-          900: "rgb(120 53 15)",
-        },
+
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",
