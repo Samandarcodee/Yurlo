@@ -9,33 +9,33 @@
    * A different format will require also updating the theme in tailwind.config.ts.
   */
   :root {
-    --background: 247 254 255;
-    --foreground: 19 39 49;
+    --background: 248 250 252;
+    --foreground: 15 23 42;
 
     --card: 255 255 255;
-    --card-foreground: 19 39 49;
+    --card-foreground: 15 23 42;
 
     --popover: 255 255 255;
-    --popover-foreground: 19 39 49;
+    --popover-foreground: 15 23 42;
 
-    --primary: 118 173 73;
+    --primary: 59 130 246;
     --primary-foreground: 255 255 255;
 
-    --secondary: 236 253 245;
-    --secondary-foreground: 22 101 52;
+    --secondary: 241 245 249;
+    --secondary-foreground: 51 65 85;
 
     --muted: 248 250 252;
     --muted-foreground: 100 116 139;
 
-    --accent: 240 253 244;
-    --accent-foreground: 22 101 52;
+    --accent: 236 254 255;
+    --accent-foreground: 14 116 144;
 
     --destructive: 239 68 68;
     --destructive-foreground: 255 255 255;
 
     --border: 226 232 240;
     --input: 226 232 240;
-    --ring: 118 173 73;
+    --ring: 59 130 246;
 
     --radius: 0.75rem;
 
