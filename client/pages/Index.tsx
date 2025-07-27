@@ -72,19 +72,19 @@ export default function Index() {
               </div>
             </div>
 
-            <div className="space-y-3">
-              <div className="flex justify-between text-sm">
+            <div className="space-y-2 sm:space-y-3">
+              <div className="flex justify-between text-xs sm:text-sm">
                 <span className="text-mint-600 font-semibold">Maqsadga jarayon</span>
-                <span className="text-mint-800 font-bold text-lg">
+                <span className="text-mint-800 font-bold text-base sm:text-lg">
                   {Math.round((userData.caloriesConsumed / userData.caloriesTarget) * 100)}%
                 </span>
               </div>
               <div className="relative">
                 <Progress
                   value={(userData.caloriesConsumed / userData.caloriesTarget) * 100}
-                  className="h-4 bg-white/50 rounded-full"
+                  className="h-3 sm:h-4 bg-white/50 rounded-full"
                 />
-                <div className="absolute inset-0 bg-gradient-to-r from-mint-400 to-mint-500 rounded-full" 
+                <div className="absolute inset-0 bg-gradient-to-r from-mint-400 to-mint-500 rounded-full"
                      style={{ width: `${(userData.caloriesConsumed / userData.caloriesTarget) * 100}%` }}></div>
               </div>
             </div>
