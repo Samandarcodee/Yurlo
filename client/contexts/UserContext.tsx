@@ -55,11 +55,30 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
       try {
         // Avval localStorage'dan tekshiramiz
         const savedProfile = localStorage.getItem('userProfile');
+        console.log('Saved profile from localStorage:', savedProfile);
+
         if (savedProfile) {
-          const profileData = JSON.parse(savedProfile);
-          setUser(profileData);
-          setIsFirstTime(false);
+          try {
+            const profileData = JSON.parse(savedProfile);
+            console.log('Parsed profile data:', profileData);
+
+            // Ma'lumotlar to'g'ri formatda ekanligini tekshirish
+            if (profileData && profileData.name && profileData.age) {
+              setUser(profileData);
+              setIsFirstTime(false);
+              console.log('User loaded from localStorage successfully');
+            } else {
+              console.log('Invalid profile data, clearing localStorage');
+              localStorage.removeItem('userProfile');
+              setIsFirstTime(true);
+            }
+          } catch (parseError) {
+            console.error('localStorage parse error:', parseError);
+            localStorage.removeItem('userProfile');
+            setIsFirstTime(true);
+          }
         } else {
+          console.log('No saved profile found');
           // Backend'dan tekshiramiz
           try {
             const response = await fetch('/api/user/profile', {
@@ -67,9 +86,9 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
                 'x-telegram-id': 'demo_user_123' // Demo uchun
               }
             });
-            
+
             const result = await response.json();
-            
+
             if (result.success && result.data) {
               setUser(result.data);
               localStorage.setItem('userProfile', JSON.stringify(result.data));
