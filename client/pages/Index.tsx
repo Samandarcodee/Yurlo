@@ -30,14 +30,14 @@ export default function Index() {
       {/* Header Greeting */}
       <div className="text-center space-y-2">
         <h1 className="text-2xl font-bold text-foreground">
-          Hi, {userData.name} 👋
+          Salom, {userData.name} 👋
         </h1>
         <p className="text-muted-foreground">
-          {new Date().toLocaleDateString('en-US', { 
-            weekday: 'long', 
-            year: 'numeric', 
-            month: 'long', 
-            day: 'numeric' 
+          {new Date().toLocaleDateString('uz-UZ', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
           })}
         </p>
       </div>
@@ -47,36 +47,36 @@ export default function Index() {
         <CardHeader className="pb-3">
           <CardTitle className="flex items-center gap-2 text-health-800">
             <Target className="h-5 w-5" />
-            Today's Calorie Balance
+            Bugungi Kaloriya Balansi
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid grid-cols-3 gap-4 text-center">
             <div className="space-y-1">
-              <p className="text-sm text-health-600 font-medium">Consumed</p>
+              <p className="text-sm text-health-600 font-medium">Iste'mol</p>
               <p className="text-2xl font-bold text-health-800">{userData.caloriesConsumed.toLocaleString()}</p>
             </div>
             <div className="space-y-1">
-              <p className="text-sm text-health-600 font-medium">Burned</p>
+              <p className="text-sm text-health-600 font-medium">Yoqilgan</p>
               <p className="text-2xl font-bold text-health-600">{userData.caloriesBurned}</p>
             </div>
             <div className="space-y-1">
-              <p className="text-sm text-health-600 font-medium">Remaining</p>
+              <p className="text-sm text-health-600 font-medium">Qolgan</p>
               <p className={`text-2xl font-bold ${caloriesRemaining > 0 ? 'text-health-500' : 'text-red-500'}`}>
                 {caloriesRemaining > 0 ? caloriesRemaining : 0}
               </p>
             </div>
           </div>
-          
+
           <div className="space-y-2">
             <div className="flex justify-between text-sm">
-              <span className="text-health-600">Progress to goal</span>
+              <span className="text-health-600">Maqsadga jarayon</span>
               <span className="text-health-800 font-medium">
                 {Math.round((userData.caloriesConsumed / userData.caloriesTarget) * 100)}%
               </span>
             </div>
-            <Progress 
-              value={(userData.caloriesConsumed / userData.caloriesTarget) * 100} 
+            <Progress
+              value={(userData.caloriesConsumed / userData.caloriesTarget) * 100}
               className="h-3 bg-health-50"
             />
           </div>
@@ -85,27 +85,27 @@ export default function Index() {
 
       {/* Quick Actions */}
       <div className="space-y-3">
-        <h2 className="text-lg font-semibold text-foreground">Quick Actions</h2>
+        <h2 className="text-lg font-semibold text-foreground">Tezkor Amallar</h2>
         <div className="grid grid-cols-1 gap-3">
           <Link to="/add-meal">
             <Button className="w-full h-14 bg-primary hover:bg-primary/90 text-primary-foreground justify-start text-left">
               <Plus className="h-5 w-5 mr-3" />
               <div>
-                <p className="font-semibold">Add Meal</p>
-                <p className="text-xs opacity-90">Upload photo or enter food name</p>
+                <p className="font-semibold">Ovqat Qo'shish</p>
+                <p className="text-xs opacity-90">Rasm yuklang yoki ovqat nomini kiriting</p>
               </div>
             </Button>
           </Link>
-          
+
           <div className="grid grid-cols-2 gap-3">
-            <Button variant="outline" className="h-14 flex-col gap-1 border-water-200 hover:bg-water-50">
-              <Droplets className="h-5 w-5 text-water-500" />
-              <span className="text-sm font-medium">Log Water</span>
+            <Button variant="outline" className="h-14 flex-col gap-1 border-accent-200 hover:bg-accent-50">
+              <Droplets className="h-5 w-5 text-accent-500" />
+              <span className="text-sm font-medium">Suv Qo'shish</span>
             </Button>
-            
+
             <Button variant="outline" className="h-14 flex-col gap-1 border-health-200 hover:bg-health-50">
               <Activity className="h-5 w-5 text-health-500" />
-              <span className="text-sm font-medium">Add Activity</span>
+              <span className="text-sm font-medium">Faoliyat Qo'shish</span>
             </Button>
           </div>
         </div>
@@ -113,24 +113,24 @@ export default function Index() {
 
       {/* Progress Tracking */}
       <div className="space-y-3">
-        <h2 className="text-lg font-semibold text-foreground">Today's Progress</h2>
-        
+        <h2 className="text-lg font-semibold text-foreground">Bugungi Taraqqiyot</h2>
+
         {/* Water Intake */}
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-2">
-                <Droplets className="h-5 w-5 text-water-500" />
-                <span className="font-medium">Water Intake</span>
+                <Droplets className="h-5 w-5 text-accent-500" />
+                <span className="font-medium">Suv Iste'moli</span>
               </div>
-              <Badge variant="secondary" className="bg-water-100 text-water-700">
-                {userData.waterIntake}/{userData.waterTarget} glasses
+              <Badge variant="secondary" className="bg-accent-100 text-accent-700">
+                {userData.waterIntake}/{userData.waterTarget} stakan
               </Badge>
             </div>
-            <Progress value={waterProgress} className="h-2 bg-water-100" />
+            <Progress value={waterProgress} className="h-2 bg-accent-100" />
             <p className="text-sm text-muted-foreground mt-2">
-              {waterProgress >= 100 ? "Great job! You've reached your daily goal!" : 
-               `${userData.waterTarget - userData.waterIntake} more glasses to reach your goal`}
+              {waterProgress >= 100 ? "Ajoyib! Siz kunlik maqsadingizga erishdingiz!" :
+               `Maqsadga erishish uchun yana ${userData.waterTarget - userData.waterIntake} stakan kerak`}
             </p>
           </CardContent>
         </Card>
@@ -141,7 +141,7 @@ export default function Index() {
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-2">
                 <Activity className="h-5 w-5 text-health-500" />
-                <span className="font-medium">Steps</span>
+                <span className="font-medium">Qadamlar</span>
               </div>
               <Badge variant="secondary" className="bg-health-100 text-health-700">
                 {userData.stepsToday.toLocaleString()}/{userData.stepsTarget.toLocaleString()}
@@ -149,8 +149,8 @@ export default function Index() {
             </div>
             <Progress value={stepsProgress} className="h-2 bg-health-100" />
             <p className="text-sm text-muted-foreground mt-2">
-              {stepsProgress >= 100 ? "Excellent! You've exceeded your daily step goal!" : 
-               `${(userData.stepsTarget - userData.stepsToday).toLocaleString()} more steps to reach your goal`}
+              {stepsProgress >= 100 ? "Zo'r! Siz kunlik qadamlar maqsadini oshib ketdingiz!" :
+               `Maqsadga erishish uchun yana ${(userData.stepsTarget - userData.stepsToday).toLocaleString()} qadam kerak`}
             </p>
           </CardContent>
         </Card>
@@ -161,38 +161,38 @@ export default function Index() {
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-2">
                 <TrendingUp className="h-5 w-5 text-health-500" />
-                <span className="font-medium">Weight Progress</span>
+                <span className="font-medium">Vazn Taraqqiyoti</span>
               </div>
               <Badge variant="secondary" className="bg-health-100 text-health-700">
                 {userData.currentWeight} kg
               </Badge>
             </div>
             <div className="flex justify-between text-sm text-muted-foreground">
-              <span>Current: {userData.currentWeight} kg</span>
-              <span>Target: {userData.targetWeight} kg</span>
+              <span>Hozirgi: {userData.currentWeight} kg</span>
+              <span>Maqsad: {userData.targetWeight} kg</span>
             </div>
             <p className="text-sm text-health-600 mt-2 font-medium">
-              {userData.currentWeight > userData.targetWeight ? 
-                `${(userData.currentWeight - userData.targetWeight).toFixed(1)} kg to lose` :
-                "Goal achieved! 🎉"}
+              {userData.currentWeight > userData.targetWeight ?
+                `${(userData.currentWeight - userData.targetWeight).toFixed(1)} kg kamaytirishingiz kerak` :
+                "Maqsadga erishdingiz! 🎉"}
             </p>
           </CardContent>
         </Card>
       </div>
 
       {/* Weekly Summary Link */}
-      <Card className="bg-gradient-to-r from-accent to-secondary border-health-200">
+      <Card className="bg-gradient-to-r from-accent-50 to-secondary border-health-200">
         <CardContent className="pt-6">
           <Link to="/analytics" className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <Calendar className="h-6 w-6 text-health-600" />
               <div>
-                <h3 className="font-semibold text-health-800">View Analytics</h3>
-                <p className="text-sm text-health-600">Track your weekly progress</p>
+                <h3 className="font-semibold text-health-800">Tahlilni Ko'rish</h3>
+                <p className="text-sm text-health-600">Haftalik taraqqiyotingizni kuzating</p>
               </div>
             </div>
             <Button variant="ghost" size="sm" className="text-health-600 hover:text-health-700">
-              View →
+              Ko'rish →
             </Button>
           </Link>
         </CardContent>
