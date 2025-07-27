@@ -45,28 +45,28 @@ export default function Index() {
         </div>
 
         {/* Calorie Balance Card */}
-        <Card className="gradient-mint border-mint-200 card-shadow-lg hover-lift animate-fade-in-up rounded-3xl overflow-hidden">
-          <CardHeader className="pb-3">
-            <CardTitle className="flex items-center gap-3 text-mint-800">
-              <div className="p-2 bg-white/50 rounded-xl">
-                <Target className="h-6 w-6" />
+        <Card className="gradient-mint border-mint-200 card-shadow-lg hover-lift animate-fade-in-up rounded-2xl sm:rounded-3xl overflow-hidden">
+          <CardHeader className="pb-2 sm:pb-3">
+            <CardTitle className="flex items-center gap-2 sm:gap-3 text-mint-800">
+              <div className="p-1.5 sm:p-2 bg-white/50 rounded-lg sm:rounded-xl">
+                <Target className="h-5 w-5 sm:h-6 sm:w-6" />
               </div>
-              <span className="text-xl font-bold">Bugungi Kaloriya Balansi</span>
+              <span className="text-lg sm:text-xl font-bold">Bugungi Kaloriya Balansi</span>
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-6">
-            <div className="grid grid-cols-3 gap-4 text-center">
-              <div className="space-y-2 p-4 bg-white/40 rounded-2xl">
-                <p className="text-sm text-mint-600 font-semibold">Iste'mol</p>
-                <p className="text-3xl font-bold text-mint-800">{userData.caloriesConsumed.toLocaleString()}</p>
+          <CardContent className="space-y-4 sm:space-y-6">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 text-center">
+              <div className="space-y-1 sm:space-y-2 p-3 sm:p-4 bg-white/40 rounded-xl sm:rounded-2xl">
+                <p className="text-xs sm:text-sm text-mint-600 font-semibold">Iste'mol</p>
+                <p className="text-xl sm:text-2xl lg:text-3xl font-bold text-mint-800">{userData.caloriesConsumed.toLocaleString()}</p>
               </div>
-              <div className="space-y-2 p-4 bg-white/40 rounded-2xl">
-                <p className="text-sm text-mint-600 font-semibold">Yoqilgan</p>
-                <p className="text-3xl font-bold text-mint-600">{userData.caloriesBurned}</p>
+              <div className="space-y-1 sm:space-y-2 p-3 sm:p-4 bg-white/40 rounded-xl sm:rounded-2xl">
+                <p className="text-xs sm:text-sm text-mint-600 font-semibold">Yoqilgan</p>
+                <p className="text-xl sm:text-2xl lg:text-3xl font-bold text-mint-600">{userData.caloriesBurned}</p>
               </div>
-              <div className="space-y-2 p-4 bg-white/40 rounded-2xl">
-                <p className="text-sm text-mint-600 font-semibold">Qolgan</p>
-                <p className={`text-3xl font-bold ${caloriesRemaining > 0 ? 'text-mint-500' : 'text-red-500'}`}>
+              <div className="space-y-1 sm:space-y-2 p-3 sm:p-4 bg-white/40 rounded-xl sm:rounded-2xl">
+                <p className="text-xs sm:text-sm text-mint-600 font-semibold">Qolgan</p>
+                <p className={`text-xl sm:text-2xl lg:text-3xl font-bold ${caloriesRemaining > 0 ? 'text-mint-500' : 'text-red-500'}`}>
                   {caloriesRemaining > 0 ? caloriesRemaining : 0}
                 </p>
               </div>
