@@ -34,10 +34,10 @@ export function Layout({ children }: LayoutProps) {
                 key={path}
                 to={path}
                 className={cn(
-                  "flex flex-col items-center gap-1 px-3 py-2 rounded-xl transition-all duration-200",
+                  "flex flex-col items-center gap-2 px-4 py-3 rounded-2xl transition-all duration-300 transform",
                   isActive
-                    ? "bg-mint-500 text-white shadow-lg"
-                    : "text-mint-600 hover:text-mint-800 hover:bg-mint-100/50"
+                    ? "bg-gradient-to-r from-mint-500 to-mint-600 text-white shadow-lg scale-110"
+                    : "text-mint-600 hover:text-mint-800 hover:bg-mint-100/70 hover:scale-105"
                 )}
               >
                 <Icon size={20} className={cn(
