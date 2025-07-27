@@ -7,8 +7,8 @@ export default function Assistant() {
     <div className="p-4 space-y-6">
       {/* Header */}
       <div className="text-center space-y-2">
-        <h1 className="text-2xl font-bold text-foreground">AI Assistant</h1>
-        <p className="text-muted-foreground">Get personalized health tips and recommendations</p>
+        <h1 className="text-2xl font-bold text-foreground">AI Yordamchi</h1>
+        <p className="text-muted-foreground">Shaxsiy sog'liq maslahatlari va tavsiyalarni oling</p>
       </div>
 
       {/* Coming Soon Card */}
@@ -20,10 +20,10 @@ export default function Assistant() {
             </div>
           </div>
           <div>
-            <h2 className="text-xl font-semibold text-health-800 mb-2">Coming Soon!</h2>
+            <h2 className="text-xl font-semibold text-health-800 mb-2">Tez Orada!</h2>
             <p className="text-health-600">
-              Your personal AI health assistant will provide customized tips, 
-              answer your nutrition questions, and help you achieve your health goals.
+              Sizning shaxsiy AI sog'liq yordamchingiz moslashtirilgan maslahatlar beradi,
+              ovqatlanish bo'yicha savollaringizga javob beradi va sog'liq maqsadlaringizga erishishga yordam beradi.
             </p>
           </div>
         </CardContent>
@@ -31,17 +31,17 @@ export default function Assistant() {
 
       {/* Features Preview */}
       <div className="space-y-3">
-        <h2 className="text-lg font-semibold text-foreground">What to Expect</h2>
-        
+        <h2 className="text-lg font-semibold text-foreground">Nimani Kutish Mumkin</h2>
+
         <div className="grid gap-3">
           <Card>
             <CardContent className="pt-6">
               <div className="flex items-start gap-3">
-                <Lightbulb className="h-5 w-5 text-yellow-500 mt-1" />
+                <Lightbulb className="h-5 w-5 text-amber-500 mt-1" />
                 <div>
-                  <h3 className="font-medium">Personalized Tips</h3>
+                  <h3 className="font-medium">Shaxsiy Maslahatlar</h3>
                   <p className="text-sm text-muted-foreground">
-                    Get daily health recommendations based on your goals and progress
+                    Maqsadlaringiz va taraqqiyotingizga asoslangan kunlik sog'liq tavsiyalari
                   </p>
                 </div>
               </div>
@@ -53,9 +53,9 @@ export default function Assistant() {
               <div className="flex items-start gap-3">
                 <Heart className="h-5 w-5 text-red-500 mt-1" />
                 <div>
-                  <h3 className="font-medium">Health Analysis</h3>
+                  <h3 className="font-medium">Sog'liq Tahlili</h3>
                   <p className="text-sm text-muted-foreground">
-                    Analyze your eating patterns and suggest improvements
+                    Ovqatlanish tarzingizni tahlil qilish va yaxshilash takliflarini berish
                   </p>
                 </div>
               </div>
@@ -67,9 +67,9 @@ export default function Assistant() {
               <div className="flex items-start gap-3">
                 <Zap className="h-5 w-5 text-blue-500 mt-1" />
                 <div>
-                  <h3 className="font-medium">Instant Answers</h3>
+                  <h3 className="font-medium">Tezkor Javoblar</h3>
                   <p className="text-sm text-muted-foreground">
-                    Ask nutrition questions and get AI-powered responses
+                    Ovqatlanish bo'yicha savollar bering va AI tomonidan javoblar oling
                   </p>
                 </div>
               </div>
@@ -80,7 +80,7 @@ export default function Assistant() {
 
       <div className="text-center pt-4">
         <p className="text-sm text-muted-foreground">
-          Continue using the app to help us build a better AI assistant for you! 🤖
+          Siz uchun yaxshiroq AI yordamchi yaratishda yordam berish uchun ilovadan foydalanishni davom eting! 🤖
         </p>
       </div>
     </div>
