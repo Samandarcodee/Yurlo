@@ -162,25 +162,25 @@ export default function Index() {
           </Card>
 
           {/* Steps */}
-          <Card className="card-shadow hover-lift rounded-2xl overflow-hidden">
-            <CardContent className="pt-6">
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 bg-health-100 rounded-xl">
-                    <Activity className="h-6 w-6 text-health-600" />
+          <Card className="card-shadow hover-lift rounded-xl sm:rounded-2xl overflow-hidden">
+            <CardContent className="pt-4 sm:pt-6">
+              <div className="flex items-center justify-between mb-3 sm:mb-4">
+                <div className="flex items-center gap-2 sm:gap-3">
+                  <div className="p-1.5 sm:p-2 bg-health-100 rounded-lg sm:rounded-xl">
+                    <Activity className="h-5 w-5 sm:h-6 sm:w-6 text-health-600" />
                   </div>
-                  <span className="font-bold text-lg">Qadamlar</span>
+                  <span className="font-bold text-base sm:text-lg">Qadamlar</span>
                 </div>
-                <Badge className="bg-health-100 text-health-700 px-3 py-1 rounded-full font-bold">
+                <Badge className="bg-health-100 text-health-700 px-2 sm:px-3 py-1 rounded-full font-bold text-xs sm:text-sm">
                   {userData.stepsToday.toLocaleString()}/{userData.stepsTarget.toLocaleString()}
                 </Badge>
               </div>
-              <div className="relative mb-3">
-                <Progress value={stepsProgress} className="h-3 bg-health-50 rounded-full" />
-                <div className="absolute inset-0 bg-gradient-to-r from-health-400 to-health-500 rounded-full" 
+              <div className="relative mb-2 sm:mb-3">
+                <Progress value={stepsProgress} className="h-2 sm:h-3 bg-health-50 rounded-full" />
+                <div className="absolute inset-0 bg-gradient-to-r from-health-400 to-health-500 rounded-full"
                      style={{ width: `${stepsProgress}%` }}></div>
               </div>
-              <p className="text-sm text-muted-foreground font-medium">
+              <p className="text-xs sm:text-sm text-muted-foreground font-medium">
                 {stepsProgress >= 100 ? "🚀 Zo'r! Siz kunlik qadamlar maqsadini oshib ketdingiz!" :
                  `👟 Maqsadga erishish uchun yana ${(userData.stepsTarget - userData.stepsToday).toLocaleString()} qadam kerak`}
               </p>
@@ -188,24 +188,24 @@ export default function Index() {
           </Card>
 
           {/* Weight Progress */}
-          <Card className="card-shadow hover-lift rounded-2xl overflow-hidden">
-            <CardContent className="pt-6">
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 bg-mint-100 rounded-xl">
-                    <TrendingUp className="h-6 w-6 text-mint-600" />
+          <Card className="card-shadow hover-lift rounded-xl sm:rounded-2xl overflow-hidden">
+            <CardContent className="pt-4 sm:pt-6">
+              <div className="flex items-center justify-between mb-3 sm:mb-4">
+                <div className="flex items-center gap-2 sm:gap-3">
+                  <div className="p-1.5 sm:p-2 bg-mint-100 rounded-lg sm:rounded-xl">
+                    <TrendingUp className="h-5 w-5 sm:h-6 sm:w-6 text-mint-600" />
                   </div>
-                  <span className="font-bold text-lg">Vazn Taraqqiyoti</span>
+                  <span className="font-bold text-base sm:text-lg">Vazn Taraqqiyoti</span>
                 </div>
-                <Badge className="bg-mint-100 text-mint-700 px-3 py-1 rounded-full font-bold">
+                <Badge className="bg-mint-100 text-mint-700 px-2 sm:px-3 py-1 rounded-full font-bold text-xs sm:text-sm">
                   {userData.currentWeight} kg
                 </Badge>
               </div>
-              <div className="flex justify-between text-sm text-muted-foreground mb-3">
+              <div className="flex justify-between text-xs sm:text-sm text-muted-foreground mb-2 sm:mb-3">
                 <span className="font-semibold">Hozirgi: {userData.currentWeight} kg</span>
                 <span className="font-semibold">Maqsad: {userData.targetWeight} kg</span>
               </div>
-              <p className="text-sm text-mint-600 font-bold bg-mint-50 p-3 rounded-xl">
+              <p className="text-xs sm:text-sm text-mint-600 font-bold bg-mint-50 p-2 sm:p-3 rounded-lg sm:rounded-xl">
                 {userData.currentWeight > userData.targetWeight ?
                   `📉 ${(userData.currentWeight - userData.targetWeight).toFixed(1)} kg kamaytirishingiz kerak` :
                   "🎉 Maqsadga erishdingiz!"}
