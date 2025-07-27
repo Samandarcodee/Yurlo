@@ -2,6 +2,13 @@ import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import { handleDemo } from "./routes/demo";
+import { 
+  createOrUpdateProfile, 
+  getUserProfile, 
+  updateProfileFields, 
+  deleteProfile, 
+  getAIRecommendations 
+} from "./routes/user";
 
 export function createServer() {
   const app = express();
@@ -18,6 +25,13 @@ export function createServer() {
   });
 
   app.get("/api/demo", handleDemo);
+
+  // User Profile API routes
+  app.post("/api/user/profile", createOrUpdateProfile);
+  app.get("/api/user/profile", getUserProfile);
+  app.put("/api/user/profile", updateProfileFields);
+  app.delete("/api/user/profile", deleteProfile);
+  app.get("/api/user/recommendations", getAIRecommendations);
 
   return app;
 }
