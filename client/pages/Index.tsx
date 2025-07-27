@@ -136,25 +136,25 @@ export default function Index() {
           </h2>
 
           {/* Water Intake */}
-          <Card className="card-shadow hover-lift rounded-2xl overflow-hidden">
-            <CardContent className="pt-6">
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 bg-water-100 rounded-xl">
-                    <Droplets className="h-6 w-6 text-water-600" />
+          <Card className="card-shadow hover-lift rounded-xl sm:rounded-2xl overflow-hidden">
+            <CardContent className="pt-4 sm:pt-6">
+              <div className="flex items-center justify-between mb-3 sm:mb-4">
+                <div className="flex items-center gap-2 sm:gap-3">
+                  <div className="p-1.5 sm:p-2 bg-water-100 rounded-lg sm:rounded-xl">
+                    <Droplets className="h-5 w-5 sm:h-6 sm:w-6 text-water-600" />
                   </div>
-                  <span className="font-bold text-lg">Suv Iste'moli</span>
+                  <span className="font-bold text-base sm:text-lg">Suv Iste'moli</span>
                 </div>
-                <Badge className="bg-water-100 text-water-700 px-3 py-1 rounded-full font-bold">
+                <Badge className="bg-water-100 text-water-700 px-2 sm:px-3 py-1 rounded-full font-bold text-xs sm:text-sm">
                   {userData.waterIntake}/{userData.waterTarget} stakan
                 </Badge>
               </div>
-              <div className="relative mb-3">
-                <Progress value={waterProgress} className="h-3 bg-water-50 rounded-full" />
-                <div className="absolute inset-0 bg-gradient-to-r from-water-400 to-water-500 rounded-full" 
+              <div className="relative mb-2 sm:mb-3">
+                <Progress value={waterProgress} className="h-2 sm:h-3 bg-water-50 rounded-full" />
+                <div className="absolute inset-0 bg-gradient-to-r from-water-400 to-water-500 rounded-full"
                      style={{ width: `${waterProgress}%` }}></div>
               </div>
-              <p className="text-sm text-muted-foreground font-medium">
+              <p className="text-xs sm:text-sm text-muted-foreground font-medium">
                 {waterProgress >= 100 ? "🎉 Ajoyib! Siz kunlik maqsadingizga erishdingiz!" :
                  `💧 Maqsadga erishish uchun yana ${userData.waterTarget - userData.waterIntake} stakan kerak`}
               </p>
