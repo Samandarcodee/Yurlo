@@ -181,17 +181,17 @@ export default function Index() {
       </div>
 
       {/* Weekly Summary Link */}
-      <Card className="bg-gradient-to-r from-accent-50 to-secondary border-health-200">
+      <Card className="bg-gradient-to-r from-water-50 to-mint-50 border-mint-200">
         <CardContent className="pt-6">
           <Link to="/analytics" className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <Calendar className="h-6 w-6 text-health-600" />
+              <Calendar className="h-6 w-6 text-mint-600" />
               <div>
-                <h3 className="font-semibold text-health-800">Tahlilni Ko'rish</h3>
-                <p className="text-sm text-health-600">Haftalik taraqqiyotingizni kuzating</p>
+                <h3 className="font-semibold text-mint-800">Tahlilni Ko'rish</h3>
+                <p className="text-sm text-mint-600">Haftalik taraqqiyotingizni kuzating</p>
               </div>
             </div>
-            <Button variant="ghost" size="sm" className="text-health-600 hover:text-health-700">
+            <Button variant="ghost" size="sm" className="text-mint-600 hover:text-mint-700">
               Ko'rish →
             </Button>
           </Link>
