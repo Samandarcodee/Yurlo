@@ -19,7 +19,9 @@
     "start": "node dist/server/node-build.mjs",
     "test": "vitest --run",
     "format.fix": "prettier --write .",
-    "typecheck": "tsc"
+    "typecheck": "tsc",
+    "bot:setup": "node scripts/setup-bot.js",
+    "bot:info": "node -e \"import('./scripts/setup-bot.js').then(m => m.getBotInfo())\""
   },
   "dependencies": {
     "dotenv": "^17.2.0",
