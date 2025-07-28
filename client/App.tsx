@@ -7,7 +7,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { Layout } from "./components/Layout";
-import { UserProvider, useOnboardingCheck } from "./contexts/UserContext";
+import { UserProvider, useOnboardingCheck, useUser } from "./contexts/UserContext";
 import Index from "./pages/Index";
 import AddMeal from "./pages/AddMeal";
 import Assistant from "./pages/Assistant";
