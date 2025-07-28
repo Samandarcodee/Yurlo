@@ -107,42 +107,9 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
             setIsFirstTime(true);
           }
         } else {
-          console.log("No saved profile found");
-          // Backend'dan tekshiramiz
-          try {
-            const response = await fetch("/api/user/profile", {
-              headers: {
-                "x-telegram-id": telegramId,
-              },
-            });
-
-            const result = await response.json();
-
-            if (result.success && result.data) {
-              // Telegram user ma'lumotlarini qo'shish
-              if (telegramUser) {
-                result.data.telegramId = telegramId;
-                result.data.name = result.data.name || telegramUser.first_name;
-                if (telegramUser.language_code && !result.data.language) {
-                  result.data.language =
-                    telegramUser.language_code === "uz"
-                      ? "uz"
-                      : telegramUser.language_code === "ru"
-                        ? "ru"
-                        : "en";
-                }
-              }
-
-              setUser(result.data);
-              localStorage.setItem(storageKey, JSON.stringify(result.data));
-              setIsFirstTime(false);
-            } else {
-              setIsFirstTime(true);
-            }
-          } catch (error) {
-            console.log("Backend mavjud emas, localStorage ishlatiladi");
-            setIsFirstTime(true);
-          }
+          console.log("No saved profile found - yangi foydalanuvchi");
+          // Static deployment uchun API so'rovlarsiz
+          setIsFirstTime(true);
         }
       } catch (error) {
         console.error("Foydalanuvchi ma'lumotlarini yuklashda xatolik:", error);
