@@ -245,33 +245,15 @@ export const useAIRecommendations = () => {
   const fetchRecommendations = async () => {
     setLoading(true);
     try {
-      // Telegram context'dan foydalanuvchi ID'sini olish
-      const telegramId =
-        window.Telegram?.WebApp?.initDataUnsafe?.user?.id?.toString() ||
-        "demo_user_123";
+      // Static deployment uchun doim mock ma'lumotlarni ishlatish
+      console.log("Static deployment: mock tavsiyalar yuklanmoqda...");
 
-      const response = await fetch("/api/user/recommendations", {
-        headers: {
-          "x-telegram-id": telegramId,
-        },
-      });
+      // Kichik delay simulation qilish
+      await new Promise(resolve => setTimeout(resolve, 500));
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const result = await response.json();
-
-      if (result.success) {
-        setRecommendations(result.data);
-      } else {
-        console.warn("AI tavsiyalar olishda server xatoligi:", result.message);
-        // Fallback mock data
-        setRecommendations(getMockRecommendations());
-      }
+      setRecommendations(getMockRecommendations());
     } catch (error) {
-      console.error("AI tavsiyalar olishda xatolik:", error);
-      // Backend mavjud bo'lmasa, mock ma'lumotlarni ishlatish
+      console.error("Mock tavsiyalar yuklashda xatolik:", error);
       setRecommendations(getMockRecommendations());
     }
     setLoading(false);
