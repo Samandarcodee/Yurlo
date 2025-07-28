@@ -5,6 +5,7 @@ import React, {
   useState,
   ReactNode,
 } from "react";
+import { useTelegram } from "../hooks/use-telegram";
 
 export interface UserProfile {
   telegramId?: string;
