@@ -185,13 +185,23 @@ export const useAIRecommendations = () => {
         },
       });
 
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
       const result = await response.json();
 
       if (result.success) {
         setRecommendations(result.data);
+      } else {
+        console.warn("AI tavsiyalar olishda server xatoligi:", result.message);
+        // Fallback mock data
+        setRecommendations(getMockRecommendations());
       }
     } catch (error) {
       console.error("AI tavsiyalar olishda xatolik:", error);
+      // Backend mavjud bo'lmasa, mock ma'lumotlarni ishlatish
+      setRecommendations(getMockRecommendations());
     }
     setLoading(false);
   };
