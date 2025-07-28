@@ -6,6 +6,7 @@ import React, {
   ReactNode,
 } from "react";
 import { useTelegram } from "../hooks/use-telegram";
+import { logEnvironmentInfo, shouldUseLocalStorage } from "../utils/environment";
 
 export interface UserProfile {
   telegramId?: string;
