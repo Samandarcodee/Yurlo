@@ -54,7 +54,7 @@ export default function Assistant() {
           </p>
         </div>
 
-        {recommendations && (
+        {recommendations ? (
           <>
             {/* Daily Tips */}
             <Card className="gradient-water border-water-200 card-shadow-lg hover-lift animate-fade-in-up rounded-2xl sm:rounded-3xl overflow-hidden">
@@ -161,6 +161,20 @@ export default function Assistant() {
               </CardContent>
             </Card>
           </>
+        ) : (
+          <Card className="card-shadow hover-lift rounded-xl sm:rounded-2xl overflow-hidden">
+            <CardContent className="pt-6 text-center space-y-4">
+              <div className="inline-block p-4 bg-water-100 rounded-full">
+                <MessageCircle className="h-8 w-8 text-water-600" />
+              </div>
+              <div>
+                <h3 className="font-semibold text-lg mb-2">AI Tavsiyalar Yuklanmoqda</h3>
+                <p className="text-muted-foreground text-sm">
+                  Shaxsiy tavsiyalarni olish uchun "Yangi Tavsiyalar Olish" tugmasini bosing
+                </p>
+              </div>
+            </CardContent>
+          </Card>
         )}
 
         {/* Refresh Button */}
