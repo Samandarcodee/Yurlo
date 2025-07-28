@@ -10,6 +10,7 @@ interface LayoutProps {
 
 export function Layout({ children }: LayoutProps) {
   const location = useLocation();
+  const { hapticFeedback, colorScheme, platform } = useTelegram();
 
   const navItems = [
     { path: "/", icon: Home, label: "Bosh sahifa" },
@@ -19,20 +20,41 @@ export function Layout({ children }: LayoutProps) {
     { path: "/profile", icon: Settings, label: "Profil" },
   ];
 
+  // Telegram WebApp theme'ga moslashish
+  useEffect(() => {
+    if (colorScheme === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [colorScheme]);
+
+  const handleNavClick = () => {
+    // Telegram'da haptic feedback
+    hapticFeedback.selection();
+  };
+
   return (
     <div className="min-h-screen bg-background flex flex-col">
       {/* Main Content */}
-      <main className="flex-1 pb-20">{children}</main>
+      <main className="flex-1 pb-20" style={{
+        paddingBottom: platform === 'ios' ? '90px' : '80px' // iOS uchun qo'shimcha bo'sh joy
+      }}>
+        {children}
+      </main>
 
       {/* Bottom Navigation */}
       <nav className="fixed bottom-0 left-0 right-0 bg-white/80 border-t border-mint-200/50 backdrop-blur-xl shadow-2xl">
-        <div className="flex items-center justify-around px-4 py-3">
+        <div className="flex items-center justify-around px-4 py-3" style={{
+          paddingBottom: platform === 'ios' ? '20px' : '12px' // iOS safe area uchun
+        }}>
           {navItems.map(({ path, icon: Icon, label }) => {
             const isActive = location.pathname === path;
             return (
               <Link
                 key={path}
                 to={path}
+                onClick={handleNavClick}
                 className={cn(
                   "flex flex-col items-center gap-2 px-4 py-3 rounded-2xl transition-all duration-300 transform",
                   isActive
