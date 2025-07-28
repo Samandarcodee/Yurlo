@@ -117,7 +117,7 @@ async function setupBotVercel() {
 
   console.log("\n📝 Vercel uchun bot sozlamalarini o'rnatish...");
   await setMenuButtonVercel();
-  await setWebhookVercel();
+  await removeWebhook();
 
   console.log("\n🎉 Vercel Bot setup yakunlandi!");
   console.log("\n📋 Keyingi qadamlar:");
