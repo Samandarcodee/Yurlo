@@ -80,33 +80,25 @@ async function setMenuButtonVercel() {
   }
 }
 
-// Webhook o'rnatish (Vercel URL bilan)
-async function setWebhookVercel() {
+// Webhook o'chirish (Vercel static deployment uchun)
+async function removeWebhook() {
   try {
-    const VERCEL_URL = getVercelUrl();
-    const webhookUrl = `${VERCEL_URL}/api/telegram/webhook`;
-
     const response = await fetch(
-      `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/setWebhook`,
+      `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/deleteWebhook`,
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          url: webhookUrl,
-          allowed_updates: ["message", "callback_query", "inline_query"],
-        }),
       },
     );
 
     const data = await response.json();
 
     if (data.ok) {
-      console.log("✅ Vercel Webhook o'rnatildi:");
-      console.log(`   🔗 URL: ${webhookUrl}`);
+      console.log("✅ Webhook o'chirildi (static deployment uchun)");
     } else {
-      console.error("❌ Webhook o'rnatishda xatolik:", data.description);
+      console.error("❌ Webhook o'chirishda xatolik:", data.description);
     }
   } catch (error) {
     console.error("❌ Network xatoligi:", error.message);
