@@ -24,6 +24,7 @@
     "bot:setup:vercel": "node scripts/setup-bot-vercel.js",
     "bot:fix": "node scripts/fix-bot.js",
     "bot:status": "node scripts/check-bot-status.js",
+    "bot:name": "node scripts/set-bot-name.js",
     "bot:info": "node -e \"import('./scripts/setup-bot.js').then(m => m.getBotInfo())\"",
     "vercel-build": "npm run build:client"
   },
