@@ -154,8 +154,23 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
 
   const updateUser = (userData: UserProfile) => {
     console.log("Updating user data:", userData);
+
+    // Telegram user ma'lumotlarini qo'shish
+    if (telegramUser) {
+      userData.telegramId = telegramUser.id.toString();
+      userData.name = userData.name || telegramUser.first_name;
+      if (telegramUser.language_code && !userData.language) {
+        userData.language = telegramUser.language_code === 'uz' ? 'uz' :
+                           telegramUser.language_code === 'ru' ? 'ru' : 'en';
+      }
+    }
+
     setUser(userData);
-    localStorage.setItem("userProfile", JSON.stringify(userData));
+
+    // Telegram ID asosida localStorage key yaratish
+    const telegramId = telegramUser?.id?.toString() || "demo_user_123";
+    const storageKey = `userProfile_${telegramId}`;
+    localStorage.setItem(storageKey, JSON.stringify(userData));
     setIsFirstTime(false);
   };
 
