@@ -55,13 +55,21 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isFirstTime, setIsFirstTime] = useState(false);
 
+  // Telegram WebApp hook
+  const { user: telegramUser, isReady: isTelegramReady } = useTelegram();
+
   // localStorage'dan foydalanuvchi ma'lumotlarini yuklash
   useEffect(() => {
     const loadUserProfile = async () => {
       setIsLoading(true);
       try {
+        // Telegram foydalanuvchi ID'sini olish
+        const telegramId = telegramUser?.id?.toString() || "demo_user_123";
+        console.log("Telegram user ID:", telegramId);
+
         // Avval localStorage'dan tekshiramiz
-        const savedProfile = localStorage.getItem("userProfile");
+        const storageKey = `userProfile_${telegramId}`;
+        const savedProfile = localStorage.getItem(storageKey);
         console.log("Saved profile from localStorage:", savedProfile);
 
         if (savedProfile) {
@@ -71,17 +79,27 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
 
             // Ma'lumotlar to'g'ri formatda ekanligini tekshirish
             if (profileData && profileData.name && profileData.age) {
+              // Telegram user ma'lumotlarini qo'shish/yangilash
+              if (telegramUser) {
+                profileData.telegramId = telegramId;
+                profileData.name = profileData.name || telegramUser.first_name;
+                if (telegramUser.language_code && !profileData.language) {
+                  profileData.language = telegramUser.language_code === 'uz' ? 'uz' :
+                                       telegramUser.language_code === 'ru' ? 'ru' : 'en';
+                }
+              }
+
               setUser(profileData);
               setIsFirstTime(false);
               console.log("User loaded from localStorage successfully");
             } else {
               console.log("Invalid profile data, clearing localStorage");
-              localStorage.removeItem("userProfile");
+              localStorage.removeItem(storageKey);
               setIsFirstTime(true);
             }
           } catch (parseError) {
             console.error("localStorage parse error:", parseError);
-            localStorage.removeItem("userProfile");
+            localStorage.removeItem(storageKey);
             setIsFirstTime(true);
           }
         } else {
@@ -90,15 +108,25 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
           try {
             const response = await fetch("/api/user/profile", {
               headers: {
-                "x-telegram-id": "demo_user_123", // Demo uchun
+                "x-telegram-id": telegramId,
               },
             });
 
             const result = await response.json();
 
             if (result.success && result.data) {
+              // Telegram user ma'lumotlarini qo'shish
+              if (telegramUser) {
+                result.data.telegramId = telegramId;
+                result.data.name = result.data.name || telegramUser.first_name;
+                if (telegramUser.language_code && !result.data.language) {
+                  result.data.language = telegramUser.language_code === 'uz' ? 'uz' :
+                                       telegramUser.language_code === 'ru' ? 'ru' : 'en';
+                }
+              }
+
               setUser(result.data);
-              localStorage.setItem("userProfile", JSON.stringify(result.data));
+              localStorage.setItem(storageKey, JSON.stringify(result.data));
               setIsFirstTime(false);
             } else {
               setIsFirstTime(true);
@@ -115,8 +143,14 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
       setIsLoading(false);
     };
 
-    loadUserProfile();
-  }, []);
+    // Telegram tayyor bo'lgandan keyin yuklash
+    if (isTelegramReady) {
+      loadUserProfile();
+    } else if (!isTelegramReady && typeof window !== 'undefined') {
+      // Telegram mavjud bo'lmasa ham ishlashi uchun
+      setTimeout(loadUserProfile, 1000);
+    }
+  }, [telegramUser, isTelegramReady]);
 
   const updateUser = (userData: UserProfile) => {
     console.log("Updating user data:", userData);
