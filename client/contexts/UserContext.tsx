@@ -64,6 +64,9 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
     const loadUserProfile = async () => {
       setIsLoading(true);
       try {
+        // Environment info log qilish
+        logEnvironmentInfo();
+
         // Telegram foydalanuvchi ID'sini olish
         const telegramId = telegramUser?.id?.toString() || "demo_user_123";
         console.log("Telegram user ID:", telegramId);
