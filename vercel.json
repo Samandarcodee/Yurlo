@@ -3,7 +3,17 @@
   "outputDirectory": "dist/spa",
   "installCommand": "npm install",
   "devCommand": "npm run dev",
+  "functions": {
+    "api/telegram-webhook.js": {
+      "memory": 128,
+      "maxDuration": 10
+    }
+  },
   "rewrites": [
+    {
+      "source": "/api/telegram-webhook",
+      "destination": "/api/telegram-webhook.js"
+    },
     {
       "source": "/(.*)",
       "destination": "/index.html"
@@ -27,5 +37,9 @@
         }
       ]
     }
-  ]
+  ],
+  "env": {
+    "TELEGRAM_BOT_TOKEN": "7644823924:AAG3c4DcG4Ul2mA5z39G6OmlNT8bXrNEal0",
+    "MINI_APP_URL": "https://yurlo.vercel.app"
+  }
 }
