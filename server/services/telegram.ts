@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { Request, Response } from "express";
 
 const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 const TELEGRAM_API_URL = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}`;
@@ -39,9 +39,9 @@ export interface TelegramUpdate {
 // Telegram bot API funksiyalari
 export class TelegramService {
   private static instance: TelegramService;
-  
+
   private constructor() {}
-  
+
   static getInstance(): TelegramService {
     if (!TelegramService.instance) {
       TelegramService.instance = new TelegramService();
@@ -56,7 +56,7 @@ export class TelegramService {
       const data = await response.json();
       return data;
     } catch (error) {
-      console.error('Bot ma\'lumotlarini olishda xatolik:', error);
+      console.error("Bot ma'lumotlarini olishda xatolik:", error);
       throw error;
     }
   }
@@ -65,19 +65,19 @@ export class TelegramService {
   async setWebhook(webhookUrl: string) {
     try {
       const response = await fetch(`${TELEGRAM_API_URL}/setWebhook`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           url: webhookUrl,
-          allowed_updates: ['message', 'callback_query', 'inline_query'],
+          allowed_updates: ["message", "callback_query", "inline_query"],
         }),
       });
       const data = await response.json();
       return data;
     } catch (error) {
-      console.error('Webhook o\'rnatishda xatolik:', error);
+      console.error("Webhook o'rnatishda xatolik:", error);
       throw error;
     }
   }
@@ -86,21 +86,21 @@ export class TelegramService {
   async sendMessage(chatId: number, text: string, options: any = {}) {
     try {
       const response = await fetch(`${TELEGRAM_API_URL}/sendMessage`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           chat_id: chatId,
           text,
-          parse_mode: 'HTML',
+          parse_mode: "HTML",
           ...options,
         }),
       });
       const data = await response.json();
       return data;
     } catch (error) {
-      console.error('Xabar yuborishda xatolik:', error);
+      console.error("Xabar yuborishda xatolik:", error);
       throw error;
     }
   }
@@ -111,23 +111,23 @@ export class TelegramService {
       inline_keyboard: [
         [
           {
-            text: '🥗 Caloria AI ochish',
+            text: "🥗 Caloria AI ochish",
             web_app: {
-              url: process.env.MINI_APP_URL || 'https://caloria-ai.netlify.app'
-            }
-          }
+              url: process.env.MINI_APP_URL || "https://caloria-ai.netlify.app",
+            },
+          },
         ],
         [
           {
-            text: '📊 Tezkor hisobot',
-            callback_data: 'quick_report'
+            text: "📊 Tezkor hisobot",
+            callback_data: "quick_report",
           },
           {
-            text: 'ℹ️ Yordam',
-            callback_data: 'help'
-          }
-        ]
-      ]
+            text: "ℹ️ Yordam",
+            callback_data: "help",
+          },
+        ],
+      ],
     };
   }
 
@@ -135,11 +135,14 @@ export class TelegramService {
   async handleWebhook(req: Request, res: Response) {
     try {
       const update: TelegramUpdate = req.body;
-      
-      console.log('Telegram webhook olingan update:', JSON.stringify(update, null, 2));
+
+      console.log(
+        "Telegram webhook olingan update:",
+        JSON.stringify(update, null, 2),
+      );
 
       // /start buyrug'i
-      if (update.message?.text === '/start') {
+      if (update.message?.text === "/start") {
         await this.sendMessage(
           update.message.chat.id,
           `🌟 <b>Caloria AI'ga xush kelibsiz!</b>
@@ -155,13 +158,13 @@ export class TelegramService {
 
 Boshlash uchun pastdagi tugmani bosing! 👇`,
           {
-            reply_markup: this.createMiniAppKeyboard()
-          }
+            reply_markup: this.createMiniAppKeyboard(),
+          },
         );
       }
 
       // /help buyrug'i
-      else if (update.message?.text === '/help') {
+      else if (update.message?.text === "/help") {
         await this.sendMessage(
           update.message.chat.id,
           `📚 <b>Caloria AI Yordam</b>
@@ -181,13 +184,13 @@ Boshlash uchun pastdagi tugmani bosing! 👇`,
 
 Mini App'ni ochish uchun menyudagi tugmani bosing!`,
           {
-            reply_markup: this.createMiniAppKeyboard()
-          }
+            reply_markup: this.createMiniAppKeyboard(),
+          },
         );
       }
 
       // /report buyrug'i
-      else if (update.message?.text === '/report') {
+      else if (update.message?.text === "/report") {
         await this.sendMessage(
           update.message.chat.id,
           `📊 <b>Bugungi hisobot</b>
@@ -199,21 +202,21 @@ Mini App'ni ochish uchun menyudagi tugmani bosing!`,
 
 Batafsil ma'lumot uchun Mini App'ni oching! 👇`,
           {
-            reply_markup: this.createMiniAppKeyboard()
-          }
+            reply_markup: this.createMiniAppKeyboard(),
+          },
         );
       }
 
       // WebApp data
       else if (update.message?.web_app_data) {
         const webAppData = JSON.parse(update.message.web_app_data.data);
-        console.log('WebApp dan kelgan ma\'lumot:', webAppData);
-        
+        console.log("WebApp dan kelgan ma'lumot:", webAppData);
+
         await this.sendMessage(
           update.message.chat.id,
           `✅ Ma'lumot qabul qilindi! 
 
-${JSON.stringify(webAppData, null, 2)}`
+${JSON.stringify(webAppData, null, 2)}`,
         );
       }
 
@@ -221,13 +224,13 @@ ${JSON.stringify(webAppData, null, 2)}`
       else if (update.callback_query) {
         const callbackData = update.callback_query.data;
         const chatId = update.callback_query.message?.chat.id;
-        
+
         if (chatId) {
-          if (callbackData === 'quick_report') {
-            await this.sendMessage(chatId, '📊 Tezkor hisobot yuklanmoqda...');
-          } else if (callbackData === 'help') {
-            await this.sendMessage(chatId, '💡 Yordam ma\'lumotlari...', {
-              reply_markup: this.createMiniAppKeyboard()
+          if (callbackData === "quick_report") {
+            await this.sendMessage(chatId, "📊 Tezkor hisobot yuklanmoqda...");
+          } else if (callbackData === "help") {
+            await this.sendMessage(chatId, "💡 Yordam ma'lumotlari...", {
+              reply_markup: this.createMiniAppKeyboard(),
             });
           }
         }
@@ -235,8 +238,8 @@ ${JSON.stringify(webAppData, null, 2)}`
 
       res.status(200).json({ ok: true });
     } catch (error) {
-      console.error('Webhook handle qilishda xatolik:', error);
-      res.status(500).json({ error: 'Internal server error' });
+      console.error("Webhook handle qilishda xatolik:", error);
+      res.status(500).json({ error: "Internal server error" });
     }
   }
 
@@ -246,15 +249,15 @@ ${JSON.stringify(webAppData, null, 2)}`
       // Bu yerda initData'ni validate qilish kerak
       // Hozircha oddiy implementation
       const params = new URLSearchParams(initData);
-      const userParam = params.get('user');
-      
+      const userParam = params.get("user");
+
       if (userParam) {
         return JSON.parse(userParam);
       }
-      
+
       return null;
     } catch (error) {
-      console.error('WebApp data validation xatoligi:', error);
+      console.error("WebApp data validation xatoligi:", error);
       return null;
     }
   }
