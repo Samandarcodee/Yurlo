@@ -34,5 +34,8 @@ export function createServer() {
   app.delete("/api/user/profile", deleteProfile);
   app.get("/api/user/recommendations", getAIRecommendations);
 
+  // Telegram Bot API routes
+  app.use("/api/telegram", telegramRoutes);
+
   return app;
 }
