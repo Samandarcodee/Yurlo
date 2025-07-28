@@ -280,9 +280,12 @@ export const useAIRecommendations = () => {
   const fetchRecommendations = async () => {
     setLoading(true);
     try {
+      // Telegram context'dan foydalanuvchi ID'sini olish
+      const telegramId = window.Telegram?.WebApp?.initDataUnsafe?.user?.id?.toString() || "demo_user_123";
+
       const response = await fetch("/api/user/recommendations", {
         headers: {
-          "x-telegram-id": "demo_user_123", // Demo uchun
+          "x-telegram-id": telegramId,
         },
       });
 
