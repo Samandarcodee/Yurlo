@@ -9,6 +9,7 @@ import {
   deleteProfile,
   getAIRecommendations,
 } from "./routes/user";
+import telegramRoutes from "./routes/telegram";
 
 export function createServer() {
   const app = express();
