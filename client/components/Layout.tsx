@@ -22,10 +22,10 @@ export function Layout({ children }: LayoutProps) {
 
   // Telegram WebApp theme'ga moslashish
   useEffect(() => {
-    if (colorScheme === 'dark') {
-      document.documentElement.classList.add('dark');
+    if (colorScheme === "dark") {
+      document.documentElement.classList.add("dark");
     } else {
-      document.documentElement.classList.remove('dark');
+      document.documentElement.classList.remove("dark");
     }
   }, [colorScheme]);
 
@@ -37,17 +37,23 @@ export function Layout({ children }: LayoutProps) {
   return (
     <div className="min-h-screen bg-background flex flex-col">
       {/* Main Content */}
-      <main className="flex-1 pb-20" style={{
-        paddingBottom: platform === 'ios' ? '90px' : '80px' // iOS uchun qo'shimcha bo'sh joy
-      }}>
+      <main
+        className="flex-1 pb-20"
+        style={{
+          paddingBottom: platform === "ios" ? "90px" : "80px", // iOS uchun qo'shimcha bo'sh joy
+        }}
+      >
         {children}
       </main>
 
       {/* Bottom Navigation */}
       <nav className="fixed bottom-0 left-0 right-0 bg-white/80 border-t border-mint-200/50 backdrop-blur-xl shadow-2xl">
-        <div className="flex items-center justify-around px-4 py-3" style={{
-          paddingBottom: platform === 'ios' ? '20px' : '12px' // iOS safe area uchun
-        }}>
+        <div
+          className="flex items-center justify-around px-4 py-3"
+          style={{
+            paddingBottom: platform === "ios" ? "20px" : "12px", // iOS safe area uchun
+          }}
+        >
           {navItems.map(({ path, icon: Icon, label }) => {
             const isActive = location.pathname === path;
             return (

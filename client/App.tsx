@@ -7,7 +7,11 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { Layout } from "./components/Layout";
-import { UserProvider, useOnboardingCheck, useUser } from "./contexts/UserContext";
+import {
+  UserProvider,
+  useOnboardingCheck,
+  useUser,
+} from "./contexts/UserContext";
 import { useTelegram } from "./hooks/use-telegram";
 import Index from "./pages/Index";
 import AddMeal from "./pages/AddMeal";
@@ -23,7 +27,11 @@ const queryClient = new QueryClient();
 const AppRoutes = () => {
   const { shouldShowOnboarding, isReady } = useOnboardingCheck();
   const { user } = useUser();
-  const { isLoading: isTelegramLoading, isReady: isTelegramReady, platform } = useTelegram();
+  const {
+    isLoading: isTelegramLoading,
+    isReady: isTelegramReady,
+    platform,
+  } = useTelegram();
 
   console.log("Routing debug:", {
     shouldShowOnboarding,
@@ -42,7 +50,9 @@ const AppRoutes = () => {
             <div className="animate-spin w-8 h-8 border-4 border-mint-600 border-t-transparent rounded-full"></div>
           </div>
           <p className="text-mint-600 font-medium">
-            {isTelegramLoading ? "Telegram WebApp yuklanmoqda..." : "Yuklanmoqda..."}
+            {isTelegramLoading
+              ? "Telegram WebApp yuklanmoqda..."
+              : "Yuklanmoqda..."}
           </p>
           {isTelegramReady && (
             <p className="text-mint-500 text-sm mt-2">Platform: {platform}</p>

@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { TelegramWebApp, TelegramUser } from '../types/telegram';
+import { useEffect, useState } from "react";
+import { TelegramWebApp, TelegramUser } from "../types/telegram";
 
 export interface TelegramWebAppHook {
   WebApp: TelegramWebApp | null;
@@ -7,7 +7,7 @@ export interface TelegramWebAppHook {
   isReady: boolean;
   isLoading: boolean;
   platform: string;
-  colorScheme: 'light' | 'dark';
+  colorScheme: "light" | "dark";
   expand: () => void;
   close: () => void;
   ready: () => void;
@@ -16,8 +16,8 @@ export interface TelegramWebAppHook {
   showBackButton: (callback: () => void) => void;
   hideBackButton: () => void;
   hapticFeedback: {
-    impact: (style?: 'light' | 'medium' | 'heavy' | 'rigid' | 'soft') => void;
-    notification: (type: 'error' | 'success' | 'warning') => void;
+    impact: (style?: "light" | "medium" | "heavy" | "rigid" | "soft") => void;
+    notification: (type: "error" | "success" | "warning") => void;
     selection: () => void;
   };
 }
@@ -30,18 +30,18 @@ export const useTelegram = (): TelegramWebAppHook => {
   useEffect(() => {
     // Telegram WebApp SDK yuklanganini tekshiramiz
     const checkTelegramWebApp = () => {
-      if (typeof window !== 'undefined' && window.Telegram?.WebApp) {
+      if (typeof window !== "undefined" && window.Telegram?.WebApp) {
         const tg = window.Telegram.WebApp;
         setWebApp(tg);
         setIsReady(true);
         setIsLoading(false);
-        
+
         // WebApp ni tayyorligini bildirish
         tg.ready();
-        
+
         // WebApp ni kengaytirish
         tg.expand();
-        
+
         return true;
       }
       return false;
@@ -63,7 +63,7 @@ export const useTelegram = (): TelegramWebAppHook => {
     const timeout = setTimeout(() => {
       clearInterval(interval);
       setIsLoading(false);
-      console.warn('Telegram WebApp SDK yuklanmadi');
+      console.warn("Telegram WebApp SDK yuklanmadi");
     }, 5000);
 
     return () => {
@@ -73,8 +73,8 @@ export const useTelegram = (): TelegramWebAppHook => {
   }, []);
 
   const user = WebApp?.initDataUnsafe?.user || null;
-  const platform = WebApp?.platform || 'unknown';
-  const colorScheme = WebApp?.colorScheme || 'light';
+  const platform = WebApp?.platform || "unknown";
+  const colorScheme = WebApp?.colorScheme || "light";
 
   const expand = () => {
     WebApp?.expand();
@@ -112,15 +112,17 @@ export const useTelegram = (): TelegramWebAppHook => {
   };
 
   const hapticFeedback = {
-    impact: (style: 'light' | 'medium' | 'heavy' | 'rigid' | 'soft' = 'medium') => {
+    impact: (
+      style: "light" | "medium" | "heavy" | "rigid" | "soft" = "medium",
+    ) => {
       WebApp?.HapticFeedback?.impactOccurred(style);
     },
-    notification: (type: 'error' | 'success' | 'warning') => {
+    notification: (type: "error" | "success" | "warning") => {
       WebApp?.HapticFeedback?.notificationOccurred(type);
     },
     selection: () => {
       WebApp?.HapticFeedback?.selectionChanged();
-    }
+    },
   };
 
   return {
@@ -137,6 +139,6 @@ export const useTelegram = (): TelegramWebAppHook => {
     hideMainButton,
     showBackButton,
     hideBackButton,
-    hapticFeedback
+    hapticFeedback,
   };
 };

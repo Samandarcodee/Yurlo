@@ -84,8 +84,12 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
                 profileData.telegramId = telegramId;
                 profileData.name = profileData.name || telegramUser.first_name;
                 if (telegramUser.language_code && !profileData.language) {
-                  profileData.language = telegramUser.language_code === 'uz' ? 'uz' :
-                                       telegramUser.language_code === 'ru' ? 'ru' : 'en';
+                  profileData.language =
+                    telegramUser.language_code === "uz"
+                      ? "uz"
+                      : telegramUser.language_code === "ru"
+                        ? "ru"
+                        : "en";
                 }
               }
 
@@ -120,8 +124,12 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
                 result.data.telegramId = telegramId;
                 result.data.name = result.data.name || telegramUser.first_name;
                 if (telegramUser.language_code && !result.data.language) {
-                  result.data.language = telegramUser.language_code === 'uz' ? 'uz' :
-                                       telegramUser.language_code === 'ru' ? 'ru' : 'en';
+                  result.data.language =
+                    telegramUser.language_code === "uz"
+                      ? "uz"
+                      : telegramUser.language_code === "ru"
+                        ? "ru"
+                        : "en";
                 }
               }
 
@@ -146,7 +154,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
     // Telegram tayyor bo'lgandan keyin yuklash
     if (isTelegramReady) {
       loadUserProfile();
-    } else if (!isTelegramReady && typeof window !== 'undefined') {
+    } else if (!isTelegramReady && typeof window !== "undefined") {
       // Telegram mavjud bo'lmasa ham ishlashi uchun
       setTimeout(loadUserProfile, 1000);
     }
@@ -160,8 +168,12 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
       userData.telegramId = telegramUser.id.toString();
       userData.name = userData.name || telegramUser.first_name;
       if (telegramUser.language_code && !userData.language) {
-        userData.language = telegramUser.language_code === 'uz' ? 'uz' :
-                           telegramUser.language_code === 'ru' ? 'ru' : 'en';
+        userData.language =
+          telegramUser.language_code === "uz"
+            ? "uz"
+            : telegramUser.language_code === "ru"
+              ? "ru"
+              : "en";
       }
     }
 
@@ -202,8 +214,12 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
           result.data.telegramId = telegramId;
           result.data.name = result.data.name || telegramUser.first_name;
           if (telegramUser.language_code && !result.data.language) {
-            result.data.language = telegramUser.language_code === 'uz' ? 'uz' :
-                                 telegramUser.language_code === 'ru' ? 'ru' : 'en';
+            result.data.language =
+              telegramUser.language_code === "uz"
+                ? "uz"
+                : telegramUser.language_code === "ru"
+                  ? "ru"
+                  : "en";
           }
         }
 
@@ -241,25 +257,26 @@ export const useOnboardingCheck = () => {
 // Mock AI tavsiyalar (backend mavjud bo'lmaganda)
 const getMockRecommendations = () => ({
   dailyTips: [
-    '🥗 Sabzavotlar bilan to\'ldiring - kaloriya kam, to\'yimlilik yuqori',
-    '🚶 Kuniga 30 daqiqa yurish metabolizmni tezlashtiradi',
-    '💧 Ovqatdan oldin bir stakan suv iching',
-    '😴 7-8 soat uyqu sizning salomatingiz kaliti'
+    "🥗 Sabzavotlar bilan to'ldiring - kaloriya kam, to'yimlilik yuqori",
+    "🚶 Kuniga 30 daqiqa yurish metabolizmni tezlashtiradi",
+    "💧 Ovqatdan oldin bir stakan suv iching",
+    "😴 7-8 soat uyqu sizning salomatingiz kaliti",
   ],
   nutritionAdvice: [
-    '🍎 Har ovqatda meva yoki sabzavot qo\'shing',
-    '🍗 Oqsil: vazningizning har kg uchun 1.2g',
-    '🌾 Kompleks uglevodlarni afzal ko\'ring',
-    '🥑 Foydali yog\'lar (yong\'oq, avokado, zeytun moyi)'
+    "🍎 Har ovqatda meva yoki sabzavot qo'shing",
+    "🍗 Oqsil: vazningizning har kg uchun 1.2g",
+    "🌾 Kompleks uglevodlarni afzal ko'ring",
+    "🥑 Foydali yog'lar (yong'oq, avokado, zeytun moyi)",
   ],
   exerciseAdvice: [
-    '🚶 Kuniga 15 daqiqadan boshlab yurish',
-    '🧘 Yoga yoki cho\'zilish mashqlari',
-    '🚶 Lift o\'rniga zinapoyadan foydalaning',
-    '🏃 Haftada 3-4 marta 30 daqiqa faollik'
+    "🚶 Kuniga 15 daqiqadan boshlab yurish",
+    "🧘 Yoga yoki cho'zilish mashqlari",
+    "🚶 Lift o'rniga zinapoyadan foydalaning",
+    "🏃 Haftada 3-4 marta 30 daqiqa faollik",
   ],
-  waterReminder: 'Kuniga kamida 8 stakan (2 litr) suv iching',
-  calorieAdjustment: 'Maqsadingizga erishish uchun kuniga 1800-2200 kaloriya iste\'mol qiling'
+  waterReminder: "Kuniga kamida 8 stakan (2 litr) suv iching",
+  calorieAdjustment:
+    "Maqsadingizga erishish uchun kuniga 1800-2200 kaloriya iste'mol qiling",
 });
 
 // Custom hook: AI tavsiyalar olish
@@ -281,7 +298,9 @@ export const useAIRecommendations = () => {
     setLoading(true);
     try {
       // Telegram context'dan foydalanuvchi ID'sini olish
-      const telegramId = window.Telegram?.WebApp?.initDataUnsafe?.user?.id?.toString() || "demo_user_123";
+      const telegramId =
+        window.Telegram?.WebApp?.initDataUnsafe?.user?.id?.toString() ||
+        "demo_user_123";
 
       const response = await fetch("/api/user/recommendations", {
         headers: {

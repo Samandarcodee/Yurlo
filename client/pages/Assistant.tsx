@@ -168,9 +168,12 @@ export default function Assistant() {
                 <MessageCircle className="h-8 w-8 text-water-600" />
               </div>
               <div>
-                <h3 className="font-semibold text-lg mb-2">AI Tavsiyalar Yuklanmoqda</h3>
+                <h3 className="font-semibold text-lg mb-2">
+                  AI Tavsiyalar Yuklanmoqda
+                </h3>
                 <p className="text-muted-foreground text-sm">
-                  Shaxsiy tavsiyalarni olish uchun "Yangi Tavsiyalar Olish" tugmasini bosing
+                  Shaxsiy tavsiyalarni olish uchun "Yangi Tavsiyalar Olish"
+                  tugmasini bosing
                 </p>
               </div>
             </CardContent>

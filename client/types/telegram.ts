@@ -2,7 +2,7 @@
 export interface TelegramWebApp {
   version: string;
   platform: string;
-  colorScheme: 'light' | 'dark';
+  colorScheme: "light" | "dark";
   themeParams: {
     bg_color?: string;
     text_color?: string;
@@ -18,7 +18,7 @@ export interface TelegramWebApp {
   headerColor: string;
   backgroundColor: string;
   isClosingConfirmationEnabled: boolean;
-  
+
   initData: string;
   initDataUnsafe: {
     query_id?: string;
@@ -32,7 +32,7 @@ export interface TelegramWebApp {
     auth_date: number;
     hash: string;
   };
-  
+
   MainButton: {
     text: string;
     color: string;
@@ -56,20 +56,22 @@ export interface TelegramWebApp {
       is_visible?: boolean;
     }) => void;
   };
-  
+
   BackButton: {
     isVisible: boolean;
     onClick: (callback: () => void) => void;
     show: () => void;
     hide: () => void;
   };
-  
+
   HapticFeedback: {
-    impactOccurred: (style: 'light' | 'medium' | 'heavy' | 'rigid' | 'soft') => void;
-    notificationOccurred: (type: 'error' | 'success' | 'warning') => void;
+    impactOccurred: (
+      style: "light" | "medium" | "heavy" | "rigid" | "soft",
+    ) => void;
+    notificationOccurred: (type: "error" | "success" | "warning") => void;
     selectionChanged: () => void;
   };
-  
+
   expand: () => void;
   close: () => void;
   ready: () => void;
@@ -93,7 +95,7 @@ export interface TelegramUser {
 
 export interface TelegramChat {
   id: number;
-  type: 'group' | 'supergroup' | 'channel';
+  type: "group" | "supergroup" | "channel";
   title: string;
   username?: string;
   photo_url?: string;
