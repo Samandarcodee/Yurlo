@@ -11,12 +11,14 @@ AI yordamida ovqat kaloriyalarini hisoblash, shaxsiy tavsiyalar va sog'liq kuzat
 ## 🚀 **Hoziroq Foydalaning!**
 
 ### **📱 Telegram'da Test Qiling:**
+
 1. [@Yurlo_bot](https://t.me/Yurlo_bot) ga boring
 2. `/start` buyrug'ini yuboring
 3. `🥗 Caloria AI` tugmasini bosing
 4. Mini App ochiladi va foydalaning!
 
 ### **🌐 Bevosita Link:**
+
 [https://yurlo.vercel.app](https://yurlo.vercel.app)
 
 ---
@@ -193,6 +195,7 @@ npm run build:client
 ## 📞 Yordam
 
 Muammolar yoki savollar uchun:
+
 - GitHub Issues ochish
 - Telegram: [@your_telegram]
 - Email: your-email@example.com

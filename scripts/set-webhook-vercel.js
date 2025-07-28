@@ -10,7 +10,7 @@ async function setWebhookForVercel() {
 
   try {
     const webhookUrl = `${VERCEL_URL}/api/telegram-webhook`;
-    
+
     const response = await fetch(
       `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/setWebhook`,
       {
@@ -23,7 +23,7 @@ async function setWebhookForVercel() {
           allowed_updates: ["message", "callback_query"],
           drop_pending_updates: true,
           max_connections: 40,
-          secret_token: "caloria_ai_webhook_secret"
+          secret_token: "caloria_ai_webhook_secret",
         }),
       },
     );
@@ -42,17 +42,21 @@ async function setWebhookForVercel() {
 
     // Webhook holatini tekshirish
     console.log("\n🔍 Webhook holatini tekshirish...");
-    
+
     const checkResponse = await fetch(
-      `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/getWebhookInfo`
+      `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/getWebhookInfo`,
     );
     const checkData = await checkResponse.json();
 
     if (checkData.ok) {
       console.log("📋 Webhook ma'lumotlari:");
       console.log(`   🔗 URL: ${checkData.result.url}`);
-      console.log(`   📊 Pending updates: ${checkData.result.pending_update_count}`);
-      console.log(`   📅 Last error date: ${checkData.result.last_error_date || 'Xatolik yo\'q'}`);
+      console.log(
+        `   📊 Pending updates: ${checkData.result.pending_update_count}`,
+      );
+      console.log(
+        `   📅 Last error date: ${checkData.result.last_error_date || "Xatolik yo'q"}`,
+      );
       if (checkData.result.last_error_message) {
         console.log(`   ❌ Last error: ${checkData.result.last_error_message}`);
       }
@@ -66,7 +70,6 @@ async function setWebhookForVercel() {
     console.log("4. Menu tugmasini bosib Mini App'ni oching");
 
     return true;
-
   } catch (error) {
     console.error("❌ Network xatoligi:", error.message);
     return false;
@@ -86,7 +89,7 @@ async function removeWebhook() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          drop_pending_updates: true
+          drop_pending_updates: true,
         }),
       },
     );
@@ -106,7 +109,7 @@ async function removeWebhook() {
 // Command line arguments orqali funksiya tanlash
 const command = process.argv[2];
 
-if (command === 'remove') {
+if (command === "remove") {
   removeWebhook().catch(console.error);
 } else {
   setWebhookForVercel().catch(console.error);

@@ -17,7 +17,7 @@ async function setBotNameProperly() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          name: "Caloria AI"
+          name: "Caloria AI",
         }),
       },
     );
@@ -39,7 +39,7 @@ async function setBotNameProperly() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          short_description: "🥗 AI yordamida sog'liq kuzatuvi"
+          short_description: "🥗 AI yordamida sog'liq kuzatuvi",
         }),
       },
     );
@@ -65,9 +65,9 @@ async function setBotNameProperly() {
             type: "web_app",
             text: "🥗 Caloria AI",
             web_app: {
-              url: "https://yurlo.vercel.app"  // / belgisiz
-            }
-          }
+              url: "https://yurlo.vercel.app", // / belgisiz
+            },
+          },
         }),
       },
     );
@@ -82,18 +82,22 @@ async function setBotNameProperly() {
 
     // Tekshirish
     console.log("\n🔍 Natija tekshirish...");
-    
-    const checkResponse = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/getMe`);
+
+    const checkResponse = await fetch(
+      `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/getMe`,
+    );
     const checkData = await checkResponse.json();
-    
+
     if (checkData.ok) {
       console.log(`   🤖 Bot nomi: ${checkData.result.first_name}`);
       console.log(`   📝 Username: @${checkData.result.username}`);
     }
 
-    const menuCheckResponse = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/getChatMenuButton`);
+    const menuCheckResponse = await fetch(
+      `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/getChatMenuButton`,
+    );
     const menuCheckData = await menuCheckResponse.json();
-    
+
     if (menuCheckData.ok && menuCheckData.result.web_app) {
       console.log(`   🔗 Menu URL: ${menuCheckData.result.web_app.url}`);
     }
@@ -104,7 +108,6 @@ async function setBotNameProperly() {
     console.log("2. Chatni tozalang (Clear History)");
     console.log("3. /start buyrug'ini yuboring");
     console.log("4. Menu tugmasini bosing");
-
   } catch (error) {
     console.error("❌ Xatolik:", error.message);
   }

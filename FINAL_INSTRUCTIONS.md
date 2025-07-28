@@ -9,11 +9,13 @@
 ## 📱 **HOZIR FOYDALANISH MUMKIN:**
 
 ### **🤖 Telegram Bot:**
+
 - **Username**: @Yurlo_bot
 - **Link**: https://t.me/Yurlo_bot
 - **Status**: ✅ Faol
 
 ### **🌐 Mini App:**
+
 - **URL**: https://yurlo.vercel.app
 - **Status**: ✅ Live va ishlayapti
 - **Webhook**: ✅ Sozlangan
@@ -23,6 +25,7 @@
 ## 🚀 **TEST QILISH UCHUN QADAMLAR:**
 
 ### **1️⃣ Telegram'da Test:**
+
 ```
 1. Telegram'ni oching
 2. @Yurlo_bot ni qidiring
@@ -32,6 +35,7 @@
 ```
 
 ### **2️⃣ Onboarding Process:**
+
 ```
 1. Ism: "Samandar" (avtomatik)
 2. Jins: Erkak/Ayol tanlang
@@ -42,6 +46,7 @@
 ```
 
 ### **3️⃣ App Features:**
+
 ```
 ✅ Dashboard: Calorie balance
 ✅ Add Meal: Ovqat qo'shish
@@ -55,17 +60,20 @@
 ## 🛠 **TEXNIK MA'LUMOTLAR:**
 
 ### **API Endpoints:**
+
 - **Webhook**: `/api/telegram-webhook`
 - **User Profile**: Stored in localStorage
 - **AI Recommendations**: Mock data
 
 ### **Environment Variables:**
+
 ```env
 TELEGRAM_BOT_TOKEN=7644823924:AAG3c4DcG4Ul2mA5z39G6OmlNT8bXrNEal0
 MINI_APP_URL=https://yurlo.vercel.app
 ```
 
 ### **Bot Commands:**
+
 - `/start` - Boshlash va salomlashish
 - `/app` - Mini App ochish
 - `/help` - Yordam ma'lumotlari
@@ -75,6 +83,7 @@ MINI_APP_URL=https://yurlo.vercel.app
 ## 📊 **FUNKSIONAL HOLATI:**
 
 ### **✅ Ishlayotgan Features:**
+
 - [x] Telegram WebApp SDK integration
 - [x] User onboarding (4 steps)
 - [x] Personal profile management
@@ -89,6 +98,7 @@ MINI_APP_URL=https://yurlo.vercel.app
 - [x] Bot webhook responses
 
 ### **✅ Bot Features:**
+
 - [x] Welcome messages
 - [x] Command handling (/start, /app, /help)
 - [x] Inline keyboards
@@ -101,18 +111,21 @@ MINI_APP_URL=https://yurlo.vercel.app
 ## 🎯 **NEXT STEPS (ixtiyoriy):**
 
 ### **1. Real Backend (keyingi bosqich):**
+
 - Database integration (PostgreSQL/MongoDB)
 - Real AI API (OpenAI/Google AI)
 - User authentication
 - Data synchronization
 
 ### **2. Advanced Features:**
+
 - Photo upload for food recognition
 - Barcode scanning
 - Social features
 - Push notifications
 
 ### **3. Analytics:**
+
 - User behavior tracking
 - Performance monitoring
 - Error logging
@@ -123,6 +136,7 @@ MINI_APP_URL=https://yurlo.vercel.app
 ## 🔧 **MUAMMO BARTARAF ETISH:**
 
 ### **Agar bot javob bermasa:**
+
 ```bash
 npm run bot:fix        # Bot sozlamalarini tuzatish
 npm run bot:status     # Holatni tekshirish
@@ -130,11 +144,13 @@ npm run bot:webhook    # Webhook qayta o'rnatish
 ```
 
 ### **Agar Mini App ochilmasa:**
+
 - Vercel deployment holatini tekshiring
 - Browser cache'ni tozalang
 - Telegram'da bot chatini tozalang
 
 ### **Agar ma'lumotlar saqlanmasa:**
+
 - localStorage'ni tekshiring
 - Browser compatibility
 - Console errors'ni ko'ring
@@ -144,6 +160,7 @@ npm run bot:webhook    # Webhook qayta o'rnatish
 ## 🎉 **XULOSA:**
 
 ### **🚀 LOYIHA HOLATI:**
+
 ```
 Status: ✅ PRODUCTION READY
 Deployment: ✅ VERCEL LIVE
@@ -153,6 +170,7 @@ Testing: ✅ WORKING PERFECTLY
 ```
 
 ### **📱 USER ACCESS:**
+
 - **Telegram**: @Yurlo_bot
 - **Direct**: https://yurlo.vercel.app
 - **Menu**: "🥗 Caloria AI" button
@@ -167,4 +185,4 @@ Testing: ✅ WORKING PERFECTLY
 
 ---
 
-*Loyiha 2024-yil yaratilgan. Modern React + Telegram WebApp texnologiyalari asosida.*
+_Loyiha 2024-yil yaratilgan. Modern React + Telegram WebApp texnologiyalari asosida._

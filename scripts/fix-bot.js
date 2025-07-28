@@ -16,7 +16,7 @@ async function fixBotName() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          name: "Caloria AI"
+          name: "Caloria AI",
         }),
       },
     );
@@ -83,7 +83,7 @@ async function removeWebhook() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          drop_pending_updates: true
+          drop_pending_updates: true,
         }),
       },
     );
@@ -142,7 +142,7 @@ async function setBotCommands() {
     const commands = [
       { command: "start", description: "🌟 Botni boshlash va Mini App ochish" },
       { command: "app", description: "🥗 Caloria AI Mini App ochish" },
-      { command: "help", description: "📚 Yordam va ma'lumot" }
+      { command: "help", description: "📚 Yordam va ma'lumot" },
     ];
 
     const response = await fetch(
@@ -203,11 +203,11 @@ async function sendTestMessage(chatId = null) {
               [
                 {
                   text: "🥗 Caloria AI ochish",
-                  web_app: { url: MINI_APP_URL }
-                }
-              ]
-            ]
-          }
+                  web_app: { url: MINI_APP_URL },
+                },
+              ],
+            ],
+          },
         }),
       },
     );
