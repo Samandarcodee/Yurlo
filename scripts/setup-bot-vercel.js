@@ -12,10 +12,7 @@ const getVercelUrl = () => {
   }
 
   // Manual URL (deploy qilgandan keyin o'zgartiring)
-  return (
-    process.env.MINI_APP_URL ||
-    "https://yurlo.vercel.app"
-  );
+  return process.env.MINI_APP_URL || "https://yurlo.vercel.app";
 };
 
 // Bot ma'lumotlarini olish
