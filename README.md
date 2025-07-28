@@ -1,6 +1,12 @@
-# Caloria AI - Telegram Mini App
+# 🥗 Caloria AI - Telegram Mini App
 
-Telegram'dagi aqlli sog'liq kuzatuv yordamchingiz. AI yordamida ovqat kaloriyalarini hisoblash, shaxsiy tavsiyalar va sog'liq kuzatuvi.
+> **✅ PRODUCTION READY** - Telegram'dagi aqlli sog'liq kuzatuv yordamchingiz
+
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-yurlo.vercel.app-blue?style=for-the-badge)](https://yurlo.vercel.app)
+[![Telegram Bot](https://img.shields.io/badge/Telegram-@Yurlo__bot-blue?style=for-the-badge&logo=telegram)](https://t.me/Yurlo_bot)
+[![Built with React](https://img.shields.io/badge/Built%20with-React%2018-blue?style=for-the-badge&logo=react)](https://reactjs.org)
+
+AI yordamida ovqat kaloriyalarini hisoblash, shaxsiy tavsiyalar va sog'liq kuzatuvi.
 
 ## 🚀 Xususiyatlar
 
@@ -174,7 +180,6 @@ npm run build:client
 ## 📞 Yordam
 
 Muammolar yoki savollar uchun:
-
 - GitHub Issues ochish
 - Telegram: [@your_telegram]
 - Email: your-email@example.com
