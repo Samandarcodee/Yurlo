@@ -8,6 +8,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { Layout } from "./components/Layout";
 import { UserProvider, useOnboardingCheck, useUser } from "./contexts/UserContext";
+import { useTelegram } from "./hooks/use-telegram";
 import Index from "./pages/Index";
 import AddMeal from "./pages/AddMeal";
 import Assistant from "./pages/Assistant";
