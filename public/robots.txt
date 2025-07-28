@@ -1,3 +1,5 @@
+# Caloria AI Telegram Mini App
+
 User-agent: Googlebot
 Allow: /
 
@@ -10,5 +12,10 @@ Allow: /
 User-agent: facebookexternalhit
 Allow: /
 
+User-agent: TelegramBot
+Allow: /
+
 User-agent: *
 Allow: /
+
+Sitemap: https://caloria-ai.netlify.app/sitemap.xml
