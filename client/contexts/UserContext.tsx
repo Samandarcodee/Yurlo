@@ -171,6 +171,30 @@ export const useOnboardingCheck = () => {
   };
 };
 
+// Mock AI tavsiyalar (backend mavjud bo'lmaganda)
+const getMockRecommendations = () => ({
+  dailyTips: [
+    '🥗 Sabzavotlar bilan to\'ldiring - kaloriya kam, to\'yimlilik yuqori',
+    '🚶 Kuniga 30 daqiqa yurish metabolizmni tezlashtiradi',
+    '💧 Ovqatdan oldin bir stakan suv iching',
+    '😴 7-8 soat uyqu sizning salomatingiz kaliti'
+  ],
+  nutritionAdvice: [
+    '🍎 Har ovqatda meva yoki sabzavot qo\'shing',
+    '🍗 Oqsil: vazningizning har kg uchun 1.2g',
+    '🌾 Kompleks uglevodlarni afzal ko\'ring',
+    '🥑 Foydali yog\'lar (yong\'oq, avokado, zeytun moyi)'
+  ],
+  exerciseAdvice: [
+    '🚶 Kuniga 15 daqiqadan boshlab yurish',
+    '🧘 Yoga yoki cho\'zilish mashqlari',
+    '🚶 Lift o\'rniga zinapoyadan foydalaning',
+    '🏃 Haftada 3-4 marta 30 daqiqa faollik'
+  ],
+  waterReminder: 'Kuniga kamida 8 stakan (2 litr) suv iching',
+  calorieAdjustment: 'Maqsadingizga erishish uchun kuniga 1800-2200 kaloriya iste\'mol qiling'
+});
+
 // Custom hook: AI tavsiyalar olish
 export const useAIRecommendations = () => {
   const [recommendations, setRecommendations] = useState(null);
