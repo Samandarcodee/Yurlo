@@ -21,7 +21,8 @@
     "format.fix": "prettier --write .",
     "typecheck": "tsc",
     "bot:setup": "node scripts/setup-bot.js",
-    "bot:info": "node -e \"import('./scripts/setup-bot.js').then(m => m.getBotInfo())\""
+    "bot:info": "node -e \"import('./scripts/setup-bot.js').then(m => m.getBotInfo())\"",
+    "vercel-build": "npm run build:client"
   },
   "dependencies": {
     "dotenv": "^17.2.0",
