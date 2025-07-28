@@ -176,7 +176,11 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
 
   const clearUser = () => {
     setUser(null);
-    localStorage.removeItem("userProfile");
+
+    // Telegram ID asosida localStorage key tozalash
+    const telegramId = telegramUser?.id?.toString() || "demo_user_123";
+    const storageKey = `userProfile_${telegramId}`;
+    localStorage.removeItem(storageKey);
     setIsFirstTime(true);
   };
 
@@ -232,7 +236,7 @@ const getMockRecommendations = () => ({
   nutritionAdvice: [
     '🍎 Har ovqatda meva yoki sabzavot qo\'shing',
     '🍗 Oqsil: vazningizning har kg uchun 1.2g',
-    '🌾 Kompleks uglevodlarni afzal ko\'ring',
+    '��� Kompleks uglevodlarni afzal ko\'ring',
     '🥑 Foydali yog\'lar (yong\'oq, avokado, zeytun moyi)'
   ],
   exerciseAdvice: [
