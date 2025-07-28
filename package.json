@@ -25,6 +25,8 @@
     "bot:fix": "node scripts/fix-bot.js",
     "bot:status": "node scripts/check-bot-status.js",
     "bot:name": "node scripts/set-bot-name.js",
+    "bot:webhook": "node scripts/set-webhook-vercel.js",
+    "bot:webhook:remove": "node scripts/set-webhook-vercel.js remove",
     "bot:info": "node -e \"import('./scripts/setup-bot.js').then(m => m.getBotInfo())\"",
     "vercel-build": "npm run build:client"
   },
