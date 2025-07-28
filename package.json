@@ -1,7 +1,8 @@
 {
-  "name": "fusion-starter",
+  "name": "caloria-ai-telegram-miniapp",
   "private": true,
   "type": "module",
+  "description": "Caloria AI - Telegram'dagi aqlli sog'liq kuzatuv yordamchingiz",
   "pkg": {
     "assets": [
       "dist/spa/*"
