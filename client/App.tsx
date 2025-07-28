@@ -23,21 +23,30 @@ const queryClient = new QueryClient();
 const AppRoutes = () => {
   const { shouldShowOnboarding, isReady } = useOnboardingCheck();
   const { user } = useUser();
+  const { isLoading: isTelegramLoading, isReady: isTelegramReady, platform } = useTelegram();
 
   console.log("Routing debug:", {
     shouldShowOnboarding,
     isReady,
     hasUser: !!user,
+    isTelegramReady,
+    platform,
   });
 
-  if (!isReady) {
+  // Telegram WebApp va User context ikkalasi ham yuklanishini kutamiz
+  if (!isReady || isTelegramLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-mint-50 via-white to-water-50 flex items-center justify-center">
         <div className="text-center">
           <div className="inline-block p-4 bg-mint-100 rounded-full mb-4">
             <div className="animate-spin w-8 h-8 border-4 border-mint-600 border-t-transparent rounded-full"></div>
           </div>
-          <p className="text-mint-600 font-medium">Yuklanmoqda...</p>
+          <p className="text-mint-600 font-medium">
+            {isTelegramLoading ? "Telegram WebApp yuklanmoqda..." : "Yuklanmoqda..."}
+          </p>
+          {isTelegramReady && (
+            <p className="text-mint-500 text-sm mt-2">Platform: {platform}</p>
+          )}
         </div>
       </div>
     );
