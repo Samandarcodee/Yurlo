@@ -1,6 +1,8 @@
 import { Link, useLocation } from "react-router-dom";
 import { Home, Camera, Brain, BarChart3, Settings } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useTelegram } from "@/hooks/use-telegram";
+import { useEffect } from "react";
 
 interface LayoutProps {
   children: React.ReactNode;
