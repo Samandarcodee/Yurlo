@@ -13,7 +13,8 @@ const getVercelUrl = () => {
 
   // Manual URL (deploy qilgandan keyin o'zgartiring)
   return (
-    process.env.MINI_APP_URL || "https://yurlo-samandarcodees-projects.vercel.app"
+    process.env.MINI_APP_URL ||
+    "https://yurlo-samandarcodees-projects.vercel.app"
   );
 };
 

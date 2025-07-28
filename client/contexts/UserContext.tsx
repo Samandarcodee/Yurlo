@@ -6,7 +6,10 @@ import React, {
   ReactNode,
 } from "react";
 import { useTelegram } from "../hooks/use-telegram";
-import { logEnvironmentInfo, shouldUseLocalStorage } from "../utils/environment";
+import {
+  logEnvironmentInfo,
+  shouldUseLocalStorage,
+} from "../utils/environment";
 
 export interface UserProfile {
   telegramId?: string;
@@ -253,7 +256,7 @@ export const useAIRecommendations = () => {
       console.log("Static deployment: mock tavsiyalar yuklanmoqda...");
 
       // Kichik delay simulation qilish
-      await new Promise(resolve => setTimeout(resolve, 500));
+      await new Promise((resolve) => setTimeout(resolve, 500));
 
       setRecommendations(getMockRecommendations());
     } catch (error) {
