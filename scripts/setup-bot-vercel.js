@@ -10,9 +10,11 @@ const getVercelUrl = () => {
   if (process.env.VERCEL_URL) {
     return `https://${process.env.VERCEL_URL}`;
   }
-  
+
   // Manual URL (deploy qilgandan keyin o'zgartiring)
-  return process.env.MINI_APP_URL || "https://caloria-ai-telegram-miniapp.vercel.app";
+  return (
+    process.env.MINI_APP_URL || "https://caloria-ai-telegram-miniapp.vercel.app"
+  );
 };
 
 // Bot ma'lumotlarini olish
@@ -44,7 +46,7 @@ async function getBotInfo() {
 async function setMenuButtonVercel() {
   try {
     const MINI_APP_URL = getVercelUrl();
-    
+
     const menuButton = {
       type: "web_app",
       text: "🥗 Caloria AI",
@@ -83,7 +85,7 @@ async function setWebhookVercel() {
   try {
     const VERCEL_URL = getVercelUrl();
     const webhookUrl = `${VERCEL_URL}/api/telegram/webhook`;
-    
+
     const response = await fetch(
       `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/setWebhook`,
       {
