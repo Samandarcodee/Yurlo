@@ -1,43 +1,9 @@
 {
-  "version": 2,
-  "builds": [
-    {
-      "src": "client/App.tsx",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "dist/spa"
-      }
-    },
-    {
-      "src": "netlify/functions/api.ts",
-      "use": "@vercel/node"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "/netlify/functions/api.ts"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/index.html"
-    }
-  ],
-  "functions": {
-    "netlify/functions/api.ts": {
-      "includeFiles": "server/**"
-    }
-  },
+  "buildCommand": "npm run build:client",
   "outputDirectory": "dist/spa",
   "installCommand": "npm install",
-  "buildCommand": "npm run build:client",
   "devCommand": "npm run dev",
-  "framework": "vite",
   "rewrites": [
-    {
-      "source": "/api/(.*)",
-      "destination": "/api/$1"
-    },
     {
       "source": "/(.*)",
       "destination": "/index.html"
@@ -61,9 +27,5 @@
         }
       ]
     }
-  ],
-  "env": {
-    "TELEGRAM_BOT_TOKEN": "7644823924:AAG3c4DcG4Ul2mA5z39G6OmlNT8bXrNEal0",
-    "MINI_APP_URL": "https://your-vercel-app.vercel.app"
-  }
+  ]
 }
