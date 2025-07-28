@@ -133,4 +133,4 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   setupBotVercel().catch(console.error);
 }
 
-export { setupBotVercel, setMenuButtonVercel, setWebhookVercel };
+export { setupBotVercel, setMenuButtonVercel, removeWebhook };
