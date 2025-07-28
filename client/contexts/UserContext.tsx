@@ -200,6 +200,16 @@ export const useAIRecommendations = () => {
   const [recommendations, setRecommendations] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  // Ilk marta yuklanganda mock tavsiyalarni ko'rsatish
+  React.useEffect(() => {
+    if (!recommendations) {
+      // Kichik delay bilan mock ma'lumotlarni yuklash
+      setTimeout(() => {
+        setRecommendations(getMockRecommendations());
+      }, 500);
+    }
+  }, [recommendations]);
+
   const fetchRecommendations = async () => {
     setLoading(true);
     try {
