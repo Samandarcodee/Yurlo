@@ -87,7 +87,7 @@ export interface MealEntry {
 
 class TelegramUserService {
   private static instance: TelegramUserService;
-  private cloudStorage: any;
+  public cloudStorage: any;
 
   constructor(cloudStorage: any) {
     this.cloudStorage = cloudStorage;

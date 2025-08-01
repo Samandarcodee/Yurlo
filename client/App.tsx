@@ -23,6 +23,9 @@ import Settings from "./pages/Settings";
 import Onboarding from "./pages/Onboarding";
 import TelegramOnboarding from "./components/TelegramOnboarding";
 import Profile from "./pages/Profile";
+import EnhancedProfile from "./pages/EnhancedProfile";
+import EnhancedAddMeal from "./pages/EnhancedAddMeal";
+import DailyTracking from "./pages/DailyTracking";
 import SleepTracker from "./pages/SleepTracker";
 import StepTracker from "./pages/StepTracker";
 import WaterTracker from "./pages/WaterTracker";
@@ -98,8 +101,11 @@ const AppRoutes = () => {
       <Routes>
         <Route path="/" element={<Index />} />
         <Route path="/onboarding" element={<Navigate to="/" replace />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/add-meal" element={<AddMeal />} />
+        <Route path="/profile" element={<EnhancedProfile />} />
+        <Route path="/profile-legacy" element={<Profile />} />
+        <Route path="/add-meal" element={<EnhancedAddMeal />} />
+        <Route path="/add-meal-legacy" element={<AddMeal />} />
+        <Route path="/daily-tracking" element={<DailyTracking />} />
         <Route path="/assistant" element={<Assistant />} />
         <Route path="/analytics" element={<Analytics />} />
         <Route path="/sleep-tracker" element={<SleepTracker />} />
