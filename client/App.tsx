@@ -21,6 +21,10 @@ import Analytics from "./pages/Analytics";
 import Settings from "./pages/Settings";
 import Onboarding from "./pages/Onboarding";
 import Profile from "./pages/Profile";
+import SleepTracker from "./pages/SleepTracker";
+import StepTracker from "./pages/StepTracker";
+import WaterTracker from "./pages/WaterTracker";
+import WorkoutTracker from "./pages/WorkoutTracker";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -81,8 +85,12 @@ const AppRoutes = () => {
         <Route path="/profile" element={<Profile />} />
         <Route path="/add-meal" element={<AddMeal />} />
         <Route path="/assistant" element={<Assistant />} />
-        <Route path="/analytics" element={<Analytics />} />
-        <Route path="/settings" element={<Settings />} />
+                    <Route path="/analytics" element={<Analytics />} />
+            <Route path="/sleep-tracker" element={<SleepTracker />} />
+            <Route path="/step-tracker" element={<StepTracker />} />
+            <Route path="/water-tracker" element={<WaterTracker />} />
+            <Route path="/workout-tracker" element={<WorkoutTracker />} />
+            <Route path="/settings" element={<Settings />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Layout>

@@ -1,13 +1,25 @@
-import { useState } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import {
   Camera,
-  Upload,
   Search,
   Clock,
   Utensils,
   Zap,
   CheckCircle,
+  Star,
+  History,
+  Flame,
+  Plus,
+  Minus,
+  Edit3,
+  TrendingUp,
+  ArrowLeft,
+  Scan,
+  ChefHat,
+  Timer,
+  Target,
 } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -22,304 +34,794 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { Progress } from "@/components/ui/progress";
+import { Separator } from "@/components/ui/separator";
+import { useUser } from "@/contexts/UserContext";
+import { useTelegram } from "@/hooks/use-telegram";
+import {
+  updateTodayTracking,
+  getTodayTracking,
+  calculateNutritionGoals,
+  type Meal,
+} from "@/utils/tracking";
+import {
+  searchFoods,
+  getPopularFoods,
+  getFoodsByCategory,
+  getRecentMeals,
+  calculateNutrition,
+  simulateAIRecognition,
+  getNutritionScore,
+  FOOD_CATEGORIES,
+  QUICK_ADD_PRESETS,
+  type FoodItem,
+} from "@/utils/foodDatabase";
+
+type AddMode = 'quick' | 'search' | 'photo' | 'manual';
+type MealType = 'breakfast' | 'lunch' | 'dinner' | 'snack';
+
+interface SelectedFood {
+  food: FoodItem;
+  portion: number;
+  customName?: string;
+  notes?: string;
+}
 
 export default function AddMeal() {
+  const { user } = useUser();
+  const { user: telegramUser } = useTelegram();
+  const navigate = useNavigate();
+  
+  // Basic states
+  const [addMode, setAddMode] = useState<AddMode>('quick');
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
-  const [mealName, setMealName] = useState("");
-  const [portionSize, setPortionSize] = useState([1]);
-  const [mealTime, setMealTime] = useState("");
+  const [mealTime, setMealTime] = useState<MealType>('lunch');
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [aiAnalysis, setAiAnalysis] = useState<{
+  const [isSaving, setIsSaving] = useState(false);
+  const [notes, setNotes] = useState("");
+  
+  // Search states
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState<FoodItem[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<string>("");
+  
+  // Selected food states
+  const [selectedFood, setSelectedFood] = useState<SelectedFood | null>(null);
+  const [customNutrition, setCustomNutrition] = useState<{
     calories: number;
     protein: number;
     carbs: number;
     fat: number;
-    confidence: number;
+    fiber: number;
   } | null>(null);
+  const [isEditingNutrition, setIsEditingNutrition] = useState(false);
+  
+  // Data states
+  const [recentMeals, setRecentMeals] = useState<Meal[]>([]);
+  const [popularFoods, setPopularFoods] = useState<FoodItem[]>([]);
+  const [todayTracking, setTodayTracking] = useState<any>(null);
+  const [nutritionGoals, setNutritionGoals] = useState<any>(null);
+  
+  const telegramId = telegramUser?.id?.toString() || "demo_user_123";
 
-  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  // Load data on mount
+  useEffect(() => {
+    if (user) {
+      setPopularFoods(getPopularFoods(8));
+      setRecentMeals(getRecentMeals(telegramId, 5));
+      setTodayTracking(getTodayTracking(telegramId));
+      setNutritionGoals(calculateNutritionGoals(user));
+      
+      // Set default meal time based on current time
+      const hour = new Date().getHours();
+      if (hour < 11) setMealTime('breakfast');
+      else if (hour < 16) setMealTime('lunch');
+      else if (hour < 21) setMealTime('dinner');
+      else setMealTime('snack');
+    }
+  }, [user, telegramId]);
+
+  // Search functionality
+  useEffect(() => {
+    if (searchQuery.trim()) {
+      const results = searchFoods(searchQuery, 10);
+      setSearchResults(results);
+    } else {
+      setSearchResults([]);
+    }
+  }, [searchQuery]);
+
+  // Calculate final nutrition
+  const finalNutrition = useMemo(() => {
+    if (!selectedFood) return null;
+    
+    if (customNutrition) {
+      return customNutrition;
+    }
+    
+    return calculateNutrition(selectedFood.food, selectedFood.portion);
+  }, [selectedFood, customNutrition]);
+
+  // Nutrition quality score
+  const nutritionScore = useMemo(() => {
+    if (!finalNutrition) return null;
+    return getNutritionScore(finalNutrition);
+  }, [finalNutrition]);
+
+  // Handle image upload and AI recognition
+  const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
       const reader = new FileReader();
-      reader.onload = (e) => {
+      reader.onload = async (e) => {
         setSelectedImage(e.target?.result as string);
-        // Simulate AI analysis
-        setTimeout(() => {
-          setIsAnalyzing(true);
-          setTimeout(() => {
-            setIsAnalyzing(false);
-            setAiAnalysis({
-              calories: 420,
-              protein: 25,
-              carbs: 45,
-              fat: 12,
-              confidence: 85,
-            });
-            setMealName("Grilled Chicken Salad");
-          }, 2000);
-        }, 500);
+        setIsAnalyzing(true);
+        setAddMode('photo');
+        
+        try {
+          const result = await simulateAIRecognition(file.name);
+          setSelectedFood({
+            food: result.food,
+            portion: result.portion,
+          });
+        } catch (error) {
+          console.error('AI recognition error:', error);
+        } finally {
+          setIsAnalyzing(false);
+        }
       };
       reader.readAsDataURL(file);
     }
   };
 
-  const handleTextAnalysis = () => {
-    if (mealName.trim()) {
-      setIsAnalyzing(true);
-      // Simulate AI analysis for text input
-      setTimeout(() => {
-        setIsAnalyzing(false);
-        setAiAnalysis({
-          calories: 380,
-          protein: 22,
-          carbs: 35,
-          fat: 15,
-          confidence: 78,
-        });
-      }, 1500);
+  // Handle food selection
+  const handleFoodSelect = (food: FoodItem, portion: number = 1) => {
+    setSelectedFood({
+      food,
+      portion,
+    });
+    setAddMode('manual');
+    setCustomNutrition(null);
+    setIsEditingNutrition(false);
+  };
+
+  // Handle recent meal selection
+  const handleRecentMealSelect = (meal: Meal) => {
+    // Find matching food or create a generic one
+    const matchingFood = searchFoods(meal.name, 1)[0];
+    
+    if (matchingFood) {
+      handleFoodSelect(matchingFood, 1);
+    } else {
+      // Create custom food entry
+      const customFood: FoodItem = {
+        id: `custom_${Date.now()}`,
+        name: meal.name,
+        nameUz: meal.name,
+        category: 'traditional',
+        serving: { size: '1 porsiya', unit: 'porsiya', grams: 200 },
+        nutrition: {
+          calories: meal.calories,
+          protein: meal.protein,
+          carbs: meal.carbs,
+          fat: meal.fat,
+          fiber: meal.fiber || 2,
+          sugar: 2,
+          sodium: 300,
+        },
+        tags: ['custom', 'recent'],
+        isVerified: false,
+        popularity: 50,
+      };
+      
+      setSelectedFood({ food: customFood, portion: 1 });
+      setAddMode('manual');
     }
   };
 
-  const saveMeal = () => {
-    // Here you would save the meal data
-    console.log("Saving meal:", {
-      name: mealName,
-      portion: portionSize[0],
-      time: mealTime,
-      nutrition: aiAnalysis,
-      image: selectedImage,
-    });
-    // Show success message and navigate back
+  // Handle portion change
+  const updatePortion = (newPortion: number) => {
+    if (selectedFood) {
+      setSelectedFood({
+        ...selectedFood,
+        portion: Math.max(0.1, newPortion),
+      });
+    }
   };
 
-  return (
-    <div className="p-4 space-y-6">
-      {/* Header */}
-      <div className="text-center space-y-2">
-        <h1 className="text-2xl font-bold text-foreground">Ovqat Qo'shish</h1>
-        <p className="text-muted-foreground">
-          Rasm yuklang yoki ovqat ma'lumotlarini kiriting
-        </p>
+  // Handle custom nutrition editing
+  const handleNutritionEdit = (field: string, value: number) => {
+    if (!finalNutrition) return;
+    
+    setCustomNutrition({
+      ...finalNutrition,
+      [field]: Math.max(0, value),
+    });
+  };
+
+  // Save meal to tracking
+  const saveMeal = async () => {
+    if (!selectedFood || !finalNutrition || !user) return;
+    
+    setIsSaving(true);
+    
+    try {
+      const newMeal: Meal = {
+        id: Date.now().toString(),
+        name: selectedFood.customName || selectedFood.food.nameUz,
+        calories: finalNutrition.calories,
+        protein: finalNutrition.protein,
+        carbs: finalNutrition.carbs,
+        fat: finalNutrition.fat,
+        fiber: finalNutrition.fiber,
+        timestamp: new Date().toISOString(),
+        type: mealTime,
+        notes: notes.trim() || undefined,
+      };
+      
+      // Get current tracking
+      const currentTracking = getTodayTracking(telegramId);
+      const updatedMeals = [...(currentTracking.meals || []), newMeal];
+      
+      // Calculate total calories consumed
+      const totalCalories = updatedMeals.reduce((sum, meal) => sum + meal.calories, 0);
+      
+      // Update tracking
+      updateTodayTracking(telegramId, {
+        meals: updatedMeals,
+        caloriesConsumed: totalCalories,
+      });
+      
+      // Show success and navigate back
+      alert(`✅ ${newMeal.name} qo'shildi! (${newMeal.calories} kal)`);
+      navigate('/');
+      
+    } catch (error) {
+      console.error('Error saving meal:', error);
+      alert('Xatolik yuz berdi. Qaytadan urinib ko\'ring.');
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  // Quick add preset
+  const handleQuickAdd = (preset: typeof QUICK_ADD_PRESETS[0]) => {
+    // For now, just select the first item of the preset
+    const firstItem = preset.items[0];
+    const food = popularFoods.find(f => f.id === firstItem.foodId);
+    if (food) {
+      handleFoodSelect(food, firstItem.portion);
+    }
+  };
+
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="text-center space-y-4">
+          <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto"></div>
+          <p className="text-gray-600 font-medium">Loading...</p>
+        </div>
       </div>
+    );
+  }
 
-      {/* Upload Section */}
-      <div className="space-y-4">
-        <Label className="text-base font-medium">
-          Ovqatingizni qanday qayd qilmoqchisiz?
-        </Label>
+  return (
+    <div className="min-h-screen bg-gray-50">
+      <div className="max-w-md mx-auto bg-white min-h-screen">
+        {/* Header */}
+        <div className="bg-gradient-to-r from-green-600 to-emerald-600 text-white p-6 pb-8">
+          <div className="flex items-center justify-between mb-4">
+            <Link to="/">
+              <Button variant="ghost" size="sm" className="text-white hover:bg-white/20 p-2">
+                <ArrowLeft className="w-5 h-5" />
+              </Button>
+            </Link>
+            <h1 className="text-xl font-bold">Ovqat Qo'shish</h1>
+            <div className="w-9"></div>
+          </div>
+          
+          {/* Today's Progress */}
+          {todayTracking && nutritionGoals && (
+            <div className="bg-white/10 rounded-2xl p-4">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm text-green-100">Bugungi jarayon</span>
+                <span className="text-sm font-semibold">
+                  {todayTracking.caloriesConsumed}/{nutritionGoals.calories} kal
+                </span>
+              </div>
+              <Progress 
+                value={(todayTracking.caloriesConsumed / nutritionGoals.calories) * 100} 
+                className="h-2 bg-white/20"
+              />
+            </div>
+          )}
+        </div>
 
-        <div className="grid grid-cols-1 gap-3">
-          {/* Photo Upload */}
-          <Card className="border-dashed border-2 border-primary/30 hover:border-primary/50 transition-colors">
-            <CardContent className="pt-6">
-              <label htmlFor="photo-upload" className="cursor-pointer">
-                <div className="flex flex-col items-center gap-3 text-center">
-                  <div className="p-4 bg-primary/10 rounded-full">
-                    <Camera className="h-8 w-8 text-primary" />
+        <div className="p-4 pb-20 -mt-4">
+          {/* Add Mode Selector */}
+          <Card className="mb-6">
+            <CardContent className="p-4">
+              <div className="grid grid-cols-4 gap-2">
+                <button
+                  onClick={() => setAddMode('quick')}
+                  className={`p-3 rounded-xl text-center transition-all ${
+                    addMode === 'quick' 
+                      ? 'bg-green-100 text-green-700 border-2 border-green-300' 
+                      : 'bg-gray-50 text-gray-600 hover:bg-gray-100'
+                  }`}
+                >
+                  <Timer className="w-5 h-5 mx-auto mb-1" />
+                  <span className="text-xs font-medium">Tezkor</span>
+                </button>
+                
+                <button
+                  onClick={() => setAddMode('search')}
+                  className={`p-3 rounded-xl text-center transition-all ${
+                    addMode === 'search' 
+                      ? 'bg-blue-100 text-blue-700 border-2 border-blue-300' 
+                      : 'bg-gray-50 text-gray-600 hover:bg-gray-100'
+                  }`}
+                >
+                  <Search className="w-5 h-5 mx-auto mb-1" />
+                  <span className="text-xs font-medium">Qidirish</span>
+                </button>
+                
+                <label className="cursor-pointer">
+                  <div className={`p-3 rounded-xl text-center transition-all ${
+                    addMode === 'photo' 
+                      ? 'bg-purple-100 text-purple-700 border-2 border-purple-300' 
+                      : 'bg-gray-50 text-gray-600 hover:bg-gray-100'
+                  }`}>
+                    <Camera className="w-5 h-5 mx-auto mb-1" />
+                    <span className="text-xs font-medium">Rasm</span>
                   </div>
-                  <div>
-                    <h3 className="font-semibold text-foreground">
-                      Rasm Olish
-                    </h3>
-                    <p className="text-sm text-muted-foreground">
-                      AI sizning ovqatingizni avtomatik tahlil qiladi
-                    </p>
-                  </div>
-                </div>
-                <input
-                  id="photo-upload"
-                  type="file"
-                  accept="image/*"
-                  capture="environment"
-                  className="hidden"
-                  onChange={handleImageUpload}
-                />
-              </label>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    capture="environment"
+                    className="hidden"
+                    onChange={handleImageUpload}
+                  />
+                </label>
+                
+                <button
+                  onClick={() => setAddMode('manual')}
+                  className={`p-3 rounded-xl text-center transition-all ${
+                    addMode === 'manual' 
+                      ? 'bg-orange-100 text-orange-700 border-2 border-orange-300' 
+                      : 'bg-gray-50 text-gray-600 hover:bg-gray-100'
+                  }`}
+                >
+                  <Edit3 className="w-5 h-5 mx-auto mb-1" />
+                  <span className="text-xs font-medium">Qo'lda</span>
+                </button>
+              </div>
             </CardContent>
           </Card>
 
-          {/* Text Input */}
-          <Card>
-            <CardContent className="pt-6">
-              <div className="space-y-3">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 bg-secondary rounded-full">
-                    <Search className="h-5 w-5 text-secondary-foreground" />
+          {/* Quick Add Mode */}
+          {addMode === 'quick' && (
+            <div className="space-y-4">
+              {/* Recent Meals */}
+              {recentMeals.length > 0 && (
+                <Card>
+                  <CardHeader className="pb-3">
+                    <CardTitle className="flex items-center text-lg">
+                      <History className="w-5 h-5 mr-2" />
+                      So'nggi ovqatlar
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-2">
+                    {recentMeals.map((meal) => (
+                      <button
+                        key={meal.id}
+                        onClick={() => handleRecentMealSelect(meal)}
+                        className="w-full flex items-center justify-between p-3 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors"
+                      >
+                        <div className="text-left">
+                          <div className="font-medium text-gray-900">{meal.name}</div>
+                          <div className="text-sm text-gray-500">{meal.calories} kal</div>
+                        </div>
+                        <Plus className="w-4 h-4 text-gray-400" />
+                      </button>
+                    ))}
+                  </CardContent>
+                </Card>
+              )}
+
+              {/* Quick Add Presets */}
+              <Card>
+                <CardHeader className="pb-3">
+                  <CardTitle className="flex items-center text-lg">
+                    <Zap className="w-5 h-5 mr-2" />
+                    Tezkor qo'shish
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  {QUICK_ADD_PRESETS.map((preset) => (
+                    <button
+                      key={preset.id}
+                      onClick={() => handleQuickAdd(preset)}
+                      className="w-full flex items-center justify-between p-3 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors"
+                    >
+                      <div className="flex items-center">
+                        <span className="text-2xl mr-3">{preset.icon}</span>
+                        <span className="font-medium text-gray-900">{preset.name}</span>
+                      </div>
+                      <Plus className="w-4 h-4 text-gray-400" />
+                    </button>
+                  ))}
+                </CardContent>
+              </Card>
+
+              {/* Popular Foods */}
+              <Card>
+                <CardHeader className="pb-3">
+                  <CardTitle className="flex items-center text-lg">
+                    <Star className="w-5 h-5 mr-2" />
+                    Mashhur ovqatlar
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-2 gap-3">
+                    {popularFoods.map((food) => (
+                      <button
+                        key={food.id}
+                        onClick={() => handleFoodSelect(food)}
+                        className="p-3 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors text-left"
+                      >
+                        <div className="font-medium text-gray-900 text-sm mb-1">
+                          {food.nameUz}
+                        </div>
+                        <div className="text-xs text-gray-500">
+                          {food.nutrition.calories} kal
+                        </div>
+                      </button>
+                    ))}
                   </div>
-                  <div className="flex-1">
-                    <Label htmlFor="meal-name">Ovqat nomini kiriting</Label>
+                </CardContent>
+              </Card>
+            </div>
+          )}
+
+          {/* Search Mode */}
+          {addMode === 'search' && (
+            <div className="space-y-4">
+              {/* Search Input */}
+              <Card>
+                <CardContent className="p-4">
+                  <div className="relative">
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
                     <Input
-                      id="meal-name"
-                      placeholder="masalan, Tovuqli salat"
-                      value={mealName}
-                      onChange={(e) => setMealName(e.target.value)}
+                      placeholder="Ovqat nomini kiriting..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="pl-10"
+                    />
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Categories */}
+              {!searchQuery && (
+                <Card>
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-lg">Kategoriyalar</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid grid-cols-3 gap-3">
+                      {Object.values(FOOD_CATEGORIES).map((category) => (
+                        <button
+                          key={category.id}
+                          onClick={() => setSelectedCategory(category.id)}
+                          className="p-3 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors text-center"
+                        >
+                          <div className="text-2xl mb-1">{category.icon}</div>
+                          <div className="text-xs font-medium text-gray-700">
+                            {category.name}
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+
+              {/* Search Results */}
+              {searchResults.length > 0 && (
+                <Card>
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-lg">Qidiruv natijalari</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-2">
+                    {searchResults.map((food) => (
+                      <button
+                        key={food.id}
+                        onClick={() => handleFoodSelect(food)}
+                        className="w-full flex items-center justify-between p-3 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors"
+                      >
+                        <div className="text-left">
+                          <div className="font-medium text-gray-900">{food.nameUz}</div>
+                          <div className="text-sm text-gray-500">
+                            {food.nutrition.calories} kal • {food.serving.size}
+                          </div>
+                        </div>
+                        <Plus className="w-4 h-4 text-gray-400" />
+                      </button>
+                    ))}
+                  </CardContent>
+                </Card>
+              )}
+
+              {/* Category Results */}
+              {selectedCategory && !searchQuery && (
+                <Card>
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-lg">
+                      {FOOD_CATEGORIES[selectedCategory as keyof typeof FOOD_CATEGORIES]?.name}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-2">
+                    {getFoodsByCategory(selectedCategory).slice(0, 10).map((food) => (
+                      <button
+                        key={food.id}
+                        onClick={() => handleFoodSelect(food)}
+                        className="w-full flex items-center justify-between p-3 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors"
+                      >
+                        <div className="text-left">
+                          <div className="font-medium text-gray-900">{food.nameUz}</div>
+                          <div className="text-sm text-gray-500">
+                            {food.nutrition.calories} kal • {food.serving.size}
+                          </div>
+                        </div>
+                        <Plus className="w-4 h-4 text-gray-400" />
+                      </button>
+                    ))}
+                  </CardContent>
+                </Card>
+              )}
+            </div>
+          )}
+
+          {/* Photo Mode */}
+          {addMode === 'photo' && (
+            <div className="space-y-4">
+              {selectedImage && (
+                <Card>
+                  <CardContent className="p-4">
+                    <div className="relative rounded-lg overflow-hidden">
+                      <img
+                        src={selectedImage}
+                        alt="Ovqat"
+                        className="w-full h-48 object-cover"
+                      />
+                      {isAnalyzing && (
+                        <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+                          <div className="text-white text-center">
+                            <div className="animate-spin mb-2">
+                              <Zap className="h-8 w-8 mx-auto" />
+                            </div>
+                            <p className="text-sm">AI tahlil qilmoqda...</p>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+            </div>
+          )}
+
+          {/* Selected Food Details */}
+          {selectedFood && finalNutrition && (
+            <div className="space-y-4">
+              {/* Food Info */}
+              <Card>
+                <CardHeader className="pb-3">
+                  <CardTitle className="flex items-center justify-between">
+                    <span>{selectedFood.food.nameUz}</span>
+                    {nutritionScore && (
+                      <Badge 
+                        variant={nutritionScore.score >= 80 ? 'default' : 
+                               nutritionScore.score >= 60 ? 'secondary' : 'destructive'}
+                      >
+                        {nutritionScore.grade} ({nutritionScore.score})
+                      </Badge>
+                    )}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  {/* Portion Control */}
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <Label>Porsiya miqdori</Label>
+                      <div className="flex items-center space-x-2">
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => updatePortion(selectedFood.portion - 0.25)}
+                          disabled={selectedFood.portion <= 0.25}
+                        >
+                          <Minus className="w-3 h-3" />
+                        </Button>
+                        <span className="min-w-16 text-center font-semibold">
+                          {selectedFood.portion}x
+                        </span>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => updatePortion(selectedFood.portion + 0.25)}
+                        >
+                          <Plus className="w-3 h-3" />
+                        </Button>
+                      </div>
+                    </div>
+                    
+                    <Slider
+                      value={[selectedFood.portion]}
+                      onValueChange={(value) => updatePortion(value[0])}
+                      min={0.25}
+                      max={3}
+                      step={0.25}
+                      className="w-full"
+                    />
+                  </div>
+
+                  {/* Nutrition Display */}
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="bg-gradient-to-br from-red-50 to-red-100 p-3 rounded-lg text-center">
+                      <div className="text-2xl font-bold text-red-700">
+                        {finalNutrition.calories}
+                      </div>
+                      <div className="text-xs text-red-600">Kaloriya</div>
+                    </div>
+                    <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-3 rounded-lg text-center">
+                      <div className="text-2xl font-bold text-blue-700">
+                        {finalNutrition.protein}g
+                      </div>
+                      <div className="text-xs text-blue-600">Oqsil</div>
+                    </div>
+                    <div className="bg-gradient-to-br from-yellow-50 to-yellow-100 p-3 rounded-lg text-center">
+                      <div className="text-2xl font-bold text-yellow-700">
+                        {finalNutrition.carbs}g
+                      </div>
+                      <div className="text-xs text-yellow-600">Uglevodlar</div>
+                    </div>
+                    <div className="bg-gradient-to-br from-green-50 to-green-100 p-3 rounded-lg text-center">
+                      <div className="text-2xl font-bold text-green-700">
+                        {finalNutrition.fat}g
+                      </div>
+                      <div className="text-xs text-green-600">Yog'</div>
+                    </div>
+                  </div>
+
+                  {/* Edit Nutrition Button */}
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setIsEditingNutrition(!isEditingNutrition)}
+                    className="w-full"
+                  >
+                    <Edit3 className="w-4 h-4 mr-2" />
+                    Ozuqa qiymatlarini tahrirlash
+                  </Button>
+
+                  {/* Custom Nutrition Edit */}
+                  {isEditingNutrition && (
+                    <div className="space-y-3 p-4 bg-gray-50 rounded-lg">
+                      {['calories', 'protein', 'carbs', 'fat', 'fiber'].map((field) => (
+                        <div key={field} className="flex items-center justify-between">
+                          <Label className="capitalize">
+                            {field === 'calories' ? 'Kaloriya' :
+                             field === 'protein' ? 'Oqsil' :
+                             field === 'carbs' ? 'Uglevodlar' :
+                             field === 'fat' ? 'Yog\'' :
+                             'Tola'}
+                          </Label>
+                          <Input
+                            type="number"
+                            value={customNutrition?.[field as keyof typeof customNutrition] || finalNutrition[field as keyof typeof finalNutrition]}
+                            onChange={(e) => handleNutritionEdit(field, parseFloat(e.target.value) || 0)}
+                            className="w-20 text-center"
+                            min="0"
+                            step={field === 'calories' ? '1' : '0.1'}
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Nutrition Quality Feedback */}
+                  {nutritionScore && nutritionScore.feedback.length > 0 && (
+                    <div className="space-y-2">
+                      <Label className="text-sm font-medium">Ozuqa sifati baholovi:</Label>
+                      <div className="space-y-1">
+                        {nutritionScore.feedback.map((feedback, index) => (
+                          <div key={index} className="text-xs text-gray-600 flex items-center">
+                            <span>{feedback}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+
+              {/* Meal Details */}
+              <Card>
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-lg">Ovqat tafsilotlari</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  {/* Custom Name */}
+                  <div>
+                    <Label htmlFor="custom-name">Ovqat nomi (ixtiyoriy)</Label>
+                    <Input
+                      id="custom-name"
+                      placeholder={selectedFood.food.nameUz}
+                      value={selectedFood.customName || ''}
+                      onChange={(e) => setSelectedFood({
+                        ...selectedFood,
+                        customName: e.target.value
+                      })}
                       className="mt-1"
                     />
                   </div>
-                </div>
+
+                  {/* Meal Time */}
+                  <div>
+                    <Label>Ovqat vaqti</Label>
+                    <Select value={mealTime} onValueChange={(value: MealType) => setMealTime(value)}>
+                      <SelectTrigger className="mt-1">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="breakfast">🌅 Nonushta</SelectItem>
+                        <SelectItem value="lunch">☀️ Tushlik</SelectItem>
+                        <SelectItem value="dinner">🌙 Kechki ovqat</SelectItem>
+                        <SelectItem value="snack">🍎 Gazak</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  {/* Notes */}
+                  <div>
+                    <Label htmlFor="notes">Izohlar (ixtiyoriy)</Label>
+                    <Textarea
+                      id="notes"
+                      placeholder="Ovqat haqida qo'shimcha ma'lumot..."
+                      value={notes}
+                      onChange={(e) => setNotes(e.target.value)}
+                      className="mt-1 h-20 resize-none"
+                    />
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Save Button */}
+              <div className="sticky bottom-4">
                 <Button
-                  onClick={handleTextAnalysis}
-                  variant="outline"
-                  className="w-full"
-                  disabled={!mealName.trim() || isAnalyzing}
+                  onClick={saveMeal}
+                  disabled={isSaving}
+                  className="w-full h-14 text-lg font-semibold bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 shadow-lg"
                 >
-                  {isAnalyzing
-                    ? "Tahlil qilinmoqda..."
-                    : "AI bilan Tahlil Qilish"}
+                  {isSaving ? (
+                    <>
+                      <div className="animate-spin w-5 h-5 border-2 border-white border-t-transparent rounded-full mr-2"></div>
+                      Saqlanmoqda...
+                    </>
+                  ) : (
+                    <>
+                      <Utensils className="w-5 h-5 mr-2" />
+                      Ovqatni Saqlash ({finalNutrition.calories} kal)
+                    </>
+                  )}
                 </Button>
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          )}
         </div>
       </div>
-
-      {/* Uploaded Image Preview */}
-      {selectedImage && (
-        <Card>
-          <CardContent className="pt-6">
-            <div className="space-y-3">
-              <Label>Yuklangan Rasm</Label>
-              <div className="relative rounded-lg overflow-hidden">
-                <img
-                  src={selectedImage}
-                  alt="Ovqat"
-                  className="w-full h-48 object-cover"
-                />
-                {isAnalyzing && (
-                  <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-                    <div className="text-white text-center">
-                      <div className="animate-spin mb-2">
-                        <Zap className="h-8 w-8 mx-auto" />
-                      </div>
-                      <p className="text-sm">
-                        AI sizning ovqatingizni tahlil qilmoqda...
-                      </p>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      )}
-
-      {/* AI Analysis Results */}
-      {aiAnalysis && (
-        <Card className="bg-gradient-to-r from-mint-100 to-mint-50 border-mint-200">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-mint-800">
-              <CheckCircle className="h-5 w-5" />
-              AI Tahlil Natijalari
-              <Badge
-                variant="secondary"
-                className="ml-auto bg-mint-200 text-mint-800"
-              >
-                {aiAnalysis.confidence}% ishonch
-              </Badge>
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="text-center p-3 bg-white/60 rounded-lg">
-                <p className="text-2xl font-bold text-mint-800">
-                  {aiAnalysis.calories}
-                </p>
-                <p className="text-sm text-mint-600">Kaloriya</p>
-              </div>
-              <div className="text-center p-3 bg-white/60 rounded-lg">
-                <p className="text-2xl font-bold text-mint-800">
-                  {aiAnalysis.protein}g
-                </p>
-                <p className="text-sm text-mint-600">Oqsil</p>
-              </div>
-              <div className="text-center p-3 bg-white/60 rounded-lg">
-                <p className="text-2xl font-bold text-mint-800">
-                  {aiAnalysis.carbs}g
-                </p>
-                <p className="text-sm text-mint-600">Uglevodlar</p>
-              </div>
-              <div className="text-center p-3 bg-white/60 rounded-lg">
-                <p className="text-2xl font-bold text-mint-800">
-                  {aiAnalysis.fat}g
-                </p>
-                <p className="text-sm text-mint-600">Yog'</p>
-              </div>
-            </div>
-
-            {/* Meal Details Form */}
-            <div className="space-y-4 pt-4 border-t border-mint-200">
-              <div className="space-y-2">
-                <Label htmlFor="meal-name-edit">Ovqat Nomi</Label>
-                <Input
-                  id="meal-name-edit"
-                  value={mealName}
-                  onChange={(e) => setMealName(e.target.value)}
-                  placeholder="Ovqat nomini kiriting yoki tahrirlang"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label>Porsiya Miqdori: {portionSize[0]} porsiya</Label>
-                <Slider
-                  value={portionSize}
-                  onValueChange={setPortionSize}
-                  max={3}
-                  min={0.5}
-                  step={0.5}
-                  className="w-full"
-                />
-                <div className="flex justify-between text-xs text-muted-foreground">
-                  <span>0.5x</span>
-                  <span>1x</span>
-                  <span>2x</span>
-                  <span>3x</span>
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <Label>Ovqat Vaqti</Label>
-                <Select value={mealTime} onValueChange={setMealTime}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Ovqat vaqtini tanlang" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="breakfast">🌅 Nonushta</SelectItem>
-                    <SelectItem value="lunch">☀️ Tushlik</SelectItem>
-                    <SelectItem value="dinner">🌙 Kechki ovqat</SelectItem>
-                    <SelectItem value="snack">🍎 Gazak</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="notes">Izoh (Ixtiyoriy)</Label>
-                <Textarea
-                  id="notes"
-                  placeholder="Ovqatingiz haqida qo'shimcha izoh qo'shing..."
-                  className="h-20"
-                />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      )}
-
-      {/* Save Button */}
-      {aiAnalysis && (
-        <div className="fixed bottom-20 left-4 right-4">
-          <Button
-            onClick={saveMeal}
-            className="w-full h-12 text-lg font-semibold"
-            disabled={!mealTime}
-          >
-            <Utensils className="h-5 w-5 mr-2" />
-            Ovqatni Saqlash ({Math.round(
-              aiAnalysis.calories * portionSize[0],
-            )}{" "}
-            kal)
-          </Button>
-        </div>
-      )}
     </div>
   );
 }
