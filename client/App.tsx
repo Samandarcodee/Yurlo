@@ -21,6 +21,7 @@ import Assistant from "./pages/Assistant";
 import Analytics from "./pages/Analytics";
 import Settings from "./pages/Settings";
 import Onboarding from "./pages/Onboarding";
+import TelegramOnboarding from "./components/TelegramOnboarding";
 import Profile from "./pages/Profile";
 import SleepTracker from "./pages/SleepTracker";
 import StepTracker from "./pages/StepTracker";
@@ -85,7 +86,8 @@ const AppRoutes = () => {
   if (shouldShowOnboarding) {
     return (
       <Routes>
-        <Route path="/onboarding" element={<Onboarding />} />
+                    <Route path="/onboarding" element={<Onboarding />} />
+            <Route path="/telegram-onboarding" element={<TelegramOnboarding />} />
         <Route path="*" element={<Navigate to="/onboarding" replace />} />
       </Routes>
     );

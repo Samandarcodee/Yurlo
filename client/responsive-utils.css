@@ -1,0 +1,345 @@
+/* === PROFESSIONAL RESPONSIVE UTILITIES === */
+
+/* === RESPONSIVE CONTAINERS === */
+
+.container-responsive {
+  @apply w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-12;
+}
+
+.container-mobile {
+  @apply w-full max-w-md mx-auto px-4 sm:px-6;
+}
+
+.container-tablet {
+  @apply w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+/* === RESPONSIVE IMAGE & MEDIA === */
+
+.image-responsive {
+  @apply w-full h-auto max-w-full object-cover rounded-lg overflow-hidden;
+}
+
+.image-contain {
+  @apply w-full h-auto max-w-full object-contain overflow-hidden;
+}
+
+.image-avatar-responsive {
+  @apply w-12 h-12 sm:w-16 sm:h-16 lg:w-20 lg:h-20 rounded-full object-cover;
+}
+
+.overflow-hidden-responsive {
+  @apply overflow-hidden;
+}
+
+/* === RESPONSIVE SPACING === */
+
+.spacing-responsive {
+  @apply space-y-4 sm:space-y-6 lg:space-y-8;
+}
+
+.spacing-tight {
+  @apply space-y-2 sm:space-y-3 lg:space-y-4;
+}
+
+.spacing-loose {
+  @apply space-y-6 sm:space-y-8 lg:space-y-12;
+}
+
+.padding-responsive {
+  @apply p-4 sm:p-6 lg:p-8;
+}
+
+.padding-responsive-x {
+  @apply px-4 sm:px-6 lg:px-8;
+}
+
+.padding-responsive-y {
+  @apply py-4 sm:py-6 lg:py-8;
+}
+
+.margin-responsive {
+  @apply m-4 sm:m-6 lg:m-8;
+}
+
+/* === RESPONSIVE GRID SYSTEMS === */
+
+.grid-responsive-1 {
+  @apply grid grid-cols-1 gap-4 sm:gap-6;
+}
+
+.grid-responsive-2 {
+  @apply grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6;
+}
+
+.grid-responsive-3 {
+  @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6;
+}
+
+.grid-responsive-4 {
+  @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6;
+}
+
+.grid-auto-fit {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.grid-auto-fill {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1rem;
+}
+
+/* === RESPONSIVE FLEXBOX === */
+
+.flex-responsive {
+  @apply flex flex-col sm:flex-row gap-4 sm:gap-6;
+}
+
+.flex-responsive-reverse {
+  @apply flex flex-col-reverse sm:flex-row gap-4 sm:gap-6;
+}
+
+.flex-center-responsive {
+  @apply flex flex-col items-center justify-center sm:flex-row sm:justify-between gap-4 sm:gap-6;
+}
+
+.flex-stack-sm {
+  @apply flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4;
+}
+
+/* === RESPONSIVE TEXT ALIGNMENT === */
+
+.text-center-mobile {
+  @apply text-center sm:text-left;
+}
+
+.text-left-mobile {
+  @apply text-left sm:text-center;
+}
+
+.text-right-mobile {
+  @apply text-right sm:text-left;
+}
+
+/* === MOBILE OPTIMIZATIONS === */
+
+.mobile-tap-highlight {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.mobile-scroll {
+  -webkit-overflow-scrolling: touch;
+  overflow-x: hidden;
+}
+
+.mobile-full-width {
+  @apply w-full sm:w-auto;
+}
+
+.mobile-hidden {
+  @apply hidden sm:block;
+}
+
+.mobile-only {
+  @apply block sm:hidden;
+}
+
+/* === TELEGRAM WEBAPP OPTIMIZATIONS === */
+
+.telegram-safe-area {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+.telegram-header-safe {
+  padding-top: env(safe-area-inset-top, 0px);
+}
+
+.telegram-viewport {
+  height: 100vh;
+  height: 100dvh; /* Dynamic viewport height */
+}
+
+/* === TOUCH OPTIMIZATIONS === */
+
+.touch-target {
+  @apply min-h-[44px] min-w-[44px] flex items-center justify-center;
+}
+
+.touch-target-large {
+  @apply min-h-[56px] min-w-[56px] flex items-center justify-center;
+}
+
+/* === PROFESSIONAL FOCUS STATES === */
+
+.focus-professional {
+  @apply focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background;
+}
+
+.focus-visible-professional {
+  @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2;
+}
+
+/* === OVERFLOW MANAGEMENT === */
+
+.overflow-safe {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  hyphens: auto;
+}
+
+.text-ellipsis-responsive {
+  @apply truncate sm:text-clip;
+}
+
+.text-break-responsive {
+  @apply break-words sm:break-normal;
+}
+
+/* === RESPONSIVE CARD COMPONENTS === */
+
+.card-responsive {
+  @apply w-full max-w-sm sm:max-w-md lg:max-w-lg mx-auto;
+}
+
+.card-grid-responsive {
+  @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6;
+}
+
+/* === RESPONSIVE NAVIGATION === */
+
+.nav-mobile {
+  @apply block sm:hidden;
+}
+
+.nav-desktop {
+  @apply hidden sm:block;
+}
+
+.nav-responsive {
+  @apply flex flex-col sm:flex-row gap-2 sm:gap-4;
+}
+
+/* === RESPONSIVE BUTTONS === */
+
+.btn-responsive {
+  @apply w-full sm:w-auto px-4 py-2 sm:px-6 sm:py-3;
+}
+
+.btn-mobile-full {
+  @apply w-full sm:w-auto;
+}
+
+/* === RESPONSIVE MODALS === */
+
+.modal-responsive {
+  @apply w-full max-w-sm sm:max-w-md lg:max-w-lg xl:max-w-xl mx-4 sm:mx-auto;
+}
+
+.modal-mobile-full {
+  @apply w-full h-full sm:w-auto sm:h-auto sm:max-w-md sm:rounded-lg;
+}
+
+/* === RESPONSIVE FORM ELEMENTS === */
+
+.form-responsive {
+  @apply space-y-4 sm:space-y-6;
+}
+
+.form-group-responsive {
+  @apply flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4;
+}
+
+.input-responsive {
+  @apply w-full text-base sm:text-sm; /* 16px on mobile to prevent zoom */
+}
+
+/* === RESPONSIVE SIDEBAR === */
+
+.sidebar-responsive {
+  @apply fixed inset-y-0 left-0 w-64 transform -translate-x-full sm:translate-x-0 sm:static sm:inset-0;
+}
+
+.sidebar-overlay {
+  @apply fixed inset-0 bg-black bg-opacity-50 sm:hidden;
+}
+
+/* === RESPONSIVE TABLES === */
+
+.table-responsive {
+  @apply overflow-x-auto;
+}
+
+.table-mobile-stack {
+  @apply block sm:table;
+}
+
+.table-mobile-stack tbody,
+.table-mobile-stack tr,
+.table-mobile-stack td {
+  @apply block sm:table-cell;
+}
+
+.table-mobile-stack tr {
+  @apply border-b mb-4 sm:mb-0 pb-4 sm:pb-0;
+}
+
+/* === RESPONSIVE HERO SECTIONS === */
+
+.hero-responsive {
+  @apply py-12 sm:py-16 lg:py-24;
+}
+
+.hero-title-responsive {
+  @apply text-3xl sm:text-4xl lg:text-6xl font-bold leading-tight;
+}
+
+.hero-subtitle-responsive {
+  @apply text-lg sm:text-xl lg:text-2xl text-muted-foreground;
+}
+
+/* === RESPONSIVE LAYOUT UTILITIES === */
+
+.aspect-responsive {
+  @apply aspect-square sm:aspect-video;
+}
+
+.height-responsive {
+  @apply h-64 sm:h-80 lg:h-96;
+}
+
+.min-height-responsive {
+  @apply min-h-screen sm:min-h-0;
+}
+
+/* === RESPONSIVE ANIMATION CONTROLS === */
+
+.animate-on-mobile {
+  @apply animate-none sm:animate-bounce;
+}
+
+.reduce-motion {
+  @media (prefers-reduced-motion: reduce) {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* === RESPONSIVE UTILITY CLASSES === */
+
+.sr-only-mobile {
+  @apply sr-only sm:not-sr-only;
+}
+
+.visible-mobile {
+  @apply visible sm:invisible;
+}
+
+.invisible-mobile {
+  @apply invisible sm:visible;
+}
