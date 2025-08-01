@@ -300,92 +300,120 @@ export default function AddMeal() {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
+      <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center space-y-4">
-          <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto"></div>
-          <p className="text-gray-600 font-medium">Loading...</p>
+          <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto"></div>
+          <p className="text-foreground font-medium">Yuklanmoqda...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-md mx-auto bg-white min-h-screen">
-        {/* Header */}
-        <div className="bg-gradient-to-r from-green-600 to-emerald-600 text-white p-6 pb-8">
-          <div className="flex items-center justify-between mb-4">
+    <div className="min-h-screen bg-background transition-colors duration-300">
+      <div className="max-w-md mx-auto bg-background min-h-screen">
+        {/* Enhanced Header with Theme Support */}
+        <div className="bg-gradient-to-br from-primary via-primary/90 to-primary/80 dark:from-primary dark:via-primary/80 dark:to-primary/60 text-white p-6 pb-8 shadow-xl">
+          <div className="flex items-center justify-between mb-6">
             <Link to="/">
               <Button
                 variant="ghost"
                 size="sm"
-                className="text-white hover:bg-white/20 p-2"
+                className="text-white hover:bg-white/20 dark:hover:bg-white/10 p-3 rounded-xl transition-all duration-200 hover:scale-105"
               >
                 <ArrowLeft className="w-5 h-5" />
               </Button>
             </Link>
-            <h1 className="text-xl font-bold">Ovqat Qo'shish</h1>
-            <div className="w-9"></div>
+            <div className="text-center">
+              <h1 className="text-xl font-bold">Ovqat Qo'shish</h1>
+              <p className="text-white/80 text-sm">Sog'liq kuzatuvi</p>
+            </div>
+            <div className="w-12"></div>
           </div>
 
-          {/* Today's Progress */}
+          {/* Enhanced Today's Progress */}
           {todayTracking && nutritionGoals && (
-            <div className="bg-white/10 rounded-2xl p-4">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-sm text-green-100">Bugungi jarayon</span>
-                <span className="text-sm font-semibold">
+            <div className="bg-white/15 dark:bg-white/10 backdrop-blur-sm rounded-2xl p-4 border border-white/20">
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center space-x-2">
+                  <Flame className="w-4 h-4 text-orange-300" />
+                  <span className="text-sm text-white/90 font-medium">Bugungi jarayon</span>
+                </div>
+                <span className="text-sm font-bold bg-white/20 px-3 py-1 rounded-full">
                   {todayTracking.caloriesConsumed}/{nutritionGoals.calories} kal
                 </span>
               </div>
-              <Progress
-                value={
-                  (todayTracking.caloriesConsumed / nutritionGoals.calories) *
-                  100
-                }
-                className="h-2 bg-white/20"
-              />
+              <div className="space-y-2">
+                <Progress
+                  value={
+                    (todayTracking.caloriesConsumed / nutritionGoals.calories) *
+                    100
+                  }
+                  className="h-3 bg-white/20"
+                />
+                <div className="flex justify-between text-xs text-white/80">
+                  <span>{Math.round((todayTracking.caloriesConsumed / nutritionGoals.calories) * 100)}% bajarildi</span>
+                  <span>{nutritionGoals.calories - todayTracking.caloriesConsumed} kal qoldi</span>
+                </div>
+              </div>
             </div>
           )}
         </div>
 
         <div className="p-4 pb-20 -mt-4">
-          {/* Add Mode Selector */}
-          <Card className="mb-6">
+          {/* Enhanced Add Mode Selector */}
+          <Card className="mb-6 theme-card border-2 border-border/30 dark:border-border/20 shadow-lg dark:shadow-xl">
             <CardContent className="p-4">
-              <div className="grid grid-cols-4 gap-2">
+              <h2 className="text-sm font-semibold text-foreground mb-4 flex items-center">
+                <Plus className="w-4 h-4 mr-2 text-primary" />
+                Qo'shish usuli
+              </h2>
+              <div className="grid grid-cols-4 gap-3">
                 <button
                   onClick={() => setAddMode("quick")}
-                  className={`p-3 rounded-xl text-center transition-all ${
+                  className={`group p-4 rounded-2xl text-center transition-all duration-300 hover:scale-105 ${
                     addMode === "quick"
-                      ? "bg-green-100 text-green-700 border-2 border-green-300"
-                      : "bg-gray-50 text-gray-600 hover:bg-gray-100"
+                      ? "bg-gradient-to-br from-green-100 to-emerald-100 dark:from-green-900/40 dark:to-emerald-900/40 text-green-700 dark:text-green-300 border-2 border-green-300 dark:border-green-600 shadow-lg"
+                      : "bg-muted/50 dark:bg-muted/30 text-muted-foreground hover:bg-muted dark:hover:bg-muted/50 hover:text-foreground border border-border/20"
                   }`}
                 >
-                  <Timer className="w-5 h-5 mx-auto mb-1" />
+                  <div className={`w-8 h-8 mx-auto mb-2 p-1 rounded-lg ${
+                    addMode === "quick" ? "bg-green-200 dark:bg-green-800" : "bg-muted"
+                  }`}>
+                    <Timer className="w-6 h-6" />
+                  </div>
                   <span className="text-xs font-medium">Tezkor</span>
                 </button>
 
                 <button
                   onClick={() => setAddMode("search")}
-                  className={`p-3 rounded-xl text-center transition-all ${
+                  className={`group p-4 rounded-2xl text-center transition-all duration-300 hover:scale-105 ${
                     addMode === "search"
-                      ? "bg-blue-100 text-blue-700 border-2 border-blue-300"
-                      : "bg-gray-50 text-gray-600 hover:bg-gray-100"
+                      ? "bg-gradient-to-br from-blue-100 to-cyan-100 dark:from-blue-900/40 dark:to-cyan-900/40 text-blue-700 dark:text-blue-300 border-2 border-blue-300 dark:border-blue-600 shadow-lg"
+                      : "bg-muted/50 dark:bg-muted/30 text-muted-foreground hover:bg-muted dark:hover:bg-muted/50 hover:text-foreground border border-border/20"
                   }`}
                 >
-                  <Search className="w-5 h-5 mx-auto mb-1" />
+                  <div className={`w-8 h-8 mx-auto mb-2 p-1 rounded-lg ${
+                    addMode === "search" ? "bg-blue-200 dark:bg-blue-800" : "bg-muted"
+                  }`}>
+                    <Search className="w-6 h-6" />
+                  </div>
                   <span className="text-xs font-medium">Qidirish</span>
                 </button>
 
-                <label className="cursor-pointer">
+                <label className="cursor-pointer group">
                   <div
-                    className={`p-3 rounded-xl text-center transition-all ${
+                    className={`p-4 rounded-2xl text-center transition-all duration-300 hover:scale-105 ${
                       addMode === "photo"
-                        ? "bg-purple-100 text-purple-700 border-2 border-purple-300"
-                        : "bg-gray-50 text-gray-600 hover:bg-gray-100"
+                        ? "bg-gradient-to-br from-purple-100 to-violet-100 dark:from-purple-900/40 dark:to-violet-900/40 text-purple-700 dark:text-purple-300 border-2 border-purple-300 dark:border-purple-600 shadow-lg"
+                        : "bg-muted/50 dark:bg-muted/30 text-muted-foreground hover:bg-muted dark:hover:bg-muted/50 hover:text-foreground border border-border/20"
                     }`}
                   >
-                    <Camera className="w-5 h-5 mx-auto mb-1" />
+                    <div className={`w-8 h-8 mx-auto mb-2 p-1 rounded-lg ${
+                      addMode === "photo" ? "bg-purple-200 dark:bg-purple-800" : "bg-muted"
+                    }`}>
+                      <Camera className="w-6 h-6" />
+                    </div>
                     <span className="text-xs font-medium">Rasm</span>
                   </div>
                   <input

@@ -170,16 +170,23 @@ export default function Profile() {
 
   if (!profile) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-mint-50 via-white to-water-50 flex items-center justify-center">
-        <Card className="w-full max-w-md mx-4">
-          <CardContent className="pt-6 text-center">
-            <User className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-            <h3 className="text-lg font-semibold mb-2">Profil topilmadi</h3>
-            <p className="text-muted-foreground mb-4">
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <Card className="w-full max-w-md mx-4 theme-card-interactive shadow-xl">
+          <CardContent className="pt-8 pb-6 text-center">
+            <div className="relative inline-block mb-6">
+              <div className="p-4 bg-muted/50 rounded-full">
+                <User className="h-12 w-12 text-muted-foreground" />
+              </div>
+              <div className="absolute -top-1 -right-1 w-4 h-4 bg-yellow-500 rounded-full animate-pulse border-2 border-background"></div>
+            </div>
+            <h3 className="text-xl font-bold mb-2 text-foreground">Profil topilmadi</h3>
+            <p className="text-muted-foreground mb-6 leading-relaxed">
               Iltimos, avval ro'yxatdan o'ting
             </p>
             <Link to="/onboarding">
-              <Button className="w-full">Ro'yxatdan o'tish</Button>
+              <Button className="w-full bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 shadow-lg hover:shadow-xl transition-all duration-200">
+                Ro'yxatdan o'tish
+              </Button>
             </Link>
           </CardContent>
         </Card>
@@ -192,14 +199,16 @@ export default function Profile() {
   const bmiCategory = getBMICategory(bmi);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-mint-50 via-white to-water-50">
+    <div className="min-h-screen bg-gradient-to-br from-background via-card to-muted/30 dark:from-background dark:via-card dark:to-muted/20 transition-colors duration-300">
       <div className="px-4 py-6 sm:px-6 lg:px-8 xl:px-12 space-y-6 sm:space-y-8 max-w-4xl mx-auto">
-        {/* Header */}
-        <div className="text-center space-y-2 sm:space-y-3 animate-fade-in-up pt-2 sm:pt-4">
-          <div className="inline-block p-2 sm:p-3 bg-gradient-to-r from-mint-100 to-water-100 rounded-full mb-1 sm:mb-2">
-            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-mint-600 to-water-600 bg-clip-text text-transparent">
-              Shaxsiy Kabinet 👤
-            </h1>
+        {/* Enhanced Header */}
+        <div className="text-center space-y-4 sm:space-y-6 animate-fade-in-up pt-4 sm:pt-6">
+          <div className="relative inline-block">
+            <div className="p-4 sm:p-6 bg-gradient-to-br from-primary/10 via-primary/5 to-accent/10 dark:from-primary/20 dark:via-primary/10 dark:to-accent/20 rounded-3xl border border-border/30 backdrop-blur-sm shadow-lg">
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-primary via-primary/80 to-accent bg-clip-text text-transparent">
+                Shaxsiy Kabinet 👤
+              </h1>
+            </div>
           </div>
         </div>
 

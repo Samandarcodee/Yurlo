@@ -178,38 +178,44 @@ export default function Analytics() {
 
   if (isLoading || !overview) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Analytics yuklanmoqda...</p>
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center space-y-6">
+          <div className="relative">
+            <div className="w-16 h-16 border-4 border-primary/30 border-t-primary rounded-full animate-spin mx-auto"></div>
+            <div className="absolute inset-0 w-16 h-16 border-4 border-transparent border-t-primary/60 rounded-full animate-ping"></div>
+          </div>
+          <div className="space-y-2">
+            <h2 className="text-xl font-bold text-foreground">Analytics yuklanmoqda</h2>
+            <p className="text-muted-foreground">Ma'lumotlar tahlil qilinmoqda...</p>
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-100 pb-20">
-      {/* Animated Background */}
+    <div className="min-h-screen bg-gradient-to-br from-background via-card to-muted/30 dark:from-background dark:via-card dark:to-muted/20 pb-20 transition-colors duration-300">
+      {/* Enhanced Animated Background */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-blue-400/20 to-purple-600/20 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-tr from-indigo-400/20 to-cyan-600/20 rounded-full blur-3xl animate-pulse delay-700"></div>
-        <div className="absolute top-1/2 left-1/2 w-60 h-60 bg-gradient-to-r from-pink-400/10 to-yellow-400/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-primary/10 to-accent/10 dark:from-primary/20 dark:to-accent/20 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-tr from-accent/10 to-primary/10 dark:from-accent/20 dark:to-primary/20 rounded-full blur-3xl animate-pulse delay-700"></div>
+        <div className="absolute top-1/2 left-1/2 w-60 h-60 bg-gradient-to-r from-muted/20 to-primary/5 dark:from-muted/30 dark:to-primary/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
       </div>
 
-      {/* Header with Glass Effect */}
-      <div className="safe-area-top bg-white/80 backdrop-blur-xl border-b border-white/20 shadow-lg relative z-10">
+      {/* Enhanced Header with Theme Support */}
+      <div className="safe-area-top bg-background/90 dark:bg-card/90 backdrop-blur-xl border-b border-border/30 dark:border-border/20 shadow-lg dark:shadow-2xl relative z-10">
         <div className="px-4 py-4">
           <div className="flex items-center justify-between">
             <Link to="/" className="flex items-center space-x-3 group">
-              <div className="p-2 rounded-xl bg-gradient-to-r from-blue-500 to-purple-600 shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-105">
+              <div className="p-3 rounded-2xl bg-gradient-to-r from-primary via-primary/90 to-accent shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-105">
                 <ArrowLeft className="h-5 w-5 text-white" />
               </div>
               <div>
-                <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                <span className="text-xl font-bold bg-gradient-to-r from-primary via-primary/80 to-accent bg-clip-text text-transparent">
                   Analytics Dashboard
                 </span>
-                <p className="text-sm text-gray-500">
-                  Health Insights & Progress
+                <p className="text-sm text-muted-foreground">
+                  Sog'liq tahlili va progress
                 </p>
               </div>
             </Link>
@@ -217,15 +223,15 @@ export default function Analytics() {
               <Button
                 variant="outline"
                 size="sm"
-                className="bg-white/70 backdrop-blur-sm border-white/30 hover:bg-white/90 transition-all duration-300 hover:scale-105 shadow-lg"
+                className="bg-background/70 dark:bg-card/70 backdrop-blur-sm border-border/30 hover:bg-background/90 dark:hover:bg-card/90 transition-all duration-300 hover:scale-105 shadow-lg"
               >
-                <Filter className="h-4 w-4 mr-2 text-blue-600" />
+                <Filter className="h-4 w-4 mr-2 text-primary" />
                 Filter
               </Button>
               <Button
                 variant="outline"
                 size="sm"
-                className="bg-gradient-to-r from-blue-500 to-purple-600 text-white border-0 hover:from-blue-600 hover:to-purple-700 transition-all duration-300 hover:scale-105 shadow-lg"
+                className="bg-gradient-to-r from-primary via-primary/90 to-accent text-white border-0 hover:from-primary/90 hover:via-primary hover:to-accent/90 transition-all duration-300 hover:scale-105 shadow-lg"
               >
                 <Share className="h-4 w-4" />
               </Button>
@@ -235,50 +241,50 @@ export default function Analytics() {
       </div>
 
       <div className="px-4 py-6 space-y-6">
-        {/* Enhanced Health Score */}
-        <Card className="border-0 shadow-2xl bg-gradient-to-br from-white/90 via-white/80 to-white/70 backdrop-blur-xl relative overflow-hidden group hover:shadow-3xl transition-all duration-500">
-          {/* Background Pattern */}
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 to-purple-500/5"></div>
-          <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-blue-400/20 to-transparent rounded-full blur-2xl"></div>
+        {/* Enhanced Health Score with Theme Support */}
+        <Card className="border-0 shadow-2xl dark:shadow-3xl bg-gradient-to-br from-card/95 via-background/90 to-muted/30 dark:from-card/90 dark:via-background/80 dark:to-muted/20 backdrop-blur-xl relative overflow-hidden group hover:shadow-3xl dark:hover:shadow-4xl transition-all duration-500">
+          {/* Enhanced Background Pattern */}
+          <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-accent/5 dark:from-primary/10 dark:to-accent/10"></div>
+          <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-primary/20 dark:from-primary/30 to-transparent rounded-full blur-2xl"></div>
 
           <CardContent className="p-8 relative z-10">
             <div className="flex items-center justify-between mb-8">
               <div className="space-y-2">
                 <div className="flex items-center space-x-3">
-                  <div className="p-3 rounded-2xl bg-gradient-to-r from-blue-500 to-purple-600 shadow-lg">
+                  <div className="p-3 rounded-2xl bg-gradient-to-r from-primary via-primary/90 to-accent shadow-lg">
                     <Shield className="h-6 w-6 text-white" />
                   </div>
                   <div>
-                    <h2 className="text-2xl font-bold bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent">
+                    <h2 className="text-2xl font-bold bg-gradient-to-r from-foreground to-foreground/80 bg-clip-text text-transparent">
                       Sog'liq Bahosi
                     </h2>
-                    <p className="text-sm text-gray-500">
+                    <p className="text-sm text-muted-foreground">
                       Umumiy salomatlik ko'rsatkichi
                     </p>
                   </div>
                 </div>
               </div>
 
-              {/* Animated Score Display */}
+              {/* Enhanced Animated Score Display */}
               <div className="relative">
-                <div className="w-24 h-24 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 p-1 shadow-2xl animate-pulse">
-                  <div className="w-full h-full rounded-full bg-white flex items-center justify-center">
+                <div className="w-28 h-28 rounded-full bg-gradient-to-r from-primary via-primary/90 to-accent p-1 shadow-2xl animate-pulse">
+                  <div className="w-full h-full rounded-full bg-background dark:bg-card flex items-center justify-center">
                     <div className="text-center">
                       <div
-                        className={`text-2xl font-bold ${getHealthScoreColor(healthScore?.score || 0)}`}
+                        className={`text-3xl font-bold ${getHealthScoreColor(healthScore?.score || 0)}`}
                       >
                         {healthScore?.score || 0}
                       </div>
-                      <div className="text-xs text-gray-400 font-medium">
+                      <div className="text-xs text-muted-foreground font-medium">
                         /100
                       </div>
                     </div>
                   </div>
                 </div>
 
-                {/* Status Badge */}
+                {/* Enhanced Status Badge */}
                 <div
-                  className={`absolute -top-2 -right-2 px-3 py-1 rounded-full text-xs font-bold ${getHealthScoreBg(healthScore?.score || 0)} ${getHealthScoreColor(healthScore?.score || 0)} shadow-lg`}
+                  className={`absolute -top-2 -right-2 px-3 py-1 rounded-full text-xs font-bold ${getHealthScoreBg(healthScore?.score || 0)} ${getHealthScoreColor(healthScore?.score || 0)} shadow-lg border border-background dark:border-card`}
                 >
                   {(healthScore?.score || 0) >= 80
                     ? "A'lo"
