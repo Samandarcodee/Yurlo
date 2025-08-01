@@ -58,22 +58,22 @@
   :root {
     --background: 210 20% 98%;
     --foreground: 214 32% 17%;
-    --card: 0 0% 100%;
-    --card-foreground: 214 32% 17%;
+    --card: 224 71% 6%;
+    --card-foreground: 213 31% 91%;
     --popover: 0 0% 100%;
     --popover-foreground: 214 32% 17%;
     --primary: 140 65% 50%;
     --primary-foreground: 0 0% 100%;
     --secondary: 158 64% 88%;
     --secondary-foreground: 140 66% 24%;
-    --muted: 210 20% 98%;
-    --muted-foreground: 215 16% 47%;
+    --muted: 215 28% 17%;
+    --muted-foreground: 217 10% 65%;
     --accent: 200 100% 85%;
     --accent-foreground: 200 100% 25%;
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
-    --border: 214 32% 91%;
-    --input: 210 17% 96%;
+    --border: 215 28% 18%;
+    --input: 215 28% 18%;
     --ring: 140 65% 50%;
     --radius: 0.75rem;
     --sidebar-background: 0 0% 98%;

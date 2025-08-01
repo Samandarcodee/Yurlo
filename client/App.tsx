@@ -16,12 +16,14 @@ import {
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { useTelegram } from "./hooks/use-telegram";
 import Index from "./pages/Index";
+import FixedIndex from "./pages/FixedIndex";
 import AddMeal from "./pages/AddMeal";
 import Assistant from "./pages/Assistant";
 import Analytics from "./pages/Analytics";
 import Settings from "./pages/Settings";
 import Onboarding from "./pages/Onboarding";
 import TelegramOnboarding from "./components/TelegramOnboarding";
+import FixedOnboarding from "./components/FixedOnboarding";
 import Profile from "./pages/Profile";
 import EnhancedProfile from "./pages/EnhancedProfile";
 import EnhancedAddMeal from "./pages/EnhancedAddMeal";
@@ -99,8 +101,11 @@ const AppRoutes = () => {
   return (
     <Layout>
       <Routes>
-        <Route path="/" element={<Index />} />
-        <Route path="/onboarding" element={<Navigate to="/" replace />} />
+        <Route path="/" element={<FixedIndex />} />
+        <Route path="/index-legacy" element={<Index />} />
+        <Route path="/onboarding" element={<FixedOnboarding />} />
+        <Route path="/onboarding-legacy" element={<Onboarding />} />
+        <Route path="/telegram-onboarding" element={<TelegramOnboarding />} />
         <Route path="/profile" element={<EnhancedProfile />} />
         <Route path="/profile-legacy" element={<Profile />} />
         <Route path="/add-meal" element={<EnhancedAddMeal />} />
