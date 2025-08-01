@@ -408,94 +408,134 @@ export default function Index() {
         </div>
 
         {/* Enhanced Professional Calorie Tracking */}
-        <div className="flex flex-col items-center py-8 theme-transition">
-          {/* Advanced Calorie Burned Circle */}
-          <div className="relative mb-8 health-card">
-            <CircularProgress
-              value={userData.caloriesBurned}
-              max={userData.caloriesTarget}
-              size={240}
-              strokeWidth={8}
-              color="hsl(var(--primary))"
-            >
-              <div className="text-center">
-                <div className="responsive-text text-4xl sm:text-5xl font-bold text-foreground mb-2">
-                  {Math.round(userData.caloriesBurned)}
-                </div>
-                <div className="responsive-text text-muted-foreground font-medium">
-                  Bugun yoqilgan kaloriya
-                </div>
-                <div className="responsive-text text-muted-foreground">
-                  maqsad: {userData.caloriesTarget} kcal
-                </div>
+        <div className="flex flex-col items-center py-6 theme-transition">
+          {/* Advanced Calorie Burned Circle with better design */}
+          <Card className="relative mb-8 p-8 bg-gradient-to-br from-background via-card to-muted/30 border-2 border-border/20 shadow-xl hover:shadow-2xl transition-all duration-500 w-full max-w-sm">
+            <CardContent className="p-0">
+              <div className="flex flex-col items-center">
+                <CircularProgress
+                  value={userData.caloriesBurned}
+                  max={userData.caloriesTarget}
+                  size={220}
+                  strokeWidth={12}
+                  color="url(#gradient)"
+                >
+                  <div className="text-center space-y-2">
+                    <div className="text-5xl sm:text-6xl font-bold bg-gradient-to-r from-primary via-primary/80 to-primary/60 bg-clip-text text-transparent leading-none">
+                      {Math.round(userData.caloriesBurned)}
+                    </div>
+                    <div className="text-sm font-semibold text-muted-foreground/80 uppercase tracking-wide">
+                      Bugun yo'qilgan kaloriya
+                    </div>
+                    <div className="text-xs text-muted-foreground px-3 py-1 bg-muted/50 rounded-full">
+                      maqsad: {userData.caloriesTarget} kcal
+                    </div>
+                  </div>
+                </CircularProgress>
+                
+                {/* Add SVG gradient definition */}
+                <svg className="absolute" width="0" height="0">
+                  <defs>
+                    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="hsl(var(--primary))" />
+                      <stop offset="50%" stopColor="hsl(var(--calorie-primary))" />
+                      <stop offset="100%" stopColor="hsl(var(--water-primary))" />
+                    </linearGradient>
+                  </defs>
+                </svg>
               </div>
-            </CircularProgress>
-          </div>
+            </CardContent>
+          </Card>
 
-          {/* Enhanced Nutrition Breakdown */}
-          <div className="responsive-flex justify-center space-x-4 sm:space-x-8 mb-8">
-            <div className="text-center">
-              <div className="responsive-text text-muted-foreground mb-2">
-                Protein
+          {/* Enhanced Nutrition Breakdown with better visual design */}
+          <Card className="w-full max-w-md mb-8 bg-gradient-to-r from-card to-muted/20 border border-border/30 shadow-lg">
+            <CardContent className="p-6">
+              <h3 className="text-center font-semibold text-foreground mb-4 text-lg">Oziq-ovqat tarkibi</h3>
+              <div className="grid grid-cols-3 gap-4">
+                <div className="text-center group hover:scale-105 transition-transform duration-200">
+                  <div className="flex flex-col items-center space-y-3">
+                    <div className="relative">
+                      <div className="w-12 h-12 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center shadow-lg group-hover:shadow-xl transition-shadow">
+                        <span className="text-white font-bold text-lg">{Math.round(userData.protein || 0)}</span>
+                      </div>
+                      <div className="absolute -top-1 -right-1 w-4 h-4 bg-blue-100 rounded-full flex items-center justify-center">
+                        <span className="text-blue-600 text-xs font-bold">%</span>
+                      </div>
+                    </div>
+                    <div className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+                      Protein
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="text-center group hover:scale-105 transition-transform duration-200">
+                  <div className="flex flex-col items-center space-y-3">
+                    <div className="relative">
+                      <div className="w-12 h-12 bg-gradient-to-br from-red-400 to-red-600 rounded-full flex items-center justify-center shadow-lg group-hover:shadow-xl transition-shadow">
+                        <span className="text-white font-bold text-lg">{Math.round(userData.fat || 0)}</span>
+                      </div>
+                      <div className="absolute -top-1 -right-1 w-4 h-4 bg-red-100 rounded-full flex items-center justify-center">
+                        <span className="text-red-600 text-xs font-bold">%</span>
+                      </div>
+                    </div>
+                    <div className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+                      Yog'
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="text-center group hover:scale-105 transition-transform duration-200">
+                  <div className="flex flex-col items-center space-y-3">
+                    <div className="relative">
+                      <div className="w-12 h-12 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center shadow-lg group-hover:shadow-xl transition-shadow">
+                        <span className="text-white font-bold text-lg">{Math.round(userData.carbs || 0)}</span>
+                      </div>
+                      <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-100 rounded-full flex items-center justify-center">
+                        <span className="text-green-600 text-xs font-bold">%</span>
+                      </div>
+                    </div>
+                    <div className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+                      Uglevod
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div className="flex items-center justify-center space-x-2">
-                <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
-                <span className="responsive-text font-bold text-foreground">
-                  {Math.round(userData.protein || 0)}%
-                </span>
-              </div>
-            </div>
-            <div className="text-center">
-              <div className="responsive-text text-muted-foreground mb-2">
-                Yog'
-              </div>
-              <div className="flex items-center justify-center space-x-2">
-                <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-                <span className="responsive-text font-bold text-foreground">
-                  {Math.round(userData.fat || 0)}%
-                </span>
-              </div>
-            </div>
-            <div className="text-center">
-              <div className="responsive-text text-muted-foreground mb-2">
-                Uglevod
-              </div>
-              <div className="flex items-center justify-center space-x-2">
-                <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                <span className="responsive-text font-bold text-foreground">
-                  {Math.round(userData.carbs || 0)}%
-                </span>
-              </div>
-            </div>
-          </div>
+            </CardContent>
+          </Card>
 
-          {/* Enhanced Daily Stats Cards */}
-          <div className="responsive-grid mb-8">
-            <Card className="health-card gradient-calorie theme-transition">
-              <CardContent className="responsive-card text-center">
-                <div className="w-10 h-10 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-3">
-                  <Apple className="h-5 w-5 text-green-600 dark:text-green-400" />
+          {/* Enhanced Daily Stats Cards with better design */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-md mb-8">
+            <Card className="group bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-950/20 dark:to-emerald-950/20 border-green-200 dark:border-green-800 hover:shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer">
+              <CardContent className="p-6 text-center">
+                <div className="w-14 h-14 bg-gradient-to-br from-green-400 to-green-600 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform shadow-lg">
+                  <Apple className="h-7 w-7 text-white" />
                 </div>
-                <div className="responsive-text text-xl sm:text-2xl font-bold text-foreground mb-1">
-                  {Math.round(userData.caloriesEaten)} Kcal
+                <div className="text-2xl sm:text-3xl font-bold text-foreground mb-2 group-hover:text-green-600 transition-colors">
+                  {Math.round(userData.caloriesEaten)}
                 </div>
-                <div className="flex items-center justify-center space-x-1 responsive-text text-green-600 dark:text-green-400 font-medium">
-                  <TrendingUp className="w-4 h-4" />
+                <div className="text-xs font-semibold text-green-600 dark:text-green-400 uppercase tracking-wide mb-1">
+                  Kcal
+                </div>
+                <div className="flex items-center justify-center space-x-1 text-xs text-muted-foreground font-medium">
+                  <TrendingUp className="w-3 h-3" />
                   <span>Iste'mol qilingan</span>
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="health-card gradient-workout theme-transition">
-              <CardContent className="responsive-card text-center">
-                <div className="w-10 h-10 bg-orange-100 dark:bg-orange-900/30 rounded-full flex items-center justify-center mx-auto mb-3">
-                  <Flame className="h-5 w-5 text-orange-600 dark:text-orange-400" />
+            <Card className="group bg-gradient-to-br from-orange-50 to-red-50 dark:from-orange-950/20 dark:to-red-950/20 border-orange-200 dark:border-orange-800 hover:shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer">
+              <CardContent className="p-6 text-center">
+                <div className="w-14 h-14 bg-gradient-to-br from-orange-400 to-red-500 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform shadow-lg">
+                  <Flame className="h-7 w-7 text-white" />
                 </div>
-                <div className="responsive-text text-xl sm:text-2xl font-bold text-foreground mb-1">
-                  {Math.round(userData.caloriesBurned)} Kcal
+                <div className="text-2xl sm:text-3xl font-bold text-foreground mb-2 group-hover:text-orange-600 transition-colors">
+                  {Math.round(userData.caloriesBurned)}
                 </div>
-                <div className="flex items-center justify-center space-x-1 text-sm text-orange-600 dark:text-orange-400 font-medium">
-                  <Zap className="w-4 h-4" />
+                <div className="text-xs font-semibold text-orange-600 dark:text-orange-400 uppercase tracking-wide mb-1">
+                  Kcal
+                </div>
+                <div className="flex items-center justify-center space-x-1 text-xs text-muted-foreground font-medium">
+                  <Zap className="w-3 h-3" />
                   <span>Yoqilgan</span>
                 </div>
               </CardContent>
