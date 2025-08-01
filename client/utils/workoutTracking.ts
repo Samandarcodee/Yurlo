@@ -524,7 +524,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
     ],
     equipment: ['none'],
     targetCalories: 150,
-    muscleGroups: ['chest', 'legs', 'core'],
+    muscleGroups: ['chest', 'quads', 'hamstrings', 'abs'],
     isCustom: false,
   },
   {

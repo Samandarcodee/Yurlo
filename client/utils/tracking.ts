@@ -39,6 +39,7 @@ export interface Meal {
   fiber: number;
   timestamp: string;
   type: 'breakfast' | 'lunch' | 'dinner' | 'snack';
+  notes?: string;
 }
 
 export interface WeeklyStats {
@@ -176,6 +177,7 @@ export const getWeeklyStats = (telegramId: string): WeeklyStats => {
   if (weeklyData.length === 0 && sleepData.length === 0) {
     return {
       averageCalories: 0,
+      averageCaloriesBurned: 0,
       averageSteps: 0,
       averageSleep: 0,
       averageSleepQuality: 0,
@@ -183,6 +185,8 @@ export const getWeeklyStats = (telegramId: string): WeeklyStats => {
       totalMeditation: 0,
       weightChange: 0,
       sleepConsistency: 0,
+      averageWaterIntake: 0,
+      weeklyCalorieDeficit: 0,
     };
   }
   

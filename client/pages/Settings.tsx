@@ -1,8 +1,9 @@
-import { User, Globe, Bell, Shield, HelpCircle, LogOut } from "lucide-react";
+import { User, Globe, Bell, Shield, HelpCircle, LogOut, Palette } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
+import { ThemeToggle, ThemeIndicator, useTheme } from "@/contexts/ThemeContext";
 
 export default function Settings() {
   return (
@@ -67,6 +68,72 @@ export default function Settings() {
               <div className="flex items-center justify-between p-3 border rounded-lg hover:bg-muted/50 cursor-pointer">
                 <span>🇷🇺 Русский</span>
               </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Theme Section */}
+      <Card className="theme-transition">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Palette className="h-5 w-5" />
+            Mavzu (Theme)
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            <p className="text-sm text-muted-foreground">
+              Ilova ko'rinishini o'zingizga moslashtiring
+            </p>
+            
+            {/* Theme Toggle Controls */}
+            <div className="flex items-center justify-between p-4 border rounded-lg bg-card">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center">
+                  <Palette className="h-5 w-5 text-primary" />
+                </div>
+                <div>
+                  <p className="font-medium">Rejim</p>
+                  <ThemeIndicator />
+                </div>
+              </div>
+              <ThemeToggle />
+            </div>
+
+            {/* Theme Preview Cards */}
+            <div className="grid grid-cols-1 gap-3">
+              <div className="flex items-center justify-between p-3 border rounded-lg bg-gradient-to-r from-orange-50 to-blue-50 dark:from-orange-950/20 dark:to-blue-950/20">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full bg-gradient-calorie"></div>
+                  <span className="text-sm font-medium">Calorie Theme</span>
+                </div>
+                <div className="text-xs text-muted-foreground">Kaloriya</div>
+              </div>
+              
+              <div className="flex items-center justify-between p-3 border rounded-lg bg-gradient-to-r from-blue-50 to-green-50 dark:from-blue-950/20 dark:to-green-950/20">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full bg-gradient-water"></div>
+                  <span className="text-sm font-medium">Water Theme</span>
+                </div>
+                <div className="text-xs text-muted-foreground">Suv</div>
+              </div>
+
+              <div className="flex items-center justify-between p-3 border rounded-lg bg-gradient-to-r from-green-50 to-purple-50 dark:from-green-950/20 dark:to-purple-950/20">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full bg-gradient-step"></div>
+                  <span className="text-sm font-medium">Activity Theme</span>
+                </div>
+                <div className="text-xs text-muted-foreground">Faollik</div>
+              </div>
+            </div>
+
+            {/* Theme Information */}
+            <div className="p-3 bg-muted/50 rounded-lg">
+              <p className="text-xs text-muted-foreground">
+                💡 <strong>Auto</strong> rejimi Telegram va tizim sozlamalariga asoslangan.
+                Qo'lda o'zgartirilganda sizning tanlovingiz saqlanadi.
+              </p>
             </div>
           </div>
         </CardContent>

@@ -122,7 +122,7 @@ export const updateProfileFields: RequestHandler = (req, res) => {
 
     for (const field of allowedFields) {
       if (fieldsToUpdate[field] !== undefined) {
-        updatedData[field as keyof UserProfile] = fieldsToUpdate[field];
+        (updatedData as any)[field] = fieldsToUpdate[field];
       }
     }
 

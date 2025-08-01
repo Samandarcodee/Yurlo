@@ -132,43 +132,29 @@
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
-  .dark {
-    --background: 222 84% 5%;
-    --foreground: 210 20% 98%;
+  /* === RESPONSIVE BREAKPOINTS === */
+  @media (max-width: 479px) {
+    :root {
+      --card-padding: 1rem;
+      --section-padding: 1rem;
+      --text-scale: 0.9;
+    }
+  }
 
-    --card: 217 33% 17%;
-    --card-foreground: 210 20% 98%;
+  @media (min-width: 480px) and (max-width: 767px) {
+    :root {
+      --card-padding: 1.25rem;
+      --section-padding: 1.5rem;
+      --text-scale: 1;
+    }
+  }
 
-    --popover: 217 33% 17%;
-    --popover-foreground: 210 20% 98%;
-
-    --primary: 160 67% 67%;
-    --primary-foreground: 156 100% 17%;
-
-    --secondary: 160 67% 67%;
-    --secondary-foreground: 156 100% 17%;
-
-    --muted: 217 33% 27%;
-    --muted-foreground: 215 20% 65%;
-
-    --accent: 188 86% 69%;
-    --accent-foreground: 197 77% 15%;
-
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 210 20% 98%;
-
-    --border: 217 33% 27%;
-    --input: 217 33% 27%;
-    --ring: 160 67% 67%;
-    
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+  @media (min-width: 768px) {
+    :root {
+      --card-padding: 1.5rem;
+      --section-padding: 2rem;
+      --text-scale: 1;
+    }
   }
 }
 
@@ -531,5 +517,132 @@
 
   .input-professional {
     @apply bg-background border border-input rounded-md px-3 py-2 text-sm focus-visible-ring placeholder:text-muted-foreground;
+  }
+
+  /* === PROFESSIONAL RESPONSIVE DESIGN SYSTEM === */
+  .responsive-container {
+    @apply w-full max-w-md mx-auto;
+    padding: var(--section-padding, 1.5rem);
+  }
+
+  .responsive-text {
+    @apply text-sm sm:text-base lg:text-lg;
+    font-size: calc(1rem * var(--text-scale, 1));
+  }
+
+  .responsive-card {
+    @apply rounded-xl shadow-lg border border-border/50;
+    padding: var(--card-padding, 1.5rem);
+    background: hsl(var(--card));
+    color: hsl(var(--card-foreground));
+  }
+
+  .responsive-grid {
+    @apply grid gap-4;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  }
+
+  .responsive-flex {
+    @apply flex flex-col sm:flex-row gap-4 items-start sm:items-center;
+  }
+
+  /* === PROFESSIONAL HEALTH APP COMPONENTS === */
+  .health-card {
+    @apply responsive-card backdrop-blur-sm theme-transition;
+    background: rgba(var(--glass-bg));
+    border: 1px solid rgba(var(--glass-border));
+    box-shadow: var(--glass-shadow);
+  }
+
+  .health-card:hover {
+    @apply transform scale-105 transition-all duration-300 ease-out;
+    box-shadow: 0 12px 40px rgba(31, 38, 135, 0.5);
+  }
+
+  .metric-card {
+    @apply relative overflow-hidden health-card;
+  }
+
+  .metric-card::before {
+    content: '';
+    @apply absolute inset-0 opacity-10;
+    background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--accent)) 100%);
+  }
+
+  /* === DARK MODE ENHANCEMENTS === */
+  .dark .health-card {
+    background: rgba(var(--glass-bg));
+    border: 1px solid rgba(var(--glass-border));
+    box-shadow: var(--glass-shadow);
+  }
+
+  .dark .health-card:hover {
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.7);
+  }
+
+  /* === THEME-AWARE GRADIENTS === */
+  .gradient-health {
+    background: linear-gradient(135deg, 
+      hsl(var(--primary)) 0%, 
+      hsl(var(--accent)) 50%, 
+      hsl(var(--secondary)) 100%);
+  }
+
+  .gradient-calorie {
+    background: linear-gradient(135deg, 
+      hsl(var(--calorie-primary)) 0%, 
+      hsl(var(--calorie-secondary)) 100%);
+  }
+
+  .gradient-water {
+    background: linear-gradient(135deg, 
+      hsl(var(--water-primary)) 0%, 
+      hsl(var(--water-secondary)) 100%);
+  }
+
+  .gradient-step {
+    background: linear-gradient(135deg, 
+      hsl(var(--step-primary)) 0%, 
+      hsl(var(--step-secondary)) 100%);
+  }
+
+  .gradient-sleep {
+    background: linear-gradient(135deg, 
+      hsl(var(--sleep-primary)) 0%, 
+      hsl(var(--sleep-secondary)) 100%);
+  }
+
+  .gradient-workout {
+    background: linear-gradient(135deg, 
+      hsl(var(--workout-primary)) 0%, 
+      hsl(var(--workout-secondary)) 100%);
+  }
+
+  /* === RESPONSIVE MOBILE OPTIMIZATIONS === */
+  @media (max-width: 480px) {
+    .health-card {
+      @apply text-sm;
+      padding: 1rem;
+    }
+    
+    .metric-card h3 {
+      @apply text-base;
+    }
+    
+    .responsive-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (min-width: 481px) and (max-width: 768px) {
+    .responsive-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 769px) {
+    .responsive-grid {
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    }
   }
 }

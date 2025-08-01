@@ -2,7 +2,7 @@ import { UserProfile } from "@/contexts/UserContext";
 import { getTodayTracking, getWeeklyStats, DailyTracking, WeeklyStats } from "./tracking";
 import { getWaterHistory, getWaterInsights, WaterSession } from "./waterTracking";
 import { getWorkoutHistory, getWorkoutInsights, WorkoutSession } from "./workoutTracking";
-import { getTodaySteps, getWeeklyStepStats, StepTracking } from "./stepTracking";
+import { getTodaySteps, getWeeklyStepStats } from "./stepTracking";
 import { getSleepInsights } from "./sleepTracking";
 
 // === ANALYTICS INTERFACES ===
@@ -196,7 +196,7 @@ export const getStepsChartData = (telegramId: string, days: number = 30): TrendD
     let steps = 0;
     if (stepsData) {
       try {
-        const parsed = JSON.parse(stepsData) as StepTracking;
+        const parsed = JSON.parse(stepsData);
         steps = parsed.steps || 0;
       } catch (error) {
         // Try general tracking

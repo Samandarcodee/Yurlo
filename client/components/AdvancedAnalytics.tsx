@@ -97,7 +97,7 @@ const goalProgressData = [
 ];
 
 // === UTILITY FUNCTIONS ===
-const calculateTrend = (data: number[]) => {
+const calculateTrend = (data: number[]): { direction: 'up' | 'down' | 'stable'; percentage: number } => {
   if (data.length < 2) return { direction: 'stable', percentage: 0 };
   
   const recent = data.slice(-7).reduce((a, b) => a + b, 0) / 7;
@@ -619,7 +619,7 @@ export default function AdvancedAnalytics() {
                       <RadialBar
                         dataKey="value"
                         cornerRadius={8}
-                        fill={(entry: any) => entry.color}
+                        fill="#8884d8"
                       />
                       <Legend />
                       <Tooltip formatter={(value) => [`${value}%`, 'Progress']} />

@@ -13,6 +13,7 @@ import {
   useOnboardingCheck,
   useUser,
 } from "./contexts/UserContext";
+import { ThemeProvider } from "./contexts/ThemeContext";
 import { useTelegram } from "./hooks/use-telegram";
 import Index from "./pages/Index";
 import AddMeal from "./pages/AddMeal";
@@ -31,7 +32,7 @@ const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       staleTime: 5 * 60 * 1000, // 5 minutes
-      cacheTime: 10 * 60 * 1000, // 10 minutes
+      gcTime: 10 * 60 * 1000, // 10 minutes (cacheTime renamed to gcTime in v5)
       retry: 1,
     },
   },
@@ -111,15 +112,17 @@ const AppRoutes = () => {
 const App = () => (
   <ErrorBoundary>
     <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <UserProvider>
-          <BrowserRouter>
-            <AppRoutes />
-          </BrowserRouter>
-        </UserProvider>
-      </TooltipProvider>
+      <ThemeProvider>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <UserProvider>
+            <BrowserRouter>
+              <AppRoutes />
+            </BrowserRouter>
+          </UserProvider>
+        </TooltipProvider>
+      </ThemeProvider>
     </QueryClientProvider>
   </ErrorBoundary>
 );

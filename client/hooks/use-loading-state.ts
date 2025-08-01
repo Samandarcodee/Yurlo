@@ -12,11 +12,11 @@ interface LoadingState {
 
 export function useLoadingState(initialState = false): LoadingState {
   const [isLoading, setIsLoading] = useState(initialState);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setErrorState] = useState<string | null>(null);
 
   const startLoading = useCallback(() => {
     setIsLoading(true);
-    setError(null);
+    setErrorState(null);
   }, []);
 
   const stopLoading = useCallback(() => {
@@ -24,7 +24,7 @@ export function useLoadingState(initialState = false): LoadingState {
   }, []);
 
   const setError = useCallback((errorMessage: string) => {
-    setError(errorMessage);
+    setErrorState(errorMessage);
     setIsLoading(false);
   }, []);
 
