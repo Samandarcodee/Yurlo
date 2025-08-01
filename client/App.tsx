@@ -21,7 +21,9 @@ import FixedOnboarding from "./components/FixedOnboarding";
 import Profile from "./pages/Profile";
 import EnhancedProfile from "./pages/EnhancedProfile";
 import ComprehensiveProfile from "./pages/ComprehensiveProfile";
+import ProfessionalProfile from "./pages/ProfessionalProfile";
 import EnhancedAddMeal from "./pages/EnhancedAddMeal";
+import SuperiorAddMeal from "./pages/SuperiorAddMeal";
 import DailyTracking from "./pages/DailyTracking";
 import SleepTracker from "./pages/SleepTracker";
 import StepTracker from "./pages/StepTracker";
@@ -100,11 +102,13 @@ const AppRoutes = () => {
         <Route path="/onboarding" element={<FixedOnboarding />} />
         <Route path="/onboarding-legacy" element={<Onboarding />} />
         <Route path="/telegram-onboarding" element={<TelegramOnboarding />} />
-        <Route path="/profile" element={<ComprehensiveProfile />} />
+        <Route path="/profile" element={<ProfessionalProfile />} />
         <Route path="/profile-legacy" element={<Profile />} />
         <Route path="/profile-enhanced" element={<EnhancedProfile />} />
-        <Route path="/add-meal" element={<EnhancedAddMeal />} />
+        <Route path="/profile-comprehensive" element={<ComprehensiveProfile />} />
+        <Route path="/add-meal" element={<SuperiorAddMeal />} />
         <Route path="/add-meal-legacy" element={<AddMeal />} />
+        <Route path="/add-meal-enhanced" element={<EnhancedAddMeal />} />
         <Route path="/daily-tracking" element={<DailyTracking />} />
         <Route path="/assistant" element={<Assistant />} />
         <Route path="/analytics" element={<Analytics />} />
