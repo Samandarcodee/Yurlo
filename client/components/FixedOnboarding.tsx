@@ -190,16 +190,18 @@ export default function FixedOnboarding() {
         updatedAt: new Date().toISOString()
       };
 
-      // Update user context
+      // Update user context with explicit isFirstTime = false
+      console.log("Completing onboarding with user data:", userData);
       updateUser(userData);
       
       hapticFeedback.notification('success');
       showAlert('Ma\'lumotlar muvaffaqiyatli saqlandi!');
       
-      // Navigate to main page
+      // Small delay to ensure data is saved, then navigate
       setTimeout(() => {
+        console.log("Navigating to home page...");
         navigate('/', { replace: true });
-      }, 1000);
+      }, 1500);
       
     } catch (error) {
       console.error('Onboarding error:', error);

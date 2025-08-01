@@ -87,14 +87,13 @@ const AppRoutes = () => {
     );
   }
 
-  // Agar foydalanuvchi birinchi marta kirsa, onboarding'ga yo'naltirish
+  // Fixed onboarding routing - show only once for new users  
   if (shouldShowOnboarding) {
+    console.log("Showing onboarding because shouldShowOnboarding is true");
     return (
-      <Routes>
-                    <Route path="/onboarding" element={<Onboarding />} />
-            <Route path="/telegram-onboarding" element={<TelegramOnboarding />} />
-        <Route path="*" element={<Navigate to="/onboarding" replace />} />
-      </Routes>
+      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800">
+        <FixedOnboarding />
+      </div>
     );
   }
 

@@ -103,9 +103,12 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
                 }
               }
 
+              // isFirstTime ni profile data'dan olish yoki false qilish
+              profileData.isFirstTime = profileData.isFirstTime !== undefined ? profileData.isFirstTime : false;
+              
               setUser(profileData);
-              setIsFirstTime(false);
-              console.log("User loaded from localStorage successfully");
+              setIsFirstTime(profileData.isFirstTime);
+              console.log("User loaded from localStorage successfully. isFirstTime:", profileData.isFirstTime);
             } else {
               console.log("Invalid profile data, clearing localStorage");
               localStorage.removeItem(storageKey);
@@ -155,13 +158,23 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
       }
     }
 
-    setUser(userData);
+    // Ma'lumotlar to'liq ekanligini aniqlash va isFirstTime ni to'g'ri belgilash
+    userData.isFirstTime = false;
+    userData.updatedAt = new Date().toISOString();
 
-    // Telegram ID asosida localStorage key yaratish
+    setUser(userData);
+    setIsFirstTime(false);
+
+    // Telegram ID asosida localStorage key yaratish va saqlash
     const telegramId = telegramUser?.id?.toString() || "demo_user_123";
     const storageKey = `userProfile_${telegramId}`;
-    localStorage.setItem(storageKey, JSON.stringify(userData));
-    setIsFirstTime(false);
+    
+    try {
+      localStorage.setItem(storageKey, JSON.stringify(userData));
+      console.log("User data saved to localStorage successfully. isFirstTime:", userData.isFirstTime);
+    } catch (error) {
+      console.error("Error saving user data to localStorage:", error);
+    }
   };
 
   const clearUser = () => {
@@ -208,7 +221,7 @@ export const useOnboardingCheck = () => {
   const { user, isLoading, isFirstTime } = useUser();
 
   return {
-    shouldShowOnboarding: !isLoading && (isFirstTime || !user),
+    shouldShowOnboarding: !isLoading && isFirstTime && !user,
     isReady: !isLoading,
   };
 };
