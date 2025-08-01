@@ -113,7 +113,7 @@ export class TelegramService {
           {
             text: "🥗 Caloria AI ochish",
             web_app: {
-              url: process.env.MINI_APP_URL || "https://caloria-ai.netlify.app",
+              url: process.env.MINI_APP_URL || "https://yurlo.vercel.app",
             },
           },
         ],

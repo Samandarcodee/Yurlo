@@ -5,7 +5,7 @@
 
 const TELEGRAM_BOT_TOKEN = "7644823924:AAG3c4DcG4Ul2mA5z39G6OmlNT8bXrNEal0";
 const MINI_APP_URL =
-  process.env.MINI_APP_URL || "https://caloria-ai.netlify.app";
+  process.env.MINI_APP_URL || "https://yurlo.vercel.app";
 
 // Bot ma'lumotlarini olish
 async function getBotInfo() {
