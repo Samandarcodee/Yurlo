@@ -9,6 +9,7 @@
    * A different format will require also updating the theme in tailwind.config.ts.
   */
   :root {
+    /* === LIGHT THEME (Professional Health App) === */
     --background: 210 20% 98%;
     --foreground: 214 32% 17%;
 
@@ -18,41 +19,116 @@
     --popover: 0 0% 100%;
     --popover-foreground: 214 32% 17%;
 
-    --primary: 158 64% 80%;
-    --primary-foreground: 140 62% 33%;
+    /* Enhanced Primary Colors - Health Green */
+    --primary: 140 65% 50%;
+    --primary-foreground: 0 0% 100%;
 
+    /* Enhanced Secondary - Soft Mint */
     --secondary: 158 64% 88%;
     --secondary-foreground: 140 66% 24%;
 
     --muted: 210 20% 98%;
     --muted-foreground: 215 16% 47%;
 
-    --accent: 184 87% 82%;
-    --accent-foreground: 192 65% 27%;
+    /* Enhanced Accent - Calming Blue */
+    --accent: 200 100% 85%;
+    --accent-foreground: 200 100% 25%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
     --border: 214 32% 91%;
     --input: 210 17% 96%;
-    --ring: 158 64% 80%;
+    --ring: 140 65% 50%;
 
     --radius: 0.75rem;
 
+    /* === ENHANCED HEALTH APP COLORS === */
+    --calorie-primary: 25 95% 53%;      /* Orange */
+    --calorie-secondary: 25 95% 95%;    /* Light Orange */
+    --water-primary: 200 100% 50%;      /* Blue */
+    --water-secondary: 200 100% 95%;    /* Light Blue */
+    --step-primary: 140 65% 50%;        /* Green */
+    --step-secondary: 140 65% 95%;      /* Light Green */
+    --sleep-primary: 260 60% 50%;       /* Purple */
+    --sleep-secondary: 260 60% 95%;     /* Light Purple */
+    --workout-primary: 0 85% 60%;       /* Red */
+    --workout-secondary: 0 85% 95%;     /* Light Red */
+
+    /* === GLASSMORPHISM EFFECTS === */
+    --glass-bg: 255 255 255 / 0.1;
+    --glass-border: 255 255 255 / 0.2;
+    --glass-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+
+    /* === SIDEBAR === */
     --sidebar-background: 0 0% 98%;
-
     --sidebar-foreground: 240 5.3% 26.1%;
-
     --sidebar-primary: 240 5.9% 10%;
-
     --sidebar-primary-foreground: 0 0% 98%;
-
     --sidebar-accent: 240 4.8% 95.9%;
-
     --sidebar-accent-foreground: 240 5.9% 10%;
-
     --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
 
+  .dark {
+    /* === DARK THEME (Professional Health App) === */
+    --background: 224 71% 4%;
+    --foreground: 213 31% 91%;
+
+    --card: 224 71% 6%;
+    --card-foreground: 213 31% 91%;
+
+    --popover: 224 71% 6%;
+    --popover-foreground: 213 31% 91%;
+
+    /* Enhanced Primary Colors - Health Green Dark */
+    --primary: 140 65% 45%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Enhanced Secondary - Dark Mint */
+    --secondary: 215 28% 17%;
+    --secondary-foreground: 210 20% 98%;
+
+    --muted: 215 28% 17%;
+    --muted-foreground: 217 10% 65%;
+
+    /* Enhanced Accent - Dark Blue */
+    --accent: 200 100% 30%;
+    --accent-foreground: 210 20% 98%;
+
+    --destructive: 0 63% 31%;
+    --destructive-foreground: 210 20% 98%;
+
+    --border: 215 28% 17%;
+    --input: 215 28% 17%;
+    --ring: 140 65% 45%;
+
+    /* === ENHANCED DARK HEALTH APP COLORS === */
+    --calorie-primary: 25 85% 55%;      /* Bright Orange */
+    --calorie-secondary: 25 40% 15%;    /* Dark Orange */
+    --water-primary: 200 100% 60%;      /* Bright Blue */
+    --water-secondary: 200 50% 15%;     /* Dark Blue */
+    --step-primary: 140 65% 55%;        /* Bright Green */
+    --step-secondary: 140 40% 15%;      /* Dark Green */
+    --sleep-primary: 260 60% 60%;       /* Bright Purple */
+    --sleep-secondary: 260 40% 15%;     /* Dark Purple */
+    --workout-primary: 0 85% 65%;       /* Bright Red */
+    --workout-secondary: 0 50% 15%;     /* Dark Red */
+
+    /* === GLASSMORPHISM EFFECTS DARK === */
+    --glass-bg: 0 0 0 / 0.2;
+    --glass-border: 255 255 255 / 0.1;
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+
+    /* === SIDEBAR DARK === */
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224 71% 4%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
@@ -84,6 +160,7 @@
     --border: 217 33% 27%;
     --input: 217 33% 27%;
     --ring: 160 67% 67%;
+    
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
@@ -101,13 +178,13 @@
   }
 
   body {
-    @apply bg-background text-foreground;
-    background-color: rgb(248 250 252) !important;
+    @apply bg-background text-foreground transition-colors duration-300;
     -webkit-tap-highlight-color: transparent;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     user-select: none;
     overscroll-behavior: none;
+    font-feature-settings: "rlig" 1, "calt" 1;
   }
 
   /* Enable text selection for inputs and content areas */
@@ -137,6 +214,13 @@
     [role="button"]:focus-visible {
       outline: 2px solid hsl(var(--ring));
       outline-offset: 2px;
+    }
+  }
+
+  /* Enhanced responsive typography */
+  @media (max-width: 640px) {
+    html {
+      font-size: 14px;
     }
   }
 
@@ -177,6 +261,22 @@
       inset 0 1px 0 rgba(255, 255, 255, 0.1);
   }
 
+  /* Dark mode glass effects */
+  .dark .glass-light {
+    background: rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .dark .glass-medium {
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .dark .glass-heavy {
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+  }
+
   /* === ENHANCED SHADOW SYSTEM === */
   .card-shadow {
     box-shadow:
@@ -201,6 +301,21 @@
 
   .card-shadow-float {
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  }
+
+  /* Dark mode shadows */
+  .dark .card-shadow {
+    box-shadow:
+      0 1px 3px 0 rgba(0, 0, 0, 0.3),
+      0 1px 2px 0 rgba(0, 0, 0, 0.2),
+      0 0 0 1px rgba(255, 255, 255, 0.1);
+  }
+
+  .dark .card-shadow-lg {
+    box-shadow:
+      0 10px 15px -3px rgba(0, 0, 0, 0.3),
+      0 4px 6px -2px rgba(0, 0, 0, 0.2),
+      0 0 0 1px rgba(255, 255, 255, 0.1);
   }
 
   /* === ENHANCED GRADIENT SYSTEM === */
@@ -250,6 +365,25 @@
     );
   }
 
+  /* Dark mode gradients */
+  .dark .gradient-mint {
+    background: linear-gradient(
+      135deg,
+      rgba(16, 185, 129, 0.2) 0%,
+      rgba(5, 150, 105, 0.3) 50%,
+      rgba(4, 120, 87, 0.2) 100%
+    );
+  }
+
+  .dark .gradient-water {
+    background: linear-gradient(
+      135deg,
+      rgba(14, 165, 233, 0.2) 0%,
+      rgba(2, 132, 199, 0.3) 50%,
+      rgba(3, 105, 161, 0.2) 100%
+    );
+  }
+
   /* === ENHANCED HOVER EFFECTS === */
   .hover-lift {
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -291,6 +425,15 @@
     animation: shimmer 1.5s infinite;
   }
 
+  .dark .skeleton {
+    background: linear-gradient(
+      90deg,
+      rgba(64, 64, 64, 0.8) 25%,
+      rgba(96, 96, 96, 0.9) 50%,
+      rgba(64, 64, 64, 0.8) 75%
+    );
+  }
+
   .pulse-ring {
     position: relative;
   }
@@ -308,6 +451,50 @@
     animation: ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
   }
 
+  /* === RESPONSIVE UTILITIES === */
+  .container-responsive {
+    @apply max-w-md mx-auto px-4 sm:px-6;
+  }
+
+  .text-responsive {
+    @apply text-sm sm:text-base;
+  }
+
+  .heading-responsive {
+    @apply text-lg sm:text-xl font-semibold;
+  }
+
+  /* === MOBILE OPTIMIZATIONS === */
+  @media (max-width: 640px) {
+    .mobile-padding {
+      @apply px-4;
+    }
+    
+    .mobile-text {
+      @apply text-sm;
+    }
+    
+    .mobile-heading {
+      @apply text-lg;
+    }
+  }
+
+  /* === ACCESSIBILITY IMPROVEMENTS === */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  /* === FOCUS VISIBLE IMPROVEMENTS === */
+  .focus-visible-ring {
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background;
+  }
+
   /* Smooth animations */
   @keyframes fadeInUp {
     from {
@@ -322,5 +509,27 @@
 
   .animate-fade-in-up {
     animation: fadeInUp 0.6s ease-out;
+  }
+
+  /* === THEME TRANSITIONS === */
+  .theme-transition {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+  }
+
+  /* === PROFESSIONAL COMPONENT STYLES === */
+  .card-professional {
+    @apply bg-card border border-border rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200;
+  }
+
+  .button-primary {
+    @apply bg-primary text-primary-foreground hover:bg-primary/90 focus-visible-ring rounded-md px-4 py-2 font-medium transition-colors;
+  }
+
+  .button-secondary {
+    @apply bg-secondary text-secondary-foreground hover:bg-secondary/80 focus-visible-ring rounded-md px-4 py-2 font-medium transition-colors;
+  }
+
+  .input-professional {
+    @apply bg-background border border-input rounded-md px-3 py-2 text-sm focus-visible-ring placeholder:text-muted-foreground;
   }
 }

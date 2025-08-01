@@ -90,7 +90,7 @@ const CircularProgress: React.FC<CircularProgressProps> = ({
           stroke="currentColor"
           strokeWidth={strokeWidth}
           fill="transparent"
-          className="text-gray-200"
+          className="text-muted"
         />
         {/* Progress circle */}
         <circle
@@ -123,16 +123,21 @@ export default function Index() {
   const [waterGoals, setWaterGoals] = useState<any>(null);
   const [weeklyWorkouts, setWeeklyWorkouts] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [hasLoadedData, setHasLoadedData] = useState(false);
 
   // Get telegram ID for data storage
   const telegramId = telegramUser?.id?.toString() || "demo_user_123";
 
-  // Load tracking data on component mount
+  // Optimized data loading - only once on startup
   useEffect(() => {
-    if (user) {
+    if (hasLoadedData || !user) return;
+
+    const loadAllData = async () => {
       setIsLoading(true);
       
       try {
+        console.log("Loading user data for:", telegramId);
+        
         // Get today's tracking data
         const tracking = getTodayTracking(telegramId);
         
@@ -172,13 +177,18 @@ export default function Index() {
         // Check for step achievements
         checkAchievements(telegramId);
         
+        setHasLoadedData(true);
+        console.log("All data loaded successfully");
+        
       } catch (error) {
         console.error('Error loading tracking data:', error);
       } finally {
         setIsLoading(false);
       }
-    }
-  }, [user, telegramId]);
+    };
+
+    loadAllData();
+  }, [user, telegramId, hasLoadedData]);
 
   // Calculate nutrition goals based on user profile
   const nutritionGoals = useMemo(() => {
@@ -331,33 +341,40 @@ export default function Index() {
     }
   };
 
-  // Loading state
+  // Loading state with professional design
   if (isLoading || !user || !userData) {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
-        <div className="text-center space-y-4">
-          <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto"></div>
-          <p className="text-gray-600 font-medium">Loading your data...</p>
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center space-y-6 animate-fade-in-up">
+          <div className="relative">
+            <div className="w-16 h-16 border-4 border-primary/20 border-t-primary rounded-full animate-spin mx-auto"></div>
+            <div className="absolute inset-0 w-16 h-16 border-4 border-transparent border-t-primary/60 rounded-full animate-ping"></div>
+          </div>
+          <div className="space-y-2">
+            <p className="text-foreground font-medium">Yuklanmoqda...</p>
+            <p className="text-muted-foreground text-sm">Ma'lumotlaringiz tayyorlanmoqda</p>
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-white">
-      <div className="max-w-md mx-auto bg-white">
-        {/* Header */}
-        <div className="flex items-center justify-between p-4 pt-12">
+    <div className="min-h-screen bg-background">
+      <div className="max-w-md mx-auto px-4 sm:px-6">
+        {/* Enhanced Header */}
+        <div className="flex items-center justify-between py-6">
           <div>
-            <p className="text-lg font-semibold text-gray-900">Today, {todayDate}</p>
+            <p className="heading-responsive text-foreground">Bugun, {todayDate}</p>
+            <p className="text-muted-foreground text-sm">Salom, {userData.name}!</p>
           </div>
-          <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
-            <Bell className="w-4 h-4 text-gray-600" />
+          <div className="w-10 h-10 bg-muted rounded-full flex items-center justify-center">
+            <Bell className="w-5 h-5 text-muted-foreground" />
           </div>
         </div>
 
         {/* Enhanced Professional Calorie Tracking */}
-        <div className="flex flex-col items-center px-4 py-8">
+        <div className="flex flex-col items-center py-8">
           {/* Advanced Calorie Burned Circle */}
           <div className="relative mb-8">
             <CircularProgress
@@ -365,121 +382,111 @@ export default function Index() {
               max={userData.caloriesTarget}
               size={240}
               strokeWidth={8}
-              color="#6366F1"
+              color="hsl(var(--primary))"
             >
               <div className="text-center">
-                <div className="text-5xl font-bold text-gray-900 mb-2">
+                <div className="text-5xl font-bold text-foreground mb-2">
                   {Math.round(userData.caloriesBurned)}
                 </div>
-                <div className="text-sm text-gray-500 font-medium">
-                  Your calories burned
+                <div className="text-sm text-muted-foreground font-medium">
+                  Bugun yoqilgan kaloriya
                 </div>
-                <div className="text-sm text-gray-500">
-                  today
+                <div className="text-sm text-muted-foreground">
+                  maqsad: {userData.caloriesTarget} kcal
                 </div>
               </div>
             </CircularProgress>
-            
-            {/* Progress indicator dot */}
-            <div 
-              className="absolute w-4 h-4 bg-blue-500 rounded-full shadow-lg"
-              style={{
-                top: `${20 + 90 * (1 - Math.cos((userData.caloriesBurned / userData.caloriesTarget) * 2 * Math.PI))}px`,
-                left: `${120 + 90 * Math.sin((userData.caloriesBurned / userData.caloriesTarget) * 2 * Math.PI)}px`,
-                transform: 'translate(-50%, -50%)'
-              }}
-            ></div>
           </div>
 
           {/* Enhanced Nutrition Breakdown */}
           <div className="flex items-center justify-center space-x-8 mb-8">
             <div className="text-center">
-              <div className="text-sm font-medium text-gray-600 mb-2">Protein</div>
+              <div className="text-sm font-medium text-muted-foreground mb-2">Protein</div>
               <div className="flex items-center justify-center space-x-2">
                 <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
-                <span className="text-lg font-bold text-gray-900">{Math.round(userData.protein || 0)}%</span>
+                <span className="text-lg font-bold text-foreground">{Math.round(userData.protein || 0)}%</span>
               </div>
             </div>
             <div className="text-center">
-              <div className="text-sm font-medium text-gray-600 mb-2">Fat</div>
+              <div className="text-sm font-medium text-muted-foreground mb-2">Yog'</div>
               <div className="flex items-center justify-center space-x-2">
                 <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-                <span className="text-lg font-bold text-gray-900">{Math.round(userData.fat || 0)}%</span>
+                <span className="text-lg font-bold text-foreground">{Math.round(userData.fat || 0)}%</span>
               </div>
             </div>
             <div className="text-center">
-              <div className="text-sm font-medium text-gray-600 mb-2">Carbs</div>
+              <div className="text-sm font-medium text-muted-foreground mb-2">Uglevod</div>
               <div className="flex items-center justify-center space-x-2">
                 <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                <span className="text-lg font-bold text-gray-900">{Math.round(userData.carbs || 0)}%</span>
+                <span className="text-lg font-bold text-foreground">{Math.round(userData.carbs || 0)}%</span>
               </div>
             </div>
           </div>
 
           {/* Enhanced Daily Stats Cards */}
-          <div className="grid grid-cols-2 gap-6 w-full mb-8">
-            <Card className="border-0 shadow-lg bg-gradient-to-br from-green-50 to-emerald-50">
+          <div className="grid grid-cols-2 gap-4 w-full mb-8">
+            <Card className="card-professional bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-950/20 dark:to-emerald-950/20">
               <CardContent className="p-6 text-center">
-                <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                  <Apple className="h-5 w-5 text-green-600" />
+                <div className="w-10 h-10 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-3">
+                  <Apple className="h-5 w-5 text-green-600 dark:text-green-400" />
                 </div>
-                <div className="text-2xl font-bold text-gray-900 mb-1">
+                <div className="text-2xl font-bold text-foreground mb-1">
                   {Math.round(userData.caloriesEaten)} Kcal
                 </div>
-                <div className="flex items-center justify-center space-x-1 text-sm text-green-600 font-medium">
+                <div className="flex items-center justify-center space-x-1 text-sm text-green-600 dark:text-green-400 font-medium">
                   <TrendingUp className="w-4 h-4" />
-                  <span>Eaten</span>
+                  <span>Iste'mol qilingan</span>
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="border-0 shadow-lg bg-gradient-to-br from-orange-50 to-red-50">
+            <Card className="card-professional bg-gradient-to-br from-orange-50 to-red-50 dark:from-orange-950/20 dark:to-red-950/20">
               <CardContent className="p-6 text-center">
-                <div className="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                  <Flame className="h-5 w-5 text-orange-600" />
+                <div className="w-10 h-10 bg-orange-100 dark:bg-orange-900/30 rounded-full flex items-center justify-center mx-auto mb-3">
+                  <Flame className="h-5 w-5 text-orange-600 dark:text-orange-400" />
                 </div>
-                <div className="text-2xl font-bold text-gray-900 mb-1">
+                <div className="text-2xl font-bold text-foreground mb-1">
                   {Math.round(userData.caloriesBurned)} Kcal
                 </div>
-                <div className="flex items-center justify-center space-x-1 text-sm text-orange-600 font-medium">
+                <div className="flex items-center justify-center space-x-1 text-sm text-orange-600 dark:text-orange-400 font-medium">
                   <Zap className="w-4 h-4" />
-                  <span>Burned</span>
+                  <span>Yoqilgan</span>
                 </div>
               </CardContent>
             </Card>
           </div>
 
           {/* Professional Goal Progress Bar */}
-          <Card className="border-0 shadow-lg w-full mb-8">
+          <Card className="card-professional w-full mb-8">
             <CardContent className="p-6">
               <div className="flex items-center justify-between mb-4">
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900">Maqsadga jarayon</h3>
-                  <p className="text-sm text-gray-500">
+                  <h3 className="heading-responsive text-foreground">Maqsadga jarayon</h3>
+                  <p className="text-sm text-muted-foreground">
                     {Math.round(userData.caloriesEaten)} kcal dan {userData.caloriesTarget} kcal
                   </p>
                 </div>
                 <div className="text-right">
-                  <p className="text-3xl font-bold text-blue-600">
+                  <p className="text-3xl font-bold text-primary">
                     {Math.round((userData.caloriesEaten / userData.caloriesTarget) * 100)}%
                   </p>
-                  <p className="text-xs text-gray-500">{userData.caloriesTarget - Math.round(userData.caloriesEaten)} kcal left</p>
+                  <p className="text-xs text-muted-foreground">{userData.caloriesTarget - Math.round(userData.caloriesEaten)} kcal qoldi</p>
                 </div>
               </div>
               
               <div className="space-y-3">
                 <div className="relative">
-                  <div className="w-full bg-gray-200 rounded-full h-3">
+                  <div className="w-full bg-muted rounded-full h-3">
                     <div 
-                      className="bg-gradient-to-r from-blue-500 to-purple-500 h-3 rounded-full transition-all duration-1000 ease-out relative"
+                      className="bg-gradient-to-r from-primary to-primary/80 h-3 rounded-full transition-all duration-1000 ease-out relative"
                       style={{ width: `${Math.min((userData.caloriesEaten / userData.caloriesTarget) * 100, 100)}%` }}
                     >
-                      <div className="absolute right-0 top-1/2 w-3 h-3 bg-white rounded-full shadow-md transform -translate-y-1/2 translate-x-1/2"></div>
+                      <div className="absolute right-0 top-1/2 w-3 h-3 bg-background rounded-full shadow-md transform -translate-y-1/2 translate-x-1/2"></div>
                     </div>
                   </div>
                 </div>
                 
-                <div className="flex justify-between text-xs text-gray-500">
+                <div className="flex justify-between text-xs text-muted-foreground">
                   <span>{Math.round(userData.caloriesEaten)} kcal</span>
                   <span className="font-medium">{Math.round((userData.caloriesEaten / userData.caloriesTarget) * 100)}%</span>
                   <span>{userData.caloriesTarget} kcal</span>
@@ -490,28 +497,28 @@ export default function Index() {
         </div>
 
         {/* Weekly Average Section */}
-        <div className="px-4 mb-6">
-          <Card className="border-0 shadow-lg">
+        <div className="mb-6">
+          <Card className="card-professional">
             <CardContent className="p-6">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold text-gray-900">This week average</h3>
-                <Link to="/analytics" className="text-blue-600 text-sm font-medium hover:text-blue-700 transition-colors">
-                  See more
+                <h3 className="heading-responsive text-foreground">Bu hafta o'rtacha</h3>
+                <Link to="/analytics" className="text-primary text-sm font-medium hover:text-primary/80 transition-colors">
+                  Batafsil
                 </Link>
               </div>
               
               <div className="grid grid-cols-3 gap-4">
                 <div className="text-center">
-                  <p className="text-2xl font-bold text-gray-900">{Math.round(userData.weeklyCalories || 0)}</p>
-                  <p className="text-xs text-gray-500">Avg calories</p>
+                  <p className="text-2xl font-bold text-foreground">{Math.round(userData.weeklyCalories || 0)}</p>
+                  <p className="text-xs text-muted-foreground">O'rtacha kaloriya</p>
                 </div>
                 <div className="text-center">
-                  <p className="text-2xl font-bold text-gray-900">{Math.round(userData.weeklyWorkouts || 0)}m</p>
-                  <p className="text-xs text-gray-500">Avg workout</p>
+                  <p className="text-2xl font-bold text-foreground">{Math.round(userData.weeklyWorkouts || 0)}m</p>
+                  <p className="text-xs text-muted-foreground">O'rtacha mashq</p>
                 </div>
                 <div className="text-center">
-                  <p className="text-2xl font-bold text-gray-900">{Math.round(userData.weeklySleepHours || 0)}h</p>
-                  <p className="text-xs text-gray-500">Avg sleep</p>
+                  <p className="text-2xl font-bold text-foreground">{Math.round(userData.weeklySleepHours || 0)}h</p>
+                  <p className="text-xs text-muted-foreground">O'rtacha uyqu</p>
                 </div>
               </div>
             </CardContent>
@@ -519,34 +526,34 @@ export default function Index() {
         </div>
 
         {/* Weekly Statistics */}
-        <div className="px-4 pb-20">
+        <div className="pb-20">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-lg font-semibold text-gray-900">This week average</h2>
+            <h2 className="heading-responsive text-foreground">Kuzatuvlar</h2>
             <Link to="/analytics">
-              <button className="text-sm text-blue-600 font-medium">See more</button>
+              <button className="text-sm text-primary font-medium hover:text-primary/80 transition-colors">Batafsil</button>
             </Link>
           </div>
           
           <div className="grid grid-cols-2 gap-4">
             {/* Walk Steps */}
             <Link to="/step-tracker">
-              <div className="bg-gray-50 rounded-2xl p-4 cursor-pointer hover:bg-gray-100 transition-colors">
+              <div className="card-professional p-4 cursor-pointer hover:shadow-lg transition-all duration-200">
                 <div className="flex items-center justify-between mb-3">
-                  <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
-                    <Footprints className="w-4 h-4 text-green-600" />
+                  <div className="w-8 h-8 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center">
+                    <Footprints className="w-4 h-4 text-green-600 dark:text-green-400" />
                   </div>
                   <div className="flex items-center space-x-1">
                     <div className={`w-2 h-2 rounded-full ${
                       userData.todaySteps >= userData.stepGoal ? 'bg-green-500' : 'bg-orange-500'
                     }`} />
-                    <span className="text-xs text-gray-500">
+                    <span className="text-xs text-muted-foreground">
                       {Math.round((userData.todaySteps / userData.stepGoal) * 100)}%
-                  </span>
+                    </span>
                   </div>
                 </div>
                 <div className="space-y-1">
                   <div className="flex items-center justify-between">
-                    <p className="text-xs text-gray-500 font-medium">Qadamlar</p>
+                    <p className="text-xs text-muted-foreground font-medium">Qadamlar</p>
                     <button 
                       onClick={(e) => {
                         e.preventDefault();
@@ -558,24 +565,24 @@ export default function Index() {
                       <Plus className="w-3 h-3 text-white" />
                     </button>
                   </div>
-                  <p className="text-lg font-bold text-gray-900">
+                  <p className="text-lg font-bold text-foreground">
                     {userData.todaySteps ? userData.todaySteps.toLocaleString() : '0'}
                   </p>
                   <div className="flex items-center justify-between">
-                    <p className="text-xs text-green-600 font-medium">
+                    <p className="text-xs text-green-600 dark:text-green-400 font-medium">
                       Maqsad: {userData.stepGoal ? userData.stepGoal.toLocaleString() : '10,000'}
                     </p>
-                    <p className="text-xs text-blue-600">
+                    <p className="text-xs text-blue-600 dark:text-blue-400">
                       {userData.todayDistance ? `${userData.todayDistance.toFixed(1)} km` : '0 km'}
                     </p>
-              </div>
+                  </div>
                   
                   {/* Progress bar */}
-                  <div className="w-full bg-gray-200 rounded-full h-1.5 mt-2">
+                  <div className="w-full bg-muted rounded-full h-1.5 mt-2">
                     <div
                       className="bg-green-500 h-1.5 rounded-full transition-all duration-500"
                       style={{ width: `${Math.min((userData.todaySteps / userData.stepGoal) * 100, 100)}%` }}
-                ></div>
+                    ></div>
                   </div>
                 </div>
               </div>
@@ -583,152 +590,152 @@ export default function Index() {
 
             {/* Sleep */}
             <Link to="/sleep-tracker">
-              <div className="bg-gray-50 rounded-2xl p-4 cursor-pointer hover:bg-gray-100 transition-colors">
+              <div className="card-professional p-4 cursor-pointer hover:shadow-lg transition-all duration-200">
                 <div className="flex items-center justify-between mb-3">
-                  <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
-                    <Moon className="w-4 h-4 text-purple-600" />
+                  <div className="w-8 h-8 bg-purple-100 dark:bg-purple-900/30 rounded-full flex items-center justify-center">
+                    <Moon className="w-4 h-4 text-purple-600 dark:text-purple-400" />
                   </div>
                   <div className="flex items-center space-x-1">
                     <div className={`w-2 h-2 rounded-full ${
                       userData.sleepQuality >= 4 ? 'bg-green-500' :
                       userData.sleepQuality >= 3 ? 'bg-yellow-500' : 'bg-red-500'
                     }`} />
-                    <span className="text-xs text-gray-500">{userData.sleepQuality.toFixed(1)}/5</span>
+                    <span className="text-xs text-muted-foreground">{userData.sleepQuality.toFixed(1)}/5</span>
                   </div>
                 </div>
                 <div className="space-y-1">
-                  <p className="text-xs text-gray-500 font-medium">Sleep</p>
-                  <p className="text-lg font-bold text-gray-900">{userData.weeklySleep}</p>
+                  <p className="text-xs text-muted-foreground font-medium">Uyqu</p>
+                  <p className="text-lg font-bold text-foreground">{userData.weeklySleep}</p>
                   <div className="flex items-center justify-between">
-                    <p className="text-xs text-purple-600 font-medium">
-                      Quality: {userData.sleepQuality > 0 ? userData.sleepQuality.toFixed(1) : 'N/A'}
+                    <p className="text-xs text-purple-600 dark:text-purple-400 font-medium">
+                      Sifat: {userData.sleepQuality > 0 ? userData.sleepQuality.toFixed(1) : 'N/A'}
                     </p>
-                    <p className="text-xs text-purple-500">
-                      {userData.sleepConsistency > 0 ? `${userData.sleepConsistency}% consistent` : 'Track sleep'}
+                    <p className="text-xs text-purple-500 dark:text-purple-400">
+                      {userData.sleepConsistency > 0 ? `${userData.sleepConsistency}% barqaror` : 'Uyqu kuzatish'}
                     </p>
                   </div>
                 </div>
               </div>
             </Link>
 
-                        {/* Workouts */}
+            {/* Workouts */}
             <Link to="/workout-tracker">
-            <div className="bg-gray-50 rounded-2xl p-4 cursor-pointer hover:bg-gray-100 transition-colors">
-              <div className="flex items-center justify-between mb-3">
-                <div className="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center">
-                  <Dumbbell className="w-4 h-4 text-orange-600" />
+              <div className="card-professional p-4 cursor-pointer hover:shadow-lg transition-all duration-200">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="w-8 h-8 bg-orange-100 dark:bg-orange-900/30 rounded-full flex items-center justify-center">
+                    <Dumbbell className="w-4 h-4 text-orange-600 dark:text-orange-400" />
+                  </div>
+                  <div className="flex items-center space-x-1">
+                    <div className={`w-2 h-2 rounded-full ${
+                      userData.workoutProgress >= 100 ? 'bg-green-500' : 
+                      userData.workoutProgress >= 70 ? 'bg-yellow-500' : 'bg-orange-500'
+                    }`} />
+                    <span className="text-xs text-muted-foreground">{userData.workoutProgress}%</span>
+                  </div>
                 </div>
-                <div className="flex items-center space-x-1">
-                  <div className={`w-2 h-2 rounded-full ${
-                    userData.workoutProgress >= 100 ? 'bg-green-500' : 
-                    userData.workoutProgress >= 70 ? 'bg-yellow-500' : 'bg-orange-500'
-                  }`} />
-                  <span className="text-xs text-gray-500">{userData.workoutProgress}%</span>
+                <div className="space-y-1">
+                  <div className="flex items-center justify-between">
+                    <p className="text-xs text-muted-foreground font-medium">Mashqlar</p>
+                    <button 
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        handleAddWorkout('cardio', 20);
+                      }}
+                      className="w-5 h-5 bg-orange-500 rounded-full flex items-center justify-center hover:bg-orange-600 transition-colors"
+                    >
+                      <Plus className="w-3 h-3 text-white" />
+                    </button>
+                  </div>
+                  <p className="text-lg font-bold text-foreground">{userData.weeklyWorkoutMinutes} min</p>
+                  <div className="flex items-center justify-between">
+                    <p className="text-xs text-orange-600 dark:text-orange-400 font-medium">
+                      Haftalik jami
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      Maqsad: {userData.weeklyWorkoutTarget}min
+                    </p>
+                  </div>
+                  
+                  {/* Progress bar */}
+                  <div className="w-full bg-muted rounded-full h-1.5 mt-2">
+                    <div
+                      className="bg-orange-500 h-1.5 rounded-full transition-all duration-500"
+                      style={{ width: `${Math.min(userData.workoutProgress, 100)}%` }}
+                    ></div>
+                  </div>
                 </div>
               </div>
-              <div className="space-y-1">
-                <div className="flex items-center justify-between">
-                  <p className="text-xs text-gray-500 font-medium">Workouts</p>
-                  <button 
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      handleAddWorkout('cardio', 20);
-                    }}
-                    className="w-5 h-5 bg-orange-500 rounded-full flex items-center justify-center hover:bg-orange-600 transition-colors"
-                  >
-                    <Plus className="w-3 h-3 text-white" />
-                  </button>
-                </div>
-                <p className="text-lg font-bold text-gray-900">{userData.weeklyWorkoutMinutes} mins</p>
-                <div className="flex items-center justify-between">
-                  <p className="text-xs text-orange-600 font-medium">
-                    Weekly total
-                  </p>
-                  <p className="text-xs text-gray-500">
-                    Goal: {userData.weeklyWorkoutTarget}min
-                  </p>
-                </div>
-                
-                {/* Progress bar */}
-                <div className="w-full bg-gray-200 rounded-full h-1.5 mt-2">
-                  <div
-                    className="bg-orange-500 h-1.5 rounded-full transition-all duration-500"
-                    style={{ width: `${Math.min(userData.workoutProgress, 100)}%` }}
-                  ></div>
-                </div>
-              </div>
-            </div>
             </Link>
 
             {/* Water Intake */}
             <Link to="/water-tracker">
-            <div className="bg-gray-50 rounded-2xl p-4 cursor-pointer hover:bg-gray-100 transition-colors">
-              <div className="flex items-center justify-between mb-3">
-                <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                  <Droplets className="w-4 h-4 text-blue-600" />
+              <div className="card-professional p-4 cursor-pointer hover:shadow-lg transition-all duration-200">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="w-8 h-8 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center">
+                    <Droplets className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                  </div>
+                  <div className="flex items-center space-x-1">
+                    {userData.waterGoalReached && (
+                      <div className="text-xs">🎉</div>
+                    )}
+                    <div className={`w-2 h-2 rounded-full ${
+                      userData.waterGoalReached ? 'bg-green-500' : 
+                      userData.waterProgress >= 70 ? 'bg-blue-500' : 'bg-gray-400'
+                    }`} />
+                    <span className="text-xs text-muted-foreground">{userData.waterProgress}%</span>
+                  </div>
                 </div>
-                <div className="flex items-center space-x-1">
-                  {userData.waterGoalReached && (
-                    <div className="text-xs">🎉</div>
-                  )}
-                  <div className={`w-2 h-2 rounded-full ${
-                    userData.waterGoalReached ? 'bg-green-500' : 
-                    userData.waterProgress >= 70 ? 'bg-blue-500' : 'bg-gray-400'
-                  }`} />
-                  <span className="text-xs text-gray-500">{userData.waterProgress}%</span>
+                <div className="space-y-1">
+                  <div className="flex items-center justify-between">
+                    <p className="text-xs text-muted-foreground font-medium">Suv</p>
+                    <button 
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        handleAddWater();
+                      }}
+                      className="w-5 h-5 bg-blue-500 rounded-full flex items-center justify-center hover:bg-blue-600 transition-colors"
+                    >
+                      <Plus className="w-3 h-3 text-white" />
+                    </button>
+                  </div>
+                  <p className="text-lg font-bold text-foreground">
+                    {userData.todayWater?.toFixed(1) || 0}/{userData.waterTarget} stakan
+                  </p>
+                  <div className="flex items-center justify-between">
+                    <p className="text-xs text-blue-600 dark:text-blue-400 font-medium">
+                      {userData.waterGoalReached ? 'Maqsadga erishildi!' : 'Ichishda davom eting'}
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      {userData.waterGoalReached ? '✅' : `${(userData.waterTarget - (userData.todayWater || 0)).toFixed(1)} qoldi`}
+                    </p>
+                  </div>
+                  
+                  {/* Progress bar */}
+                  <div className="w-full bg-muted rounded-full h-1.5 mt-2">
+                    <div
+                      className={`h-1.5 rounded-full transition-all duration-500 ${
+                        userData.waterGoalReached ? 'bg-green-500' : 'bg-blue-500'
+                      }`}
+                      style={{ width: `${Math.min(userData.waterProgress, 100)}%` }}
+                    ></div>
+                  </div>
                 </div>
               </div>
-              <div className="space-y-1">
-                <div className="flex items-center justify-between">
-                  <p className="text-xs text-gray-500 font-medium">Water</p>
-                  <button 
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      handleAddWater();
-                    }}
-                    className="w-5 h-5 bg-blue-500 rounded-full flex items-center justify-center hover:bg-blue-600 transition-colors"
-                  >
-                    <Plus className="w-3 h-3 text-white" />
-                  </button>
-                </div>
-                <p className="text-lg font-bold text-gray-900">
-                  {userData.todayWater?.toFixed(1) || 0}/{userData.waterTarget} glasses
-                </p>
-                <div className="flex items-center justify-between">
-                  <p className="text-xs text-blue-600 font-medium">
-                    {userData.waterGoalReached ? 'Goal reached!' : 'Keep drinking'}
-                  </p>
-                  <p className="text-xs text-gray-500">
-                    {userData.waterGoalReached ? '✅' : `${(userData.waterTarget - (userData.todayWater || 0)).toFixed(1)} left`}
-                  </p>
-                </div>
-                
-                {/* Progress bar */}
-                <div className="w-full bg-gray-200 rounded-full h-1.5 mt-2">
-                  <div
-                    className={`h-1.5 rounded-full transition-all duration-500 ${
-                      userData.waterGoalReached ? 'bg-green-500' : 'bg-blue-500'
-                    }`}
-                    style={{ width: `${Math.min(userData.waterProgress, 100)}%` }}
-                  ></div>
-                </div>
-              </div>
-            </div>
             </Link>
-        </div>
+          </div>
 
-          {/* AI Recommendation Alert */}
+          {/* AI Recommendation Alerts */}
           {userData.caloriesEaten < userData.caloriesTarget * 0.7 && (
-            <div className="mt-6 bg-gradient-to-r from-yellow-50 to-orange-50 border border-yellow-200 rounded-2xl p-4">
-              <div className="flex items-start space-x-3">
-                <div className="w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center">
-                  <Zap className="w-4 h-4 text-yellow-600" />
+            <div className="mt-6 card-professional bg-gradient-to-r from-yellow-50 to-orange-50 dark:from-yellow-950/20 dark:to-orange-950/20 border border-yellow-200 dark:border-yellow-800">
+              <div className="flex items-start space-x-3 p-4">
+                <div className="w-8 h-8 bg-yellow-100 dark:bg-yellow-900/30 rounded-full flex items-center justify-center">
+                  <Zap className="w-4 h-4 text-yellow-600 dark:text-yellow-400" />
                 </div>
                 <div className="flex-1">
-                  <h4 className="font-semibold text-yellow-800 mb-1">AI Tavsiya</h4>
-                  <p className="text-sm text-yellow-700">
+                  <h4 className="font-semibold text-yellow-800 dark:text-yellow-200 mb-1">AI Tavsiya</h4>
+                  <p className="text-sm text-yellow-700 dark:text-yellow-300">
                     Siz bugun {Math.round(userData.caloriesTarget - userData.caloriesEaten)} kaloriya kam iste'mol qildingiz. 
                     Sog'lom atıştırmalık qo'shing.
                   </p>
@@ -738,14 +745,14 @@ export default function Index() {
           )}
 
           {userData.caloriesEaten > userData.caloriesTarget * 1.1 && (
-            <div className="mt-6 bg-gradient-to-r from-red-50 to-pink-50 border border-red-200 rounded-2xl p-4">
-              <div className="flex items-start space-x-3">
-                <div className="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center">
-                  <Activity className="w-4 h-4 text-red-600" />
+            <div className="mt-6 card-professional bg-gradient-to-r from-red-50 to-pink-50 dark:from-red-950/20 dark:to-pink-950/20 border border-red-200 dark:border-red-800">
+              <div className="flex items-start space-x-3 p-4">
+                <div className="w-8 h-8 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center">
+                  <Activity className="w-4 h-4 text-red-600 dark:text-red-400" />
                 </div>
                 <div className="flex-1">
-                  <h4 className="font-semibold text-red-800 mb-1">Harakat Tavsiyasi</h4>
-                  <p className="text-sm text-red-700">
+                  <h4 className="font-semibold text-red-800 dark:text-red-200 mb-1">Harakat Tavsiyasi</h4>
+                  <p className="text-sm text-red-700 dark:text-red-300">
                     Maqsaddan {Math.round(userData.caloriesEaten - userData.caloriesTarget)} kaloriya oshib ketdingiz. 
                     Qo'shimcha {Math.round((userData.caloriesEaten - userData.caloriesTarget) / 8)} daqiqa yurish tavsiya etiladi.
                   </p>
@@ -755,14 +762,14 @@ export default function Index() {
           )}
 
           {userData.todayWater < userData.waterTarget * 0.6 && (
-            <div className="mt-6 bg-gradient-to-r from-blue-50 to-cyan-50 border border-blue-200 rounded-2xl p-4">
-              <div className="flex items-start space-x-3">
-                <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                  <Droplets className="w-4 h-4 text-blue-600" />
+            <div className="mt-6 card-professional bg-gradient-to-r from-blue-50 to-cyan-50 dark:from-blue-950/20 dark:to-cyan-950/20 border border-blue-200 dark:border-blue-800">
+              <div className="flex items-start space-x-3 p-4">
+                <div className="w-8 h-8 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center">
+                  <Droplets className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                 </div>
                 <div className="flex-1">
-                  <h4 className="font-semibold text-blue-800 mb-1">Suv Eslatmasi</h4>
-                  <p className="text-sm text-blue-700">
+                  <h4 className="font-semibold text-blue-800 dark:text-blue-200 mb-1">Suv Eslatmasi</h4>
+                  <p className="text-sm text-blue-700 dark:text-blue-300">
                     Yana {userData.waterTarget - userData.todayWater} stakan suv ichishingiz kerak. 
                     Gidratatsiya sog'ligingiz uchun muhim!
                   </p>
@@ -778,22 +785,24 @@ export default function Index() {
           )}
 
           {/* Progress Summary */}
-          <div className="mt-6 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-2xl p-4">
-            <h4 className="font-semibold text-green-800 mb-3">Bugungi xulosa</h4>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="text-center">
-                <div className="text-2xl font-bold text-green-700">
-                  {Math.round(((userData.caloriesEaten / userData.caloriesTarget) + 
-                               (userData.todayWater / userData.waterTarget) + 
-                               (userData.todaySteps / 10000)) / 3 * 100)}%
+          <div className="mt-6 card-professional bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-950/20 dark:to-emerald-950/20 border border-green-200 dark:border-green-800">
+            <div className="p-4">
+              <h4 className="font-semibold text-green-800 dark:text-green-200 mb-3">Bugungi xulosa</h4>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-green-700 dark:text-green-300">
+                    {Math.round(((userData.caloriesEaten / userData.caloriesTarget) + 
+                                 (userData.todayWater / userData.waterTarget) + 
+                                 (userData.todaySteps / 10000)) / 3 * 100)}%
+                  </div>
+                  <div className="text-xs text-green-600 dark:text-green-400">Umumiy maqsad</div>
                 </div>
-                <div className="text-xs text-green-600">Umumiy maqsad</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-green-700">
-                  {user?.bmr || 0}
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-green-700 dark:text-green-300">
+                    {user?.bmr || 0}
+                  </div>
+                  <div className="text-xs text-green-600 dark:text-green-400">BMR</div>
                 </div>
-                <div className="text-xs text-green-600">BMR</div>
               </div>
             </div>
           </div>
@@ -801,7 +810,7 @@ export default function Index() {
           {/* Quick Action Buttons */}
           <div className="mt-8 space-y-3">
             <Link to="/add-meal">
-              <Button className="w-full h-14 bg-gradient-to-r from-mint-500 to-mint-600 hover:from-mint-600 hover:to-mint-700 text-white shadow-lg hover:shadow-xl transition-all duration-200 rounded-2xl">
+              <Button className="w-full h-14 bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary text-primary-foreground shadow-lg hover:shadow-xl transition-all duration-200 rounded-2xl">
                 <Plus className="mr-2 h-5 w-5" />
                 <span className="font-semibold">Ovqat Qo'shish</span>
               </Button>
@@ -811,7 +820,7 @@ export default function Index() {
               <Button
                 onClick={handleAddWater}
                 variant="outline"
-                className="h-12 border-blue-200 hover:bg-blue-50 text-blue-700 font-semibold rounded-xl"
+                className="h-12 border-blue-200 hover:bg-blue-50 dark:hover:bg-blue-950/20 text-blue-700 dark:text-blue-300 font-semibold rounded-xl"
               >
                 <Droplets className="mr-2 h-4 w-4" />
                 Suv +1
@@ -819,7 +828,7 @@ export default function Index() {
               <Button
                 onClick={() => handleAddSteps(1000)}
                 variant="outline"
-                className="h-12 border-green-200 hover:bg-green-50 text-green-700 font-semibold rounded-xl"
+                className="h-12 border-green-200 hover:bg-green-50 dark:hover:bg-green-950/20 text-green-700 dark:text-green-300 font-semibold rounded-xl"
               >
                 <Footprints className="mr-2 h-4 w-4" />
                 Qadam +1K
@@ -827,7 +836,7 @@ export default function Index() {
               <Button
                 onClick={() => handleAddWorkout('strength', 30)}
                 variant="outline"
-                className="h-12 border-orange-200 hover:bg-orange-50 text-orange-700 font-semibold rounded-xl"
+                className="h-12 border-orange-200 hover:bg-orange-50 dark:hover:bg-orange-950/20 text-orange-700 dark:text-orange-300 font-semibold rounded-xl"
               >
                 <Dumbbell className="mr-2 h-4 w-4" />
                 Mashq +30m

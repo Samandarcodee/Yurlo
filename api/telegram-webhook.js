@@ -1,4 +1,8 @@
 // Vercel serverless function for Telegram webhook
+
+// Simple in-memory storage for registered users (in production, use database)
+let registeredUsers = new Set();
+
 export default async function handler(req, res) {
   // CORS headers for Telegram
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -91,19 +95,41 @@ export default async function handler(req, res) {
       }
     };
 
-    // Check if user exists (simulate database check)
+    // Check if user exists (with real detection)
     const checkExistingUser = async (telegramId) => {
-      // In real implementation, this would check a database
-      // For now, we'll simulate by checking localStorage keys that would be created
       try {
-        // Simulate database lookup
         console.log(`🔍 Checking existing user: ${telegramId}`);
         
-        // Return false for now to treat all users as new
-        // In production, this would query your database
+        // Check in-memory storage
+        const isRegistered = registeredUsers.has(telegramId);
+        
+        if (isRegistered) {
+          console.log(`✅ User ${telegramId} is already registered`);
+          return true;
+        }
+        
+        // In production, you would also check database:
+        /*
+        const dbUser = await database.findUser({ telegram_id: telegramId });
+        return !!dbUser;
+        */
+        
+        console.log(`🆕 User ${telegramId} is new`);
         return false;
       } catch (error) {
         console.error("❌ Error checking user:", error);
+        return false;
+      }
+    };
+
+    // Register user in memory (in production, save to database)
+    const registerUser = async (telegramId) => {
+      try {
+        registeredUsers.add(telegramId);
+        console.log(`📝 User ${telegramId} registered successfully`);
+        return true;
+      } catch (error) {
+        console.error("❌ Error registering user:", error);
         return false;
       }
     };
@@ -238,31 +264,55 @@ export default async function handler(req, res) {
         // Check if user already exists
         const isExistingUser = await checkExistingUser(userData.telegram_id);
         
-        // Initialize user data for Mini App
-        const initData = await initializeUserData(userData);
-        
-        if (!initData) {
-          throw new Error("Failed to initialize user data");
-        }
-
-        // Update user activity
+        // Update user activity first
         await updateUserActivity(userData.telegram_id);
 
-        // Personalized welcome message
         const firstName = userData.first_name || "Foydalanuvchi";
-        const welcomeType = isExistingUser ? "qaytganingiz" : "kelganingiz";
-        const emoji = isExistingUser ? "👋" : "🌟";
-        
-        const welcomeMessage = `${emoji} <b>Salom ${firstName}! Caloria AI'ga xush ${welcomeType}!</b>
 
-${isExistingUser 
-  ? `🔄 <b>Qaytib kelganingizdan xursandmiz!</b>\n📊 Sizning progress'ingiz saqlanib qolgan.`
-  : `🎉 <b>Birinchi marta foydalanayapsiz!</b>\n✨ Keling, sog'liq sayohatingizni boshlaylik!`
-}
+        if (isExistingUser) {
+          // Existing user - show simplified welcome message
+          const returningUserMessage = `👋 <b>Qaytib kelganingizdan xursandmiz, ${firstName}!</b>
+
+🔄 <b>Sizning hisobingiz faol!</b>
+📊 Barcha ma'lumotlaringiz saqlanib qolgan.
+
+📱 <b>Davom etish uchun Mini App'ni oching:</b>
+• 📈 Bugungi progress'ni ko'ring
+• 🥗 Ovqat qo'shing
+• 💧 Suv iste'molini kuzating
+• 📊 Analytics'ni ko'ring
+
+<i>💡 Maslahat: Mini App'da barcha funksiyalar mavjud!</i>`;
+
+          await sendMessage(chatId, returningUserMessage, {
+            reply_markup: createMiniAppKeyboard(),
+          });
+
+          console.log(`👋 Returning user welcomed: ${userData.telegram_id}`);
+
+        } else {
+          // New user - full registration process
+          console.log(`🆕 New user registration started: ${userData.telegram_id}`);
+          
+          // Initialize user data for Mini App
+          const initData = await initializeUserData(userData);
+          
+          if (!initData) {
+            throw new Error("Failed to initialize user data");
+          }
+
+          // Register user to prevent duplicate registration
+          await registerUser(userData.telegram_id);
+
+          // New user welcome message with full onboarding
+          const newUserMessage = `🌟 <b>Salom ${firstName}! Caloria AI'ga xush kelibsiz!</b>
+
+🎉 <b>Birinchi marta foydalanayapsiz!</b>
+✨ Keling, sog'liq sayohatingizni boshlaylik!
 
 🤖 <b>Men sizning shaxsiy AI sog'liq yordamchingizman:</b>
 
-<b>📱 Asosiy funksiyalar:</b>
+<b>📱 Qanday yordam bera olaman:</b>
 • 📸 Ovqat rasmini AI tahlil qilish
 • 🧮 Kaloriya hisoblash va kuzatuv  
 • 💧 Suv iste'moli nazorati
@@ -278,19 +328,22 @@ ${isExistingUser
 • Til: ${userData.language_code.toUpperCase()}
 ${userData.is_premium ? '• ⭐ Premium foydalanuvchi' : ''}
 
-<b>🚀 Mini App orqali to'liq funksiyalardan foydalaning!</b>`;
+<b>🚀 Boshlash uchun Mini App'ni oching va profilingizni to'ldiring!</b>
 
-        await sendMessage(chatId, welcomeMessage, {
-          reply_markup: createMiniAppKeyboard(),
-        });
+<i>💡 Eslatma: Mini App'da full funksiyalar va professional design mavjud!</i>`;
 
-        // Log successful user registration/login
-        console.log(`✅ User ${isExistingUser ? 'returned' : 'registered'}:`, {
-          telegram_id: userData.telegram_id,
-          name: `${userData.first_name} ${userData.last_name}`.trim(),
-          username: userData.username,
-          timestamp: new Date().toISOString()
-        });
+          await sendMessage(chatId, newUserMessage, {
+            reply_markup: createMiniAppKeyboard(),
+          });
+
+          // Log successful user registration
+          console.log(`✅ New user registered successfully:`, {
+            telegram_id: userData.telegram_id,
+            name: `${userData.first_name} ${userData.last_name}`.trim(),
+            username: userData.username,
+            timestamp: new Date().toISOString()
+          });
+        }
 
       } catch (error) {
         console.error("❌ Error in /start command:", error);

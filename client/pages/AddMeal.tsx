@@ -155,7 +155,7 @@ export default function AddMeal() {
       const reader = new FileReader();
       reader.onload = async (e) => {
         setSelectedImage(e.target?.result as string);
-        setIsAnalyzing(true);
+          setIsAnalyzing(true);
         setAddMode('photo');
         
         try {
@@ -167,7 +167,7 @@ export default function AddMeal() {
         } catch (error) {
           console.error('AI recognition error:', error);
         } finally {
-          setIsAnalyzing(false);
+            setIsAnalyzing(false);
         }
       };
       reader.readAsDataURL(file);
@@ -308,7 +308,7 @@ export default function AddMeal() {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-md mx-auto bg-white min-h-screen">
-        {/* Header */}
+      {/* Header */}
         <div className="bg-gradient-to-r from-green-600 to-emerald-600 text-white p-6 pb-8">
           <div className="flex items-center justify-between mb-4">
             <Link to="/">
@@ -318,8 +318,8 @@ export default function AddMeal() {
             </Link>
             <h1 className="text-xl font-bold">Ovqat Qo'shish</h1>
             <div className="w-9"></div>
-          </div>
-          
+      </div>
+
           {/* Today's Progress */}
           {todayTracking && nutritionGoals && (
             <div className="bg-white/10 rounded-2xl p-4">
@@ -374,15 +374,15 @@ export default function AddMeal() {
                   }`}>
                     <Camera className="w-5 h-5 mx-auto mb-1" />
                     <span className="text-xs font-medium">Rasm</span>
-                  </div>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    capture="environment"
-                    className="hidden"
-                    onChange={handleImageUpload}
-                  />
-                </label>
+                </div>
+                <input
+                  type="file"
+                  accept="image/*"
+                  capture="environment"
+                  className="hidden"
+                  onChange={handleImageUpload}
+                />
+              </label>
                 
                 <button
                   onClick={() => setAddMode('manual')}
@@ -455,7 +455,7 @@ export default function AddMeal() {
               </Card>
 
               {/* Popular Foods */}
-              <Card>
+          <Card>
                 <CardHeader className="pb-3">
                   <CardTitle className="flex items-center text-lg">
                     <Star className="w-5 h-5 mr-2" />
@@ -519,12 +519,12 @@ export default function AddMeal() {
                           <div className="text-2xl mb-1">{category.icon}</div>
                           <div className="text-xs font-medium text-gray-700">
                             {category.name}
-                          </div>
+                </div>
                         </button>
                       ))}
-                    </div>
-                  </CardContent>
-                </Card>
+              </div>
+            </CardContent>
+          </Card>
               )}
 
               {/* Search Results */}
@@ -572,8 +572,8 @@ export default function AddMeal() {
                           <div className="font-medium text-gray-900">{food.nameUz}</div>
                           <div className="text-sm text-gray-500">
                             {food.nutrition.calories} kal • {food.serving.size}
-                          </div>
-                        </div>
+        </div>
+      </div>
                         <Plus className="w-4 h-4 text-gray-400" />
                       </button>
                     ))}
@@ -586,28 +586,28 @@ export default function AddMeal() {
           {/* Photo Mode */}
           {addMode === 'photo' && (
             <div className="space-y-4">
-              {selectedImage && (
-                <Card>
+      {selectedImage && (
+        <Card>
                   <CardContent className="p-4">
-                    <div className="relative rounded-lg overflow-hidden">
-                      <img
-                        src={selectedImage}
-                        alt="Ovqat"
-                        className="w-full h-48 object-cover"
-                      />
-                      {isAnalyzing && (
-                        <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-                          <div className="text-white text-center">
-                            <div className="animate-spin mb-2">
-                              <Zap className="h-8 w-8 mx-auto" />
-                            </div>
+              <div className="relative rounded-lg overflow-hidden">
+                <img
+                  src={selectedImage}
+                  alt="Ovqat"
+                  className="w-full h-48 object-cover"
+                />
+                {isAnalyzing && (
+                  <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+                    <div className="text-white text-center">
+                      <div className="animate-spin mb-2">
+                        <Zap className="h-8 w-8 mx-auto" />
+                      </div>
                             <p className="text-sm">AI tahlil qilmoqda...</p>
-                          </div>
-                        </div>
-                      )}
                     </div>
-                  </CardContent>
-                </Card>
+                  </div>
+                )}
+            </div>
+          </CardContent>
+        </Card>
               )}
             </div>
           )}
@@ -621,16 +621,16 @@ export default function AddMeal() {
                   <CardTitle className="flex items-center justify-between">
                     <span>{selectedFood.food.nameUz}</span>
                     {nutritionScore && (
-                      <Badge 
+              <Badge
                         variant={nutritionScore.score >= 80 ? 'default' : 
                                nutritionScore.score >= 60 ? 'secondary' : 'destructive'}
-                      >
+              >
                         {nutritionScore.grade} ({nutritionScore.score})
-                      </Badge>
+              </Badge>
                     )}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
                   {/* Portion Control */}
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
@@ -654,9 +654,9 @@ export default function AddMeal() {
                         >
                           <Plus className="w-3 h-3" />
                         </Button>
-                      </div>
-                    </div>
-                    
+              </div>
+            </div>
+
                     <Slider
                       value={[selectedFood.portion]}
                       onValueChange={(value) => updatePortion(value[0])}
@@ -664,8 +664,8 @@ export default function AddMeal() {
                       max={3}
                       step={0.25}
                       className="w-full"
-                    />
-                  </div>
+                />
+              </div>
 
                   {/* Nutrition Display */}
                   <div className="grid grid-cols-2 gap-3">
@@ -692,8 +692,8 @@ export default function AddMeal() {
                         {finalNutrition.fat}g
                       </div>
                       <div className="text-xs text-green-600">Yog'</div>
-                    </div>
-                  </div>
+                </div>
+              </div>
 
                   {/* Edit Nutrition Button */}
                   <Button
@@ -733,7 +733,7 @@ export default function AddMeal() {
 
                   {/* Nutrition Quality Feedback */}
                   {nutritionScore && nutritionScore.feedback.length > 0 && (
-                    <div className="space-y-2">
+              <div className="space-y-2">
                       <Label className="text-sm font-medium">Ozuqa sifati baholovi:</Label>
                       <div className="space-y-1">
                         {nutritionScore.feedback.map((feedback, index) => (
@@ -774,34 +774,34 @@ export default function AddMeal() {
                     <Select value={mealTime} onValueChange={(value: MealType) => setMealTime(value)}>
                       <SelectTrigger className="mt-1">
                         <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="breakfast">🌅 Nonushta</SelectItem>
-                        <SelectItem value="lunch">☀️ Tushlik</SelectItem>
-                        <SelectItem value="dinner">🌙 Kechki ovqat</SelectItem>
-                        <SelectItem value="snack">🍎 Gazak</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="breakfast">🌅 Nonushta</SelectItem>
+                    <SelectItem value="lunch">☀️ Tushlik</SelectItem>
+                    <SelectItem value="dinner">🌙 Kechki ovqat</SelectItem>
+                    <SelectItem value="snack">🍎 Gazak</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
 
                   {/* Notes */}
                   <div>
                     <Label htmlFor="notes">Izohlar (ixtiyoriy)</Label>
-                    <Textarea
-                      id="notes"
+                <Textarea
+                  id="notes"
                       placeholder="Ovqat haqida qo'shimcha ma'lumot..."
                       value={notes}
                       onChange={(e) => setNotes(e.target.value)}
                       className="mt-1 h-20 resize-none"
                     />
-                  </div>
-                </CardContent>
-              </Card>
+            </div>
+          </CardContent>
+        </Card>
 
-              {/* Save Button */}
+      {/* Save Button */}
               <div className="sticky bottom-4">
-                <Button
-                  onClick={saveMeal}
+          <Button
+            onClick={saveMeal}
                   disabled={isSaving}
                   className="w-full h-14 text-lg font-semibold bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 shadow-lg"
                 >
@@ -816,7 +816,7 @@ export default function AddMeal() {
                       Ovqatni Saqlash ({finalNutrition.calories} kal)
                     </>
                   )}
-                </Button>
+          </Button>
               </div>
             </div>
           )}

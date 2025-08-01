@@ -3,6 +3,7 @@ import { Home, Camera, Brain, BarChart3, Settings } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useTelegram } from "@/hooks/use-telegram";
 import { useEffect } from "react";
+import { ThemeToggle } from "./ThemeToggle";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -35,21 +36,38 @@ export function Layout({ children }: LayoutProps) {
   };
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
-      {/* Main Content */}
+    <div className="min-h-screen bg-background flex flex-col transition-colors duration-300">
+      {/* Enhanced Header with Theme Toggle */}
+      <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border/50">
+        <div className="flex items-center justify-between px-4 py-3">
+          <div className="flex items-center space-x-2">
+            <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
+              <span className="text-primary-foreground text-sm font-bold">Y</span>
+            </div>
+            <span className="font-semibold text-foreground">Yurlo AI</span>
+          </div>
+          
+          {/* Theme Toggle Button */}
+          <ThemeToggle />
+        </div>
+      </header>
+
+      {/* Main Content with Enhanced Responsive Design */}
       <main
-        className="flex-1 pb-20"
+        className="flex-1 pb-20 sm:pb-24"
         style={{
           paddingBottom: platform === "ios" ? "90px" : "80px", // iOS uchun qo'shimcha bo'sh joy
         }}
       >
-        {children}
+        <div className="max-w-md mx-auto px-4 sm:px-6">
+          {children}
+        </div>
       </main>
 
-      {/* Bottom Navigation */}
-      <nav className="fixed bottom-0 left-0 right-0 bg-white/80 border-t border-mint-200/50 backdrop-blur-xl shadow-2xl">
+      {/* Enhanced Bottom Navigation */}
+      <nav className="fixed bottom-0 left-0 right-0 bg-background/80 border-t border-border/50 backdrop-blur-xl shadow-2xl z-40">
         <div
-          className="flex items-center justify-around px-4 py-3"
+          className="flex items-center justify-around px-4 py-3 max-w-md mx-auto"
           style={{
             paddingBottom: platform === "ios" ? "20px" : "12px", // iOS safe area uchun
           }}
@@ -62,23 +80,23 @@ export function Layout({ children }: LayoutProps) {
                 to={path}
                 onClick={handleNavClick}
                 className={cn(
-                  "flex flex-col items-center gap-2 px-4 py-3 rounded-2xl transition-all duration-300 transform",
+                  "flex flex-col items-center gap-1 px-3 py-2 rounded-xl transition-all duration-300 transform hover:scale-105",
                   isActive
-                    ? "bg-gradient-to-r from-mint-500 to-mint-600 text-white shadow-lg scale-110"
-                    : "text-mint-600 hover:text-mint-800 hover:bg-mint-100/70 hover:scale-105",
+                    ? "bg-primary text-primary-foreground shadow-lg scale-110"
+                    : "text-muted-foreground hover:text-foreground hover:bg-muted/50",
                 )}
               >
                 <Icon
-                  size={22}
+                  size={20}
                   className={cn(
                     "transition-all duration-300",
-                    isActive && "scale-125 drop-shadow-sm",
+                    isActive && "scale-125",
                   )}
                 />
                 <span
                   className={cn(
-                    "text-xs font-semibold tracking-wide",
-                    isActive && "text-white",
+                    "text-xs font-medium tracking-wide",
+                    isActive && "text-primary-foreground",
                   )}
                 >
                   {label}

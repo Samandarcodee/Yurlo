@@ -58,12 +58,15 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
   const [user, setUser] = useState<UserProfile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isFirstTime, setIsFirstTime] = useState(false);
+  const [hasInitialized, setHasInitialized] = useState(false);
 
   // Telegram WebApp hook
   const { user: telegramUser, isReady: isTelegramReady } = useTelegram();
 
-  // localStorage'dan foydalanuvchi ma'lumotlarini yuklash
+  // Optimized data loading - only once on startup
   useEffect(() => {
+    if (hasInitialized) return; // Prevent multiple initializations
+
     const loadUserProfile = async () => {
       setIsLoading(true);
       try {
@@ -115,14 +118,15 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
           }
         } else {
           console.log("No saved profile found - yangi foydalanuvchi");
-          // Static deployment uchun API so'rovlarsiz
           setIsFirstTime(true);
         }
       } catch (error) {
         console.error("Foydalanuvchi ma'lumotlarini yuklashda xatolik:", error);
         setIsFirstTime(true);
+      } finally {
+        setIsLoading(false);
+        setHasInitialized(true);
       }
-      setIsLoading(false);
     };
 
     // Telegram tayyor bo'lgandan keyin yuklash
@@ -132,7 +136,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
       // Telegram mavjud bo'lmasa ham ishlashi uchun
       setTimeout(loadUserProfile, 1000);
     }
-  }, [telegramUser, isTelegramReady]);
+  }, [telegramUser, isTelegramReady, hasInitialized]);
 
   const updateUser = (userData: UserProfile) => {
     console.log("Updating user data:", userData);
