@@ -1,96 +1,72 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
+import { useTelegram } from '../hooks/use-telegram';
 
 type Theme = 'light' | 'dark' | 'system';
 
 interface ThemeContextType {
   theme: Theme;
   setTheme: (theme: Theme) => void;
-  actualTheme: 'light' | 'dark';
+  effectiveTheme: 'light' | 'dark';
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setTheme] = useState<Theme>(() => {
-    // Get saved theme from localStorage or default to system
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('caloria-theme') as Theme;
-      return saved || 'system';
+  const [theme, setTheme] = useState<Theme>('system');
+  const { colorScheme: telegramColorScheme } = useTelegram();
+
+  // Determine effective theme
+  const effectiveTheme = React.useMemo(() => {
+    if (theme === 'system') {
+      // Use Telegram theme if available, otherwise system preference
+      if (telegramColorScheme) {
+        return telegramColorScheme;
+      }
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
     }
-    return 'system';
-  });
+    return theme as 'light' | 'dark';
+  }, [theme, telegramColorScheme]);
 
-  const [actualTheme, setActualTheme] = useState<'light' | 'dark'>('light');
-
+  // Load saved theme preference
   useEffect(() => {
-    const root = window.document.documentElement;
+    const savedTheme = localStorage.getItem('theme') as Theme;
+    if (savedTheme && ['light', 'dark', 'system'].includes(savedTheme)) {
+      setTheme(savedTheme);
+    }
+  }, []);
 
+  // Apply theme to document
+  useEffect(() => {
+    const root = document.documentElement;
+    
     // Remove previous theme classes
     root.classList.remove('light', 'dark');
+    
+    // Add current theme class
+    root.classList.add(effectiveTheme);
+    
+    // Save theme preference
+    localStorage.setItem('theme', theme);
+  }, [theme, effectiveTheme]);
 
-    if (theme === 'system') {
-      const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-      root.classList.add(systemTheme);
-      setActualTheme(systemTheme);
-    } else {
-      root.classList.add(theme);
-      setActualTheme(theme);
-    }
-
-    // Save to localStorage
-    localStorage.setItem('caloria-theme', theme);
-  }, [theme]);
-
+  // Listen to system theme changes
   useEffect(() => {
-    // Listen for system theme changes when in system mode
     if (theme === 'system') {
       const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-      
-      const handleChange = (e: MediaQueryListEvent) => {
-        const root = window.document.documentElement;
-        root.classList.remove('light', 'dark');
-        const systemTheme = e.matches ? 'dark' : 'light';
-        root.classList.add(systemTheme);
-        setActualTheme(systemTheme);
+      const handleChange = () => {
+        // Trigger re-render to update effectiveTheme
+        setTheme('system');
       };
-
+      
       mediaQuery.addEventListener('change', handleChange);
       return () => mediaQuery.removeEventListener('change', handleChange);
     }
   }, [theme]);
 
-  // Telegram Mini App theme detection
-  useEffect(() => {
-    try {
-      // @ts-ignore - Telegram WebApp API
-      if (window.Telegram?.WebApp) {
-        const tg = window.Telegram.WebApp;
-        
-        // Get Telegram theme
-        const telegramTheme = tg.colorScheme || 'light';
-        
-        // If user hasn't set a preference, use Telegram theme
-        const savedTheme = localStorage.getItem('caloria-theme');
-        if (!savedTheme) {
-          setTheme(telegramTheme as Theme);
-        }
-
-        // Listen for Telegram theme changes
-        tg.onEvent('themeChanged', () => {
-          if (theme === 'system' || !localStorage.getItem('caloria-theme')) {
-            setTheme(tg.colorScheme as Theme);
-          }
-        });
-      }
-    } catch (error) {
-      console.log('Telegram WebApp not available, using default theme detection');
-    }
-  }, []);
-
-  const value = {
+  const value: ThemeContextType = {
     theme,
     setTheme,
-    actualTheme,
+    effectiveTheme,
   };
 
   return (
@@ -102,79 +78,8 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
 export function useTheme() {
   const context = useContext(ThemeContext);
-  
   if (context === undefined) {
     throw new Error('useTheme must be used within a ThemeProvider');
   }
-  
   return context;
-}
-
-// Theme toggle button component
-export function ThemeToggle({ className = '' }: { className?: string }) {
-  const { theme, setTheme, actualTheme } = useTheme();
-
-  const toggleTheme = () => {
-    if (theme === 'light') {
-      setTheme('dark');
-    } else if (theme === 'dark') {
-      setTheme('system');
-    } else {
-      setTheme('light');
-    }
-  };
-
-  const getIcon = () => {
-    if (theme === 'system') {
-      return '🌓'; // Auto
-    }
-    return actualTheme === 'dark' ? '🌙' : '☀️';
-  };
-
-  const getLabel = () => {
-    if (theme === 'system') {
-      return 'Auto';
-    }
-    return actualTheme === 'dark' ? 'Tungi' : 'Kunduzgi';
-  };
-
-  return (
-    <button
-      onClick={toggleTheme}
-      className={`
-        relative inline-flex items-center gap-2 px-3 py-2 rounded-lg
-        bg-background/50 backdrop-blur-sm border border-border/50
-        hover:bg-accent/10 active:scale-95
-        transition-all duration-300 ease-out
-        focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2
-        text-sm font-medium
-        ${className}
-      `}
-      aria-label={`Switch to ${theme === 'light' ? 'dark' : theme === 'dark' ? 'system' : 'light'} theme`}
-    >
-      <span className="text-lg transition-transform duration-300 hover:scale-110">
-        {getIcon()}
-      </span>
-      <span className="hidden sm:inline">{getLabel()}</span>
-    </button>
-  );
-}
-
-// Theme status indicator
-export function ThemeIndicator() {
-  const { actualTheme, theme } = useTheme();
-  
-  return (
-    <div className="flex items-center gap-2 text-xs text-muted-foreground">
-      <div className={`w-2 h-2 rounded-full ${
-        actualTheme === 'dark' 
-          ? 'bg-blue-500' 
-          : 'bg-yellow-500'
-      }`} />
-      <span>
-        {actualTheme === 'dark' ? 'Tungi' : 'Kunduzgi'} rejim
-        {theme === 'system' && ' (Auto)'}
-      </span>
-    </div>
-  );
 }

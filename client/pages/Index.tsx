@@ -360,12 +360,12 @@ export default function Index() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="max-w-md mx-auto px-4 sm:px-6">
+    <div className="min-h-screen bg-background theme-transition">
+      <div className="responsive-container">
         {/* Enhanced Header */}
-        <div className="flex items-center justify-between py-6">
+        <div className="responsive-flex justify-between py-6">
           <div>
-            <p className="heading-responsive text-foreground">Bugun, {todayDate}</p>
+            <p className="responsive-text text-lg font-semibold text-foreground">Bugun, {todayDate}</p>
             <p className="text-muted-foreground text-sm">Salom, {userData.name}!</p>
           </div>
           <div className="w-10 h-10 bg-muted rounded-full flex items-center justify-center">
@@ -374,9 +374,9 @@ export default function Index() {
         </div>
 
         {/* Enhanced Professional Calorie Tracking */}
-        <div className="flex flex-col items-center py-8">
+        <div className="flex flex-col items-center py-8 theme-transition">
           {/* Advanced Calorie Burned Circle */}
-          <div className="relative mb-8">
+          <div className="relative mb-8 health-card">
             <CircularProgress
               value={userData.caloriesBurned}
               max={userData.caloriesTarget}
@@ -385,13 +385,13 @@ export default function Index() {
               color="hsl(var(--primary))"
             >
               <div className="text-center">
-                <div className="text-5xl font-bold text-foreground mb-2">
+                <div className="responsive-text text-4xl sm:text-5xl font-bold text-foreground mb-2">
                   {Math.round(userData.caloriesBurned)}
                 </div>
-                <div className="text-sm text-muted-foreground font-medium">
+                <div className="responsive-text text-muted-foreground font-medium">
                   Bugun yoqilgan kaloriya
                 </div>
-                <div className="text-sm text-muted-foreground">
+                <div className="responsive-text text-muted-foreground">
                   maqsad: {userData.caloriesTarget} kcal
                 </div>
               </div>
@@ -399,53 +399,53 @@ export default function Index() {
           </div>
 
           {/* Enhanced Nutrition Breakdown */}
-          <div className="flex items-center justify-center space-x-8 mb-8">
+          <div className="responsive-flex justify-center space-x-4 sm:space-x-8 mb-8">
             <div className="text-center">
-              <div className="text-sm font-medium text-muted-foreground mb-2">Protein</div>
+              <div className="responsive-text text-muted-foreground mb-2">Protein</div>
               <div className="flex items-center justify-center space-x-2">
                 <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
-                <span className="text-lg font-bold text-foreground">{Math.round(userData.protein || 0)}%</span>
+                <span className="responsive-text font-bold text-foreground">{Math.round(userData.protein || 0)}%</span>
               </div>
             </div>
             <div className="text-center">
-              <div className="text-sm font-medium text-muted-foreground mb-2">Yog'</div>
+              <div className="responsive-text text-muted-foreground mb-2">Yog'</div>
               <div className="flex items-center justify-center space-x-2">
                 <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-                <span className="text-lg font-bold text-foreground">{Math.round(userData.fat || 0)}%</span>
+                <span className="responsive-text font-bold text-foreground">{Math.round(userData.fat || 0)}%</span>
               </div>
             </div>
             <div className="text-center">
-              <div className="text-sm font-medium text-muted-foreground mb-2">Uglevod</div>
+              <div className="responsive-text text-muted-foreground mb-2">Uglevod</div>
               <div className="flex items-center justify-center space-x-2">
                 <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                <span className="text-lg font-bold text-foreground">{Math.round(userData.carbs || 0)}%</span>
+                <span className="responsive-text font-bold text-foreground">{Math.round(userData.carbs || 0)}%</span>
               </div>
             </div>
           </div>
 
           {/* Enhanced Daily Stats Cards */}
-          <div className="grid grid-cols-2 gap-4 w-full mb-8">
-            <Card className="card-professional bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-950/20 dark:to-emerald-950/20">
-              <CardContent className="p-6 text-center">
+          <div className="responsive-grid mb-8">
+            <Card className="health-card gradient-calorie theme-transition">
+              <CardContent className="responsive-card text-center">
                 <div className="w-10 h-10 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-3">
                   <Apple className="h-5 w-5 text-green-600 dark:text-green-400" />
                 </div>
-                <div className="text-2xl font-bold text-foreground mb-1">
+                <div className="responsive-text text-xl sm:text-2xl font-bold text-foreground mb-1">
                   {Math.round(userData.caloriesEaten)} Kcal
                 </div>
-                <div className="flex items-center justify-center space-x-1 text-sm text-green-600 dark:text-green-400 font-medium">
+                <div className="flex items-center justify-center space-x-1 responsive-text text-green-600 dark:text-green-400 font-medium">
                   <TrendingUp className="w-4 h-4" />
                   <span>Iste'mol qilingan</span>
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="card-professional bg-gradient-to-br from-orange-50 to-red-50 dark:from-orange-950/20 dark:to-red-950/20">
-              <CardContent className="p-6 text-center">
+            <Card className="health-card gradient-workout theme-transition">
+              <CardContent className="responsive-card text-center">
                 <div className="w-10 h-10 bg-orange-100 dark:bg-orange-900/30 rounded-full flex items-center justify-center mx-auto mb-3">
                   <Flame className="h-5 w-5 text-orange-600 dark:text-orange-400" />
                 </div>
-                <div className="text-2xl font-bold text-foreground mb-1">
+                <div className="responsive-text text-xl sm:text-2xl font-bold text-foreground mb-1">
                   {Math.round(userData.caloriesBurned)} Kcal
                 </div>
                 <div className="flex items-center justify-center space-x-1 text-sm text-orange-600 dark:text-orange-400 font-medium">

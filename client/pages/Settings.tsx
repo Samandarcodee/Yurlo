@@ -3,7 +3,18 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import { ThemeToggle, ThemeIndicator, useTheme } from "@/contexts/ThemeContext";
+import { useTheme } from "@/contexts/ThemeContext";
+import { ThemeToggle } from "@/components/ThemeToggle";
+
+function ThemeIndicator() {
+  const { theme, effectiveTheme } = useTheme();
+  
+  return (
+    <p className="text-sm text-muted-foreground">
+      {theme === 'system' ? `Auto (${effectiveTheme})` : theme} mode
+    </p>
+  );
+}
 
 export default function Settings() {
   return (
