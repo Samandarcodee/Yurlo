@@ -136,10 +136,29 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
     if (isTelegramReady) {
       loadUserProfile();
     } else if (!isTelegramReady && typeof window !== "undefined") {
-      // Telegram mavjud bo'lmasa ham ishlashi uchun
-      setTimeout(loadUserProfile, 1000);
+      // Telegram mavjud bo'lmasa ham ishlashi uchun - timeout bilan
+      const timeoutId = setTimeout(() => {
+        console.log("Telegram WebApp timeout - loading without Telegram");
+        loadUserProfile();
+      }, 3000); // 3 soniya kutamiz
+
+      return () => clearTimeout(timeoutId);
     }
   }, [telegramUser, isTelegramReady, hasInitialized]);
+
+  // Fallback timeout - agar 10 soniyadan keyin hali loading bo'lsa
+  useEffect(() => {
+    if (isLoading && !hasInitialized) {
+      const fallbackTimeout = setTimeout(() => {
+        console.warn("UserContext loading timeout - forcing completion");
+        setIsLoading(false);
+        setHasInitialized(true);
+        setIsFirstTime(true);
+      }, 10000); // 10 soniya
+
+      return () => clearTimeout(fallbackTimeout);
+    }
+  }, [isLoading, hasInitialized]);
 
   const updateUser = (userData: UserProfile) => {
     console.log("Updating user data:", userData);

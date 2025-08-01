@@ -61,6 +61,49 @@ export const DebugUtils = {
     localStorage.setItem(storageKey, JSON.stringify(mockUserData));
     console.log('Mock user data saved:', mockUserData);
     window.location.reload();
+  },
+
+  // Check app state
+  checkAppState: () => {
+    console.log('=== APP STATE DEBUG ===');
+    console.log('Window Telegram:', typeof window !== 'undefined' ? !!window.Telegram : 'No window');
+    console.log('Telegram WebApp:', typeof window !== 'undefined' && window.Telegram ? !!window.Telegram.WebApp : 'No WebApp');
+    console.log('localStorage available:', typeof localStorage !== 'undefined');
+    console.log('User profiles in localStorage:', DebugUtils.showAllUserData());
+    console.log('Current URL:', window.location.href);
+    console.log('User Agent:', navigator.userAgent);
+    console.log('=== END DEBUG ===');
+  },
+
+  // Force reload with cache clear
+  forceReload: () => {
+    if ('caches' in window) {
+      caches.keys().then(names => {
+        names.forEach(name => {
+          caches.delete(name);
+          console.log('Cache cleared:', name);
+        });
+      });
+    }
+    window.location.reload();
+  },
+
+  // Test Telegram WebApp
+  testTelegramWebApp: () => {
+    if (typeof window !== 'undefined' && window.Telegram?.WebApp) {
+      const tg = window.Telegram.WebApp;
+      console.log('Telegram WebApp found:', {
+        platform: tg.platform,
+        colorScheme: tg.colorScheme,
+        themeParams: tg.themeParams,
+        initData: tg.initData,
+        initDataUnsafe: tg.initDataUnsafe
+      });
+      return true;
+    } else {
+      console.log('Telegram WebApp not found');
+      return false;
+    }
   }
 };
 

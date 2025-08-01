@@ -3,6 +3,7 @@ import React, { Component, ErrorInfo, ReactNode } from "react";
 interface Props {
   children: ReactNode;
   fallback?: ReactNode;
+  FallbackComponent?: React.ComponentType<{ error: Error; resetErrorBoundary: () => void }>;
 }
 
 interface State {
@@ -35,8 +36,17 @@ export class ErrorBoundary extends Component<Props, State> {
     }
   }
 
+  resetErrorBoundary = () => {
+    this.setState({ hasError: false, error: undefined });
+  };
+
   render() {
-    if (this.state.hasError) {
+    if (this.state.hasError && this.state.error) {
+      // Custom FallbackComponent
+      if (this.props.FallbackComponent) {
+        return <this.props.FallbackComponent error={this.state.error} resetErrorBoundary={this.resetErrorBoundary} />;
+      }
+
       // Custom fallback UI
       if (this.props.fallback) {
         return this.props.fallback;
@@ -68,12 +78,20 @@ export class ErrorBoundary extends Component<Props, State> {
               Ilovada texnik muammo yuz berdi. Sahifani yangilang yoki qayta
               urinib ko'ring.
             </p>
-            <button
-              onClick={() => window.location.reload()}
-              className="px-6 py-3 bg-mint-600 text-white rounded-lg hover:bg-mint-700 transition-colors"
-            >
-              🔄 Sahifani yangilash
-            </button>
+            <div className="space-y-2">
+              <button
+                onClick={this.resetErrorBoundary}
+                className="px-6 py-3 bg-mint-600 text-white rounded-lg hover:bg-mint-700 transition-colors"
+              >
+                🔄 Qayta urinish
+              </button>
+              <button
+                onClick={() => window.location.reload()}
+                className="px-6 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors ml-2"
+              >
+                📄 Sahifani yangilash
+              </button>
+            </div>
           </div>
         </div>
       );
@@ -99,3 +117,6 @@ export const useErrorHandler = () => {
 
   return { handleError };
 };
+
+// Default export
+export default ErrorBoundary;

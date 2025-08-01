@@ -1,6 +1,5 @@
 import React from "react";
-import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Route, Routes } from "react-router-dom";
 import { Layout } from "./components/Layout";
 import {
   UserProvider,
@@ -30,16 +29,46 @@ import StepTracker from "./pages/StepTracker";
 import WaterTracker from "./pages/WaterTracker";
 import WorkoutTracker from "./pages/WorkoutTracker";
 import NotFound from "./pages/NotFound";
+import ErrorBoundary from "./components/ErrorBoundary";
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: 5 * 60 * 1000, // 5 minutes
-      gcTime: 10 * 60 * 1000, // 10 minutes (cacheTime renamed to gcTime in v5)
-      retry: 1,
-    },
-  },
-});
+// Error Fallback Component
+const ErrorFallback = ({ error, resetErrorBoundary }: { error: Error; resetErrorBoundary: () => void }) => {
+  return (
+    <div className="min-h-screen bg-background flex items-center justify-center p-4">
+      <div className="text-center space-y-4 max-w-md">
+        <div className="text-6xl mb-4">⚠️</div>
+        <h1 className="text-2xl font-bold text-foreground">Xatolik yuz berdi</h1>
+        <p className="text-muted-foreground">
+          Ilovada muammo bor. Iltimos, sahifani yangilang yoki keyinroq urinib ko'ring.
+        </p>
+        <div className="space-y-2">
+          <button
+            onClick={resetErrorBoundary}
+            className="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90"
+          >
+            Qayta urinish
+          </button>
+          <button
+            onClick={() => window.location.reload()}
+            className="px-4 py-2 bg-secondary text-secondary-foreground rounded-lg hover:bg-secondary/90 ml-2"
+          >
+            Sahifani yangilash
+          </button>
+        </div>
+        {process.env.NODE_ENV === 'development' && (
+          <details className="mt-4 text-left">
+            <summary className="cursor-pointer text-sm text-muted-foreground">
+              Xatolik ma'lumotlari (faqat rivojlanish uchun)
+            </summary>
+            <pre className="mt-2 p-2 bg-muted rounded text-xs overflow-auto">
+              {error.message}
+            </pre>
+          </details>
+        )}
+      </div>
+    </div>
+  );
+};
 
 const AppRoutes = () => {
   const { shouldShowOnboarding, isReady } = useOnboardingCheck();
@@ -50,16 +79,34 @@ const AppRoutes = () => {
     platform,
   } = useTelegram();
 
+  // Fallback state for loading timeout
+  const [loadingTimeout, setLoadingTimeout] = React.useState(false);
+
   console.log("Routing debug:", {
     shouldShowOnboarding,
     isReady,
     hasUser: !!user,
     isTelegramReady,
     platform,
+    loadingTimeout,
   });
 
+  // Loading timeout fallback
+  React.useEffect(() => {
+    if (!isReady || isTelegramLoading) {
+      const timeout = setTimeout(() => {
+        console.warn("App loading timeout - forcing continue");
+        setLoadingTimeout(true);
+      }, 8000); // 8 soniya
+
+      return () => clearTimeout(timeout);
+    } else {
+      setLoadingTimeout(false);
+    }
+  }, [isReady, isTelegramLoading]);
+
   // Optimized loading state
-  if (!isReady || isTelegramLoading) {
+  if ((!isReady || isTelegramLoading) && !loadingTimeout) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center space-y-4 animate-fade-in-up">
@@ -124,15 +171,13 @@ const AppRoutes = () => {
 };
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <BrowserRouter>
-      <ThemeProvider>
-        <UserProvider>
-          <AppRoutes />
-        </UserProvider>
-      </ThemeProvider>
-    </BrowserRouter>
-  </QueryClientProvider>
+  <ErrorBoundary FallbackComponent={ErrorFallback}>
+    <ThemeProvider>
+      <UserProvider>
+        <AppRoutes />
+      </UserProvider>
+    </ThemeProvider>
+  </ErrorBoundary>
 );
 
 export default App;

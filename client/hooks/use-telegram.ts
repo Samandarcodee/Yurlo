@@ -103,12 +103,12 @@ export const useTelegram = (): TelegramWebAppHook => {
       }
     }, 100);
 
-    // 5 soniyadan keyin to'xtatamiz
+    // 3 soniyadan keyin to'xtatamiz - timeout qisqaroq
     const timeout = setTimeout(() => {
       clearInterval(interval);
       setIsLoading(false);
-      console.warn("Telegram WebApp SDK yuklanmadi");
-    }, 5000);
+      console.warn("Telegram WebApp SDK yuklanmadi - static mode ishlatilmoqda");
+    }, 3000);
 
     return () => {
       clearInterval(interval);
