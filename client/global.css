@@ -44,16 +44,16 @@
     --radius: 0.75rem;
 
     /* === ENHANCED HEALTH APP COLORS === */
-    --calorie-primary: 25 95% 53%;      /* Orange */
-    --calorie-secondary: 25 95% 95%;    /* Light Orange */
-    --water-primary: 200 100% 50%;      /* Blue */
-    --water-secondary: 200 100% 95%;    /* Light Blue */
-    --step-primary: 140 65% 50%;        /* Green */
-    --step-secondary: 140 65% 95%;      /* Light Green */
-    --sleep-primary: 260 60% 50%;       /* Purple */
-    --sleep-secondary: 260 60% 95%;     /* Light Purple */
-    --workout-primary: 0 85% 60%;       /* Red */
-    --workout-secondary: 0 85% 95%;     /* Light Red */
+    --calorie-primary: 25 95% 53%; /* Orange */
+    --calorie-secondary: 25 95% 95%; /* Light Orange */
+    --water-primary: 200 100% 50%; /* Blue */
+    --water-secondary: 200 100% 95%; /* Light Blue */
+    --step-primary: 140 65% 50%; /* Green */
+    --step-secondary: 140 65% 95%; /* Light Green */
+    --sleep-primary: 260 60% 50%; /* Purple */
+    --sleep-secondary: 260 60% 95%; /* Light Purple */
+    --workout-primary: 0 85% 60%; /* Red */
+    --workout-secondary: 0 85% 95%; /* Light Red */
 
     /* === GLASSMORPHISM EFFECTS === */
     --glass-bg: 255 255 255 / 0.1;
@@ -105,16 +105,16 @@
     --ring: 140 65% 45%;
 
     /* === ENHANCED DARK HEALTH APP COLORS === */
-    --calorie-primary: 25 85% 55%;      /* Bright Orange */
-    --calorie-secondary: 25 40% 15%;    /* Dark Orange */
-    --water-primary: 200 100% 60%;      /* Bright Blue */
-    --water-secondary: 200 50% 15%;     /* Dark Blue */
-    --step-primary: 140 65% 55%;        /* Bright Green */
-    --step-secondary: 140 40% 15%;      /* Dark Green */
-    --sleep-primary: 260 60% 60%;       /* Bright Purple */
-    --sleep-secondary: 260 40% 15%;     /* Dark Purple */
-    --workout-primary: 0 85% 65%;       /* Bright Red */
-    --workout-secondary: 0 50% 15%;     /* Dark Red */
+    --calorie-primary: 25 85% 55%; /* Bright Orange */
+    --calorie-secondary: 25 40% 15%; /* Dark Orange */
+    --water-primary: 200 100% 60%; /* Bright Blue */
+    --water-secondary: 200 50% 15%; /* Dark Blue */
+    --step-primary: 140 65% 55%; /* Bright Green */
+    --step-secondary: 140 40% 15%; /* Dark Green */
+    --sleep-primary: 260 60% 60%; /* Bright Purple */
+    --sleep-secondary: 260 40% 15%; /* Dark Purple */
+    --workout-primary: 0 85% 65%; /* Bright Red */
+    --workout-secondary: 0 50% 15%; /* Dark Red */
 
     /* === GLASSMORPHISM EFFECTS DARK === */
     --glass-bg: 0 0 0 / 0.2;
@@ -170,7 +170,9 @@
     -webkit-user-select: none;
     user-select: none;
     overscroll-behavior: none;
-    font-feature-settings: "rlig" 1, "calt" 1;
+    font-feature-settings:
+      "rlig" 1,
+      "calt" 1;
   }
 
   /* Enable text selection for inputs and content areas */
@@ -215,7 +217,7 @@
     background: rgba(255, 255, 255, 0.15);
     backdrop-filter: blur(20px) saturate(1.5);
     border: 1px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 
+    box-shadow:
       0 8px 32px rgba(0, 0, 0, 0.08),
       inset 0 1px 0 rgba(255, 255, 255, 0.2);
   }
@@ -224,7 +226,7 @@
     background: rgba(255, 255, 255, 0.25);
     backdrop-filter: blur(16px) saturate(1.8);
     border: 1px solid rgba(255, 255, 255, 0.4);
-    box-shadow: 
+    box-shadow:
       0 16px 40px rgba(0, 0, 0, 0.12),
       inset 0 1px 0 rgba(255, 255, 255, 0.3);
   }
@@ -233,7 +235,7 @@
     background: rgba(255, 255, 255, 0.35);
     backdrop-filter: blur(12px) saturate(2);
     border: 1px solid rgba(255, 255, 255, 0.5);
-    box-shadow: 
+    box-shadow:
       0 24px 48px rgba(0, 0, 0, 0.15),
       inset 0 1px 0 rgba(255, 255, 255, 0.4);
   }
@@ -242,7 +244,7 @@
     background: rgba(0, 0, 0, 0.15);
     backdrop-filter: blur(20px) saturate(1.5);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 
+    box-shadow:
       0 8px 32px rgba(0, 0, 0, 0.3),
       inset 0 1px 0 rgba(255, 255, 255, 0.1);
   }
@@ -385,7 +387,7 @@
   }
 
   .hover-glow:hover {
-    box-shadow: 
+    box-shadow:
       0 0 20px rgba(34, 197, 94, 0.3),
       0 10px 20px rgba(0, 0, 0, 0.1);
   }
@@ -425,7 +427,7 @@
   }
 
   .pulse-ring::before {
-    content: '';
+    content: "";
     position: absolute;
     top: 50%;
     left: 50%;
@@ -455,11 +457,11 @@
     .mobile-padding {
       @apply px-4;
     }
-    
+
     .mobile-text {
       @apply text-sm;
     }
-    
+
     .mobile-heading {
       @apply text-lg;
     }
@@ -499,7 +501,10 @@
 
   /* === THEME TRANSITIONS === */
   .theme-transition {
-    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    transition:
+      background-color 0.3s ease,
+      color 0.3s ease,
+      border-color 0.3s ease;
   }
 
   /* === PROFESSIONAL COMPONENT STYLES === */
@@ -564,9 +569,13 @@
   }
 
   .metric-card::before {
-    content: '';
+    content: "";
     @apply absolute inset-0 opacity-10;
-    background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--accent)) 100%);
+    background: linear-gradient(
+      135deg,
+      hsl(var(--primary)) 0%,
+      hsl(var(--accent)) 100%
+    );
   }
 
   /* === DARK MODE ENHANCEMENTS === */
@@ -582,40 +591,52 @@
 
   /* === THEME-AWARE GRADIENTS === */
   .gradient-health {
-    background: linear-gradient(135deg, 
-      hsl(var(--primary)) 0%, 
-      hsl(var(--accent)) 50%, 
-      hsl(var(--secondary)) 100%);
+    background: linear-gradient(
+      135deg,
+      hsl(var(--primary)) 0%,
+      hsl(var(--accent)) 50%,
+      hsl(var(--secondary)) 100%
+    );
   }
 
   .gradient-calorie {
-    background: linear-gradient(135deg, 
-      hsl(var(--calorie-primary)) 0%, 
-      hsl(var(--calorie-secondary)) 100%);
+    background: linear-gradient(
+      135deg,
+      hsl(var(--calorie-primary)) 0%,
+      hsl(var(--calorie-secondary)) 100%
+    );
   }
 
   .gradient-water {
-    background: linear-gradient(135deg, 
-      hsl(var(--water-primary)) 0%, 
-      hsl(var(--water-secondary)) 100%);
+    background: linear-gradient(
+      135deg,
+      hsl(var(--water-primary)) 0%,
+      hsl(var(--water-secondary)) 100%
+    );
   }
 
   .gradient-step {
-    background: linear-gradient(135deg, 
-      hsl(var(--step-primary)) 0%, 
-      hsl(var(--step-secondary)) 100%);
+    background: linear-gradient(
+      135deg,
+      hsl(var(--step-primary)) 0%,
+      hsl(var(--step-secondary)) 100%
+    );
   }
 
   .gradient-sleep {
-    background: linear-gradient(135deg, 
-      hsl(var(--sleep-primary)) 0%, 
-      hsl(var(--sleep-secondary)) 100%);
+    background: linear-gradient(
+      135deg,
+      hsl(var(--sleep-primary)) 0%,
+      hsl(var(--sleep-secondary)) 100%
+    );
   }
 
   .gradient-workout {
-    background: linear-gradient(135deg, 
-      hsl(var(--workout-primary)) 0%, 
-      hsl(var(--workout-secondary)) 100%);
+    background: linear-gradient(
+      135deg,
+      hsl(var(--workout-primary)) 0%,
+      hsl(var(--workout-secondary)) 100%
+    );
   }
 
   /* === RESPONSIVE MOBILE OPTIMIZATIONS === */
@@ -624,11 +645,11 @@
       @apply text-sm;
       padding: 1rem;
     }
-    
+
     .metric-card h3 {
       @apply text-base;
     }
-    
+
     .responsive-grid {
       grid-template-columns: 1fr;
     }

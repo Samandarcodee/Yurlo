@@ -77,11 +77,7 @@ const CircularProgress: React.FC<CircularProgressProps> = ({
 
   return (
     <div className="relative" style={{ width: size, height: size }}>
-      <svg
-        className="transform -rotate-90"
-        width={size}
-        height={size}
-      >
+      <svg className="transform -rotate-90" width={size} height={size}>
         {/* Background circle */}
         <circle
           cx={size / 2}
@@ -115,7 +111,9 @@ const CircularProgress: React.FC<CircularProgressProps> = ({
 export default function Index() {
   const { user } = useUser();
   const { user: telegramUser } = useTelegram();
-  const [todayTracking, setTodayTracking] = useState<DailyTracking | null>(null);
+  const [todayTracking, setTodayTracking] = useState<DailyTracking | null>(
+    null,
+  );
   const [weeklyStats, setWeeklyStats] = useState<WeeklyStats | null>(null);
   const [todaySteps, setTodaySteps] = useState<any>(null);
   const [stepGoals, setStepGoals] = useState<any>(null);
@@ -134,13 +132,13 @@ export default function Index() {
 
     const loadAllData = async () => {
       setIsLoading(true);
-      
+
       try {
         console.log("Loading user data for:", telegramId);
-        
+
         // Get today's tracking data
         const tracking = getTodayTracking(telegramId);
-        
+
         // Add sample data if this is first time (for demo purposes)
         if (tracking.caloriesConsumed === 0) {
           addSampleData(telegramId, user);
@@ -149,18 +147,22 @@ export default function Index() {
         } else {
           setTodayTracking(tracking);
         }
-        
+
         // Get weekly statistics
         const weekly = getWeeklyStats(telegramId);
         setWeeklyStats(weekly);
-        
+
         // Load step tracking data
-        addSampleStepData(telegramId, parseFloat(user.height), parseFloat(user.weight));
+        addSampleStepData(
+          telegramId,
+          parseFloat(user.height),
+          parseFloat(user.weight),
+        );
         const steps = getTodaySteps(telegramId);
         const stepGoals = getStepGoals(telegramId);
         setTodaySteps(steps);
         setStepGoals(stepGoals);
-        
+
         // Load water tracking data
         const waterGoal = calculateWaterGoal(user);
         addSampleWaterData(telegramId, waterGoal);
@@ -168,20 +170,19 @@ export default function Index() {
         const waterGoals = getWaterGoals(telegramId);
         setTodayWater(water);
         setWaterGoals(waterGoals);
-        
+
         // Load workout data
         addSampleWorkoutData(telegramId, parseFloat(user.weight));
         const workouts = getWeeklyWorkoutSummary(telegramId);
         setWeeklyWorkouts(workouts);
-        
+
         // Check for step achievements
         checkAchievements(telegramId);
-        
+
         setHasLoadedData(true);
         console.log("All data loaded successfully");
-        
       } catch (error) {
-        console.error('Error loading tracking data:', error);
+        console.error("Error loading tracking data:", error);
       } finally {
         setIsLoading(false);
       }
@@ -208,11 +209,11 @@ export default function Index() {
         carbs: acc.carbs + meal.carbs,
         fat: acc.fat + meal.fat,
       }),
-      { protein: 0, carbs: 0, fat: 0 }
+      { protein: 0, carbs: 0, fat: 0 },
     );
 
     const totalGrams = totals.protein + totals.carbs + totals.fat;
-    
+
     if (totalGrams === 0) {
       return { protein: 28, fat: 35, carbs: 37 };
     }
@@ -236,75 +237,91 @@ export default function Index() {
       caloriesBurned: Math.round(
         // Base calories from tracking
         todayTracking.caloriesBurned +
-        // Calories from steps (approx 0.04 cal per step)
-        (todaySteps?.steps || 0) * 0.04 + 
-        // Calories from today's workouts
-        (weeklyWorkouts?.totalCalories || 0) / 7 +
-        // Additional metabolic calories based on activity level
-        (todayTracking?.activities?.reduce((sum, activity) => 
-          sum + (activity.duration * 5), 0) || 0) // roughly 5 cal per minute
+          // Calories from steps (approx 0.04 cal per step)
+          (todaySteps?.steps || 0) * 0.04 +
+          // Calories from today's workouts
+          (weeklyWorkouts?.totalCalories || 0) / 7 +
+          // Additional metabolic calories based on activity level
+          (todayTracking?.activities?.reduce(
+            (sum, activity) => sum + activity.duration * 5,
+            0,
+          ) || 0), // roughly 5 cal per minute
       ),
       caloriesEaten: todayTracking.caloriesConsumed,
       caloriesTarget: nutritionGoals.calories,
-      
+
       // Real nutrition breakdown
       protein: nutritionBreakdown.protein,
       fat: nutritionBreakdown.fat,
       carbs: nutritionBreakdown.carbs,
-      
+
       // Weekly statistics (real or calculated)
       weeklySteps: weeklyStats?.averageSteps || 0,
-      weeklySleep: weeklyStats?.averageSleep 
+      weeklySleep: weeklyStats?.averageSleep
         ? `${Math.floor(weeklyStats.averageSleep)}h ${Math.round((weeklyStats.averageSleep % 1) * 60)}m`
         : "0h 0m",
       weeklyWorkouts: weeklyStats?.totalWorkouts * 60 || 0, // convert to minutes
       weeklyMeditation: weeklyStats?.totalMeditation || 0,
       sleepQuality: weeklyStats?.averageSleepQuality || 0,
       sleepConsistency: weeklyStats?.sleepConsistency || 0,
-      
+
       // Daily values from tracking (use enhanced tracking systems)
       todaySteps: todaySteps?.steps || todayTracking.steps,
       todayDistance: todaySteps?.distance || 0,
       todayActiveMinutes: todaySteps?.activeMinutes || 0,
       stepGoal: stepGoals?.dailySteps || 10000,
       todayWater: todayWater?.totalIntake || todayTracking.waterIntake,
-      waterTarget: todayWater?.goal || waterGoals?.dailyGlasses || nutritionGoals.water,
+      waterTarget:
+        todayWater?.goal || waterGoals?.dailyGlasses || nutritionGoals.water,
       waterGoalReached: todayWater?.goalReached || false,
-      waterProgress: todayWater ? Math.round((todayWater.totalIntake / todayWater.goal) * 100) : 0,
+      waterProgress: todayWater
+        ? Math.round((todayWater.totalIntake / todayWater.goal) * 100)
+        : 0,
       weeklyWorkoutMinutes: weeklyWorkouts?.totalMinutes || 0,
       weeklyWorkoutTarget: weeklyWorkouts?.goalMinutes || 150,
       workoutProgress: weeklyWorkouts?.minuteProgress || 0,
-      
+
       // Enhanced weekly statistics
       weeklyCalories: weeklyStats?.averageCalories || 0,
       weeklySleepHours: weeklyStats?.averageSleep || 0,
-      
+
       currentWeight: parseFloat(user.weight),
-      
+
       // User profile data
       bmr: user.bmr,
       dailyCalories: user.dailyCalories,
       goal: user.goal,
     };
-  }, [user, todayTracking, nutritionGoals, nutritionBreakdown, weeklyStats, todaySteps, stepGoals, todayWater, waterGoals, weeklyWorkouts]);
+  }, [
+    user,
+    todayTracking,
+    nutritionGoals,
+    nutritionBreakdown,
+    weeklyStats,
+    todaySteps,
+    stepGoals,
+    todayWater,
+    waterGoals,
+    weeklyWorkouts,
+  ]);
 
-  const todayDate = new Date().toLocaleDateString('en-US', {
-    weekday: 'short',
-    month: 'short',
-    day: 'numeric'
+  const todayDate = new Date().toLocaleDateString("en-US", {
+    weekday: "short",
+    month: "short",
+    day: "numeric",
   });
 
   // Quick action handlers
   const handleAddWater = () => {
     if (todayWater) {
       // Use professional water tracking system
-      const updated = addWaterEntry(telegramId, 1, 'water', 'room');
+      const updated = addWaterEntry(telegramId, 1, "water", "room");
       setTodayWater(updated);
-      
+
       // Also update general tracking for compatibility
       if (todayTracking) {
         const generalUpdated = updateTodayTracking(telegramId, {
-          waterIntake: updated.totalIntake
+          waterIntake: updated.totalIntake,
         });
         setTodayTracking(generalUpdated);
       }
@@ -314,8 +331,14 @@ export default function Index() {
   const handleAddWorkout = (type: string, duration: number) => {
     if (user && weeklyWorkouts) {
       // Log quick workout
-      logQuickWorkout(telegramId, type as any, duration, 'moderate', parseFloat(user.weight));
-      
+      logQuickWorkout(
+        telegramId,
+        type as any,
+        duration,
+        "moderate",
+        parseFloat(user.weight),
+      );
+
       // Refresh weekly workout summary
       const updated = getWeeklyWorkoutSummary(telegramId);
       setWeeklyWorkouts(updated);
@@ -325,17 +348,22 @@ export default function Index() {
   const handleAddSteps = (steps: number) => {
     if (user && todaySteps) {
       // Update step tracking system
-      const updatedSteps = addSteps(telegramId, steps, parseFloat(user.height), parseFloat(user.weight));
+      const updatedSteps = addSteps(
+        telegramId,
+        steps,
+        parseFloat(user.height),
+        parseFloat(user.weight),
+      );
       setTodaySteps(updatedSteps);
-      
+
       // Also update general tracking for compatibility
       if (todayTracking) {
         const updated = updateTodayTracking(telegramId, {
-          steps: updatedSteps.steps
+          steps: updatedSteps.steps,
         });
         setTodayTracking(updated);
       }
-      
+
       // Check for new achievements
       checkAchievements(telegramId);
     }
@@ -352,7 +380,9 @@ export default function Index() {
           </div>
           <div className="space-y-2">
             <p className="text-foreground font-medium">Yuklanmoqda...</p>
-            <p className="text-muted-foreground text-sm">Ma'lumotlaringiz tayyorlanmoqda</p>
+            <p className="text-muted-foreground text-sm">
+              Ma'lumotlaringiz tayyorlanmoqda
+            </p>
           </div>
         </div>
       </div>
@@ -365,8 +395,12 @@ export default function Index() {
         {/* Enhanced Header */}
         <div className="responsive-flex justify-between py-6">
           <div>
-            <p className="responsive-text text-lg font-semibold text-foreground">Bugun, {todayDate}</p>
-            <p className="text-muted-foreground text-sm">Salom, {userData.name}!</p>
+            <p className="responsive-text text-lg font-semibold text-foreground">
+              Bugun, {todayDate}
+            </p>
+            <p className="text-muted-foreground text-sm">
+              Salom, {userData.name}!
+            </p>
           </div>
           <div className="w-10 h-10 bg-muted rounded-full flex items-center justify-center">
             <Bell className="w-5 h-5 text-muted-foreground" />
@@ -401,24 +435,36 @@ export default function Index() {
           {/* Enhanced Nutrition Breakdown */}
           <div className="responsive-flex justify-center space-x-4 sm:space-x-8 mb-8">
             <div className="text-center">
-              <div className="responsive-text text-muted-foreground mb-2">Protein</div>
+              <div className="responsive-text text-muted-foreground mb-2">
+                Protein
+              </div>
               <div className="flex items-center justify-center space-x-2">
                 <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
-                <span className="responsive-text font-bold text-foreground">{Math.round(userData.protein || 0)}%</span>
+                <span className="responsive-text font-bold text-foreground">
+                  {Math.round(userData.protein || 0)}%
+                </span>
               </div>
             </div>
             <div className="text-center">
-              <div className="responsive-text text-muted-foreground mb-2">Yog'</div>
+              <div className="responsive-text text-muted-foreground mb-2">
+                Yog'
+              </div>
               <div className="flex items-center justify-center space-x-2">
                 <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-                <span className="responsive-text font-bold text-foreground">{Math.round(userData.fat || 0)}%</span>
+                <span className="responsive-text font-bold text-foreground">
+                  {Math.round(userData.fat || 0)}%
+                </span>
               </div>
             </div>
             <div className="text-center">
-              <div className="responsive-text text-muted-foreground mb-2">Uglevod</div>
+              <div className="responsive-text text-muted-foreground mb-2">
+                Uglevod
+              </div>
               <div className="flex items-center justify-center space-x-2">
                 <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                <span className="responsive-text font-bold text-foreground">{Math.round(userData.carbs || 0)}%</span>
+                <span className="responsive-text font-bold text-foreground">
+                  {Math.round(userData.carbs || 0)}%
+                </span>
               </div>
             </div>
           </div>
@@ -461,34 +507,51 @@ export default function Index() {
             <CardContent className="p-6">
               <div className="flex items-center justify-between mb-4">
                 <div>
-                  <h3 className="heading-responsive text-foreground">Maqsadga jarayon</h3>
+                  <h3 className="heading-responsive text-foreground">
+                    Maqsadga jarayon
+                  </h3>
                   <p className="text-sm text-muted-foreground">
-                    {Math.round(userData.caloriesEaten)} kcal dan {userData.caloriesTarget} kcal
+                    {Math.round(userData.caloriesEaten)} kcal dan{" "}
+                    {userData.caloriesTarget} kcal
                   </p>
                 </div>
                 <div className="text-right">
                   <p className="text-3xl font-bold text-primary">
-                    {Math.round((userData.caloriesEaten / userData.caloriesTarget) * 100)}%
+                    {Math.round(
+                      (userData.caloriesEaten / userData.caloriesTarget) * 100,
+                    )}
+                    %
                   </p>
-                  <p className="text-xs text-muted-foreground">{userData.caloriesTarget - Math.round(userData.caloriesEaten)} kcal qoldi</p>
+                  <p className="text-xs text-muted-foreground">
+                    {userData.caloriesTarget -
+                      Math.round(userData.caloriesEaten)}{" "}
+                    kcal qoldi
+                  </p>
                 </div>
               </div>
-              
+
               <div className="space-y-3">
                 <div className="relative">
                   <div className="w-full bg-muted rounded-full h-3">
-                    <div 
+                    <div
                       className="bg-gradient-to-r from-primary to-primary/80 h-3 rounded-full transition-all duration-1000 ease-out relative"
-                      style={{ width: `${Math.min((userData.caloriesEaten / userData.caloriesTarget) * 100, 100)}%` }}
+                      style={{
+                        width: `${Math.min((userData.caloriesEaten / userData.caloriesTarget) * 100, 100)}%`,
+                      }}
                     >
                       <div className="absolute right-0 top-1/2 w-3 h-3 bg-background rounded-full shadow-md transform -translate-y-1/2 translate-x-1/2"></div>
                     </div>
                   </div>
                 </div>
-                
+
                 <div className="flex justify-between text-xs text-muted-foreground">
                   <span>{Math.round(userData.caloriesEaten)} kcal</span>
-                  <span className="font-medium">{Math.round((userData.caloriesEaten / userData.caloriesTarget) * 100)}%</span>
+                  <span className="font-medium">
+                    {Math.round(
+                      (userData.caloriesEaten / userData.caloriesTarget) * 100,
+                    )}
+                    %
+                  </span>
                   <span>{userData.caloriesTarget} kcal</span>
                 </div>
               </div>
@@ -501,23 +564,38 @@ export default function Index() {
           <Card className="card-professional">
             <CardContent className="p-6">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="heading-responsive text-foreground">Bu hafta o'rtacha</h3>
-                <Link to="/analytics" className="text-primary text-sm font-medium hover:text-primary/80 transition-colors">
+                <h3 className="heading-responsive text-foreground">
+                  Bu hafta o'rtacha
+                </h3>
+                <Link
+                  to="/analytics"
+                  className="text-primary text-sm font-medium hover:text-primary/80 transition-colors"
+                >
                   Batafsil
                 </Link>
               </div>
-              
+
               <div className="grid grid-cols-3 gap-4">
                 <div className="text-center">
-                  <p className="text-2xl font-bold text-foreground">{Math.round(userData.weeklyCalories || 0)}</p>
-                  <p className="text-xs text-muted-foreground">O'rtacha kaloriya</p>
+                  <p className="text-2xl font-bold text-foreground">
+                    {Math.round(userData.weeklyCalories || 0)}
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    O'rtacha kaloriya
+                  </p>
                 </div>
                 <div className="text-center">
-                  <p className="text-2xl font-bold text-foreground">{Math.round(userData.weeklyWorkouts || 0)}m</p>
-                  <p className="text-xs text-muted-foreground">O'rtacha mashq</p>
+                  <p className="text-2xl font-bold text-foreground">
+                    {Math.round(userData.weeklyWorkouts || 0)}m
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    O'rtacha mashq
+                  </p>
                 </div>
                 <div className="text-center">
-                  <p className="text-2xl font-bold text-foreground">{Math.round(userData.weeklySleepHours || 0)}h</p>
+                  <p className="text-2xl font-bold text-foreground">
+                    {Math.round(userData.weeklySleepHours || 0)}h
+                  </p>
                   <p className="text-xs text-muted-foreground">O'rtacha uyqu</p>
                 </div>
               </div>
@@ -530,10 +608,12 @@ export default function Index() {
           <div className="flex items-center justify-between mb-6">
             <h2 className="heading-responsive text-foreground">Kuzatuvlar</h2>
             <Link to="/analytics">
-              <button className="text-sm text-primary font-medium hover:text-primary/80 transition-colors">Batafsil</button>
+              <button className="text-sm text-primary font-medium hover:text-primary/80 transition-colors">
+                Batafsil
+              </button>
             </Link>
           </div>
-          
+
           <div className="grid grid-cols-2 gap-4">
             {/* Walk Steps */}
             <Link to="/step-tracker">
@@ -543,18 +623,27 @@ export default function Index() {
                     <Footprints className="w-4 h-4 text-green-600 dark:text-green-400" />
                   </div>
                   <div className="flex items-center space-x-1">
-                    <div className={`w-2 h-2 rounded-full ${
-                      userData.todaySteps >= userData.stepGoal ? 'bg-green-500' : 'bg-orange-500'
-                    }`} />
+                    <div
+                      className={`w-2 h-2 rounded-full ${
+                        userData.todaySteps >= userData.stepGoal
+                          ? "bg-green-500"
+                          : "bg-orange-500"
+                      }`}
+                    />
                     <span className="text-xs text-muted-foreground">
-                      {Math.round((userData.todaySteps / userData.stepGoal) * 100)}%
+                      {Math.round(
+                        (userData.todaySteps / userData.stepGoal) * 100,
+                      )}
+                      %
                     </span>
                   </div>
                 </div>
                 <div className="space-y-1">
                   <div className="flex items-center justify-between">
-                    <p className="text-xs text-muted-foreground font-medium">Qadamlar</p>
-                    <button 
+                    <p className="text-xs text-muted-foreground font-medium">
+                      Qadamlar
+                    </p>
+                    <button
                       onClick={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
@@ -566,22 +655,31 @@ export default function Index() {
                     </button>
                   </div>
                   <p className="text-lg font-bold text-foreground">
-                    {userData.todaySteps ? userData.todaySteps.toLocaleString() : '0'}
+                    {userData.todaySteps
+                      ? userData.todaySteps.toLocaleString()
+                      : "0"}
                   </p>
                   <div className="flex items-center justify-between">
                     <p className="text-xs text-green-600 dark:text-green-400 font-medium">
-                      Maqsad: {userData.stepGoal ? userData.stepGoal.toLocaleString() : '10,000'}
+                      Maqsad:{" "}
+                      {userData.stepGoal
+                        ? userData.stepGoal.toLocaleString()
+                        : "10,000"}
                     </p>
                     <p className="text-xs text-blue-600 dark:text-blue-400">
-                      {userData.todayDistance ? `${userData.todayDistance.toFixed(1)} km` : '0 km'}
+                      {userData.todayDistance
+                        ? `${userData.todayDistance.toFixed(1)} km`
+                        : "0 km"}
                     </p>
                   </div>
-                  
+
                   {/* Progress bar */}
                   <div className="w-full bg-muted rounded-full h-1.5 mt-2">
                     <div
                       className="bg-green-500 h-1.5 rounded-full transition-all duration-500"
-                      style={{ width: `${Math.min((userData.todaySteps / userData.stepGoal) * 100, 100)}%` }}
+                      style={{
+                        width: `${Math.min((userData.todaySteps / userData.stepGoal) * 100, 100)}%`,
+                      }}
                     ></div>
                   </div>
                 </div>
@@ -596,22 +694,38 @@ export default function Index() {
                     <Moon className="w-4 h-4 text-purple-600 dark:text-purple-400" />
                   </div>
                   <div className="flex items-center space-x-1">
-                    <div className={`w-2 h-2 rounded-full ${
-                      userData.sleepQuality >= 4 ? 'bg-green-500' :
-                      userData.sleepQuality >= 3 ? 'bg-yellow-500' : 'bg-red-500'
-                    }`} />
-                    <span className="text-xs text-muted-foreground">{userData.sleepQuality.toFixed(1)}/5</span>
+                    <div
+                      className={`w-2 h-2 rounded-full ${
+                        userData.sleepQuality >= 4
+                          ? "bg-green-500"
+                          : userData.sleepQuality >= 3
+                            ? "bg-yellow-500"
+                            : "bg-red-500"
+                      }`}
+                    />
+                    <span className="text-xs text-muted-foreground">
+                      {userData.sleepQuality.toFixed(1)}/5
+                    </span>
                   </div>
                 </div>
                 <div className="space-y-1">
-                  <p className="text-xs text-muted-foreground font-medium">Uyqu</p>
-                  <p className="text-lg font-bold text-foreground">{userData.weeklySleep}</p>
+                  <p className="text-xs text-muted-foreground font-medium">
+                    Uyqu
+                  </p>
+                  <p className="text-lg font-bold text-foreground">
+                    {userData.weeklySleep}
+                  </p>
                   <div className="flex items-center justify-between">
                     <p className="text-xs text-purple-600 dark:text-purple-400 font-medium">
-                      Sifat: {userData.sleepQuality > 0 ? userData.sleepQuality.toFixed(1) : 'N/A'}
+                      Sifat:{" "}
+                      {userData.sleepQuality > 0
+                        ? userData.sleepQuality.toFixed(1)
+                        : "N/A"}
                     </p>
                     <p className="text-xs text-purple-500 dark:text-purple-400">
-                      {userData.sleepConsistency > 0 ? `${userData.sleepConsistency}% barqaror` : 'Uyqu kuzatish'}
+                      {userData.sleepConsistency > 0
+                        ? `${userData.sleepConsistency}% barqaror`
+                        : "Uyqu kuzatish"}
                     </p>
                   </div>
                 </div>
@@ -626,28 +740,39 @@ export default function Index() {
                     <Dumbbell className="w-4 h-4 text-orange-600 dark:text-orange-400" />
                   </div>
                   <div className="flex items-center space-x-1">
-                    <div className={`w-2 h-2 rounded-full ${
-                      userData.workoutProgress >= 100 ? 'bg-green-500' : 
-                      userData.workoutProgress >= 70 ? 'bg-yellow-500' : 'bg-orange-500'
-                    }`} />
-                    <span className="text-xs text-muted-foreground">{userData.workoutProgress}%</span>
+                    <div
+                      className={`w-2 h-2 rounded-full ${
+                        userData.workoutProgress >= 100
+                          ? "bg-green-500"
+                          : userData.workoutProgress >= 70
+                            ? "bg-yellow-500"
+                            : "bg-orange-500"
+                      }`}
+                    />
+                    <span className="text-xs text-muted-foreground">
+                      {userData.workoutProgress}%
+                    </span>
                   </div>
                 </div>
                 <div className="space-y-1">
                   <div className="flex items-center justify-between">
-                    <p className="text-xs text-muted-foreground font-medium">Mashqlar</p>
-                    <button 
+                    <p className="text-xs text-muted-foreground font-medium">
+                      Mashqlar
+                    </p>
+                    <button
                       onClick={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
-                        handleAddWorkout('cardio', 20);
+                        handleAddWorkout("cardio", 20);
                       }}
                       className="w-5 h-5 bg-orange-500 rounded-full flex items-center justify-center hover:bg-orange-600 transition-colors"
                     >
                       <Plus className="w-3 h-3 text-white" />
                     </button>
                   </div>
-                  <p className="text-lg font-bold text-foreground">{userData.weeklyWorkoutMinutes} min</p>
+                  <p className="text-lg font-bold text-foreground">
+                    {userData.weeklyWorkoutMinutes} min
+                  </p>
                   <div className="flex items-center justify-between">
                     <p className="text-xs text-orange-600 dark:text-orange-400 font-medium">
                       Haftalik jami
@@ -656,12 +781,14 @@ export default function Index() {
                       Maqsad: {userData.weeklyWorkoutTarget}min
                     </p>
                   </div>
-                  
+
                   {/* Progress bar */}
                   <div className="w-full bg-muted rounded-full h-1.5 mt-2">
                     <div
                       className="bg-orange-500 h-1.5 rounded-full transition-all duration-500"
-                      style={{ width: `${Math.min(userData.workoutProgress, 100)}%` }}
+                      style={{
+                        width: `${Math.min(userData.workoutProgress, 100)}%`,
+                      }}
                     ></div>
                   </div>
                 </div>
@@ -679,17 +806,26 @@ export default function Index() {
                     {userData.waterGoalReached && (
                       <div className="text-xs">🎉</div>
                     )}
-                    <div className={`w-2 h-2 rounded-full ${
-                      userData.waterGoalReached ? 'bg-green-500' : 
-                      userData.waterProgress >= 70 ? 'bg-blue-500' : 'bg-gray-400'
-                    }`} />
-                    <span className="text-xs text-muted-foreground">{userData.waterProgress}%</span>
+                    <div
+                      className={`w-2 h-2 rounded-full ${
+                        userData.waterGoalReached
+                          ? "bg-green-500"
+                          : userData.waterProgress >= 70
+                            ? "bg-blue-500"
+                            : "bg-gray-400"
+                      }`}
+                    />
+                    <span className="text-xs text-muted-foreground">
+                      {userData.waterProgress}%
+                    </span>
                   </div>
                 </div>
                 <div className="space-y-1">
                   <div className="flex items-center justify-between">
-                    <p className="text-xs text-muted-foreground font-medium">Suv</p>
-                    <button 
+                    <p className="text-xs text-muted-foreground font-medium">
+                      Suv
+                    </p>
+                    <button
                       onClick={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
@@ -701,24 +837,33 @@ export default function Index() {
                     </button>
                   </div>
                   <p className="text-lg font-bold text-foreground">
-                    {userData.todayWater?.toFixed(1) || 0}/{userData.waterTarget} stakan
+                    {userData.todayWater?.toFixed(1) || 0}/
+                    {userData.waterTarget} stakan
                   </p>
                   <div className="flex items-center justify-between">
                     <p className="text-xs text-blue-600 dark:text-blue-400 font-medium">
-                      {userData.waterGoalReached ? 'Maqsadga erishildi!' : 'Ichishda davom eting'}
+                      {userData.waterGoalReached
+                        ? "Maqsadga erishildi!"
+                        : "Ichishda davom eting"}
                     </p>
                     <p className="text-xs text-muted-foreground">
-                      {userData.waterGoalReached ? '✅' : `${(userData.waterTarget - (userData.todayWater || 0)).toFixed(1)} qoldi`}
+                      {userData.waterGoalReached
+                        ? "✅"
+                        : `${(userData.waterTarget - (userData.todayWater || 0)).toFixed(1)} qoldi`}
                     </p>
                   </div>
-                  
+
                   {/* Progress bar */}
                   <div className="w-full bg-muted rounded-full h-1.5 mt-2">
                     <div
                       className={`h-1.5 rounded-full transition-all duration-500 ${
-                        userData.waterGoalReached ? 'bg-green-500' : 'bg-blue-500'
+                        userData.waterGoalReached
+                          ? "bg-green-500"
+                          : "bg-blue-500"
                       }`}
-                      style={{ width: `${Math.min(userData.waterProgress, 100)}%` }}
+                      style={{
+                        width: `${Math.min(userData.waterProgress, 100)}%`,
+                      }}
                     ></div>
                   </div>
                 </div>
@@ -734,10 +879,16 @@ export default function Index() {
                   <Zap className="w-4 h-4 text-yellow-600 dark:text-yellow-400" />
                 </div>
                 <div className="flex-1">
-                  <h4 className="font-semibold text-yellow-800 dark:text-yellow-200 mb-1">AI Tavsiya</h4>
+                  <h4 className="font-semibold text-yellow-800 dark:text-yellow-200 mb-1">
+                    AI Tavsiya
+                  </h4>
                   <p className="text-sm text-yellow-700 dark:text-yellow-300">
-                    Siz bugun {Math.round(userData.caloriesTarget - userData.caloriesEaten)} kaloriya kam iste'mol qildingiz. 
-                    Sog'lom atıştırmalık qo'shing.
+                    Siz bugun{" "}
+                    {Math.round(
+                      userData.caloriesTarget - userData.caloriesEaten,
+                    )}{" "}
+                    kaloriya kam iste'mol qildingiz. Sog'lom atıştırmalık
+                    qo'shing.
                   </p>
                 </div>
               </div>
@@ -751,10 +902,19 @@ export default function Index() {
                   <Activity className="w-4 h-4 text-red-600 dark:text-red-400" />
                 </div>
                 <div className="flex-1">
-                  <h4 className="font-semibold text-red-800 dark:text-red-200 mb-1">Harakat Tavsiyasi</h4>
+                  <h4 className="font-semibold text-red-800 dark:text-red-200 mb-1">
+                    Harakat Tavsiyasi
+                  </h4>
                   <p className="text-sm text-red-700 dark:text-red-300">
-                    Maqsaddan {Math.round(userData.caloriesEaten - userData.caloriesTarget)} kaloriya oshib ketdingiz. 
-                    Qo'shimcha {Math.round((userData.caloriesEaten - userData.caloriesTarget) / 8)} daqiqa yurish tavsiya etiladi.
+                    Maqsaddan{" "}
+                    {Math.round(
+                      userData.caloriesEaten - userData.caloriesTarget,
+                    )}{" "}
+                    kaloriya oshib ketdingiz. Qo'shimcha{" "}
+                    {Math.round(
+                      (userData.caloriesEaten - userData.caloriesTarget) / 8,
+                    )}{" "}
+                    daqiqa yurish tavsiya etiladi.
                   </p>
                 </div>
               </div>
@@ -768,12 +928,14 @@ export default function Index() {
                   <Droplets className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                 </div>
                 <div className="flex-1">
-                  <h4 className="font-semibold text-blue-800 dark:text-blue-200 mb-1">Suv Eslatmasi</h4>
+                  <h4 className="font-semibold text-blue-800 dark:text-blue-200 mb-1">
+                    Suv Eslatmasi
+                  </h4>
                   <p className="text-sm text-blue-700 dark:text-blue-300">
-                    Yana {userData.waterTarget - userData.todayWater} stakan suv ichishingiz kerak. 
-                    Gidratatsiya sog'ligingiz uchun muhim!
+                    Yana {userData.waterTarget - userData.todayWater} stakan suv
+                    ichishingiz kerak. Gidratatsiya sog'ligingiz uchun muhim!
                   </p>
-                  <button 
+                  <button
                     onClick={handleAddWater}
                     className="mt-2 px-3 py-1 bg-blue-500 text-white text-xs rounded-full hover:bg-blue-600 transition-colors"
                   >
@@ -787,21 +949,32 @@ export default function Index() {
           {/* Progress Summary */}
           <div className="mt-6 card-professional bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-950/20 dark:to-emerald-950/20 border border-green-200 dark:border-green-800">
             <div className="p-4">
-              <h4 className="font-semibold text-green-800 dark:text-green-200 mb-3">Bugungi xulosa</h4>
+              <h4 className="font-semibold text-green-800 dark:text-green-200 mb-3">
+                Bugungi xulosa
+              </h4>
               <div className="grid grid-cols-2 gap-4">
                 <div className="text-center">
                   <div className="text-2xl font-bold text-green-700 dark:text-green-300">
-                    {Math.round(((userData.caloriesEaten / userData.caloriesTarget) + 
-                                 (userData.todayWater / userData.waterTarget) + 
-                                 (userData.todaySteps / 10000)) / 3 * 100)}%
+                    {Math.round(
+                      ((userData.caloriesEaten / userData.caloriesTarget +
+                        userData.todayWater / userData.waterTarget +
+                        userData.todaySteps / 10000) /
+                        3) *
+                        100,
+                    )}
+                    %
                   </div>
-                  <div className="text-xs text-green-600 dark:text-green-400">Umumiy maqsad</div>
+                  <div className="text-xs text-green-600 dark:text-green-400">
+                    Umumiy maqsad
+                  </div>
                 </div>
                 <div className="text-center">
                   <div className="text-2xl font-bold text-green-700 dark:text-green-300">
                     {user?.bmr || 0}
                   </div>
-                  <div className="text-xs text-green-600 dark:text-green-400">BMR</div>
+                  <div className="text-xs text-green-600 dark:text-green-400">
+                    BMR
+                  </div>
                 </div>
               </div>
             </div>
@@ -815,7 +988,7 @@ export default function Index() {
                 <span className="font-semibold">Ovqat Qo'shish</span>
               </Button>
             </Link>
-            
+
             <div className="grid grid-cols-3 gap-3">
               <Button
                 onClick={handleAddWater}
@@ -834,7 +1007,7 @@ export default function Index() {
                 Qadam +1K
               </Button>
               <Button
-                onClick={() => handleAddWorkout('strength', 30)}
+                onClick={() => handleAddWorkout("strength", 30)}
                 variant="outline"
                 className="h-12 border-orange-200 hover:bg-orange-50 dark:hover:bg-orange-950/20 text-orange-700 dark:text-orange-300 font-semibold rounded-xl"
               >

@@ -42,11 +42,13 @@ export function Layout({ children }: LayoutProps) {
         <div className="flex items-center justify-between px-4 py-3">
           <div className="flex items-center space-x-2">
             <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
-              <span className="text-primary-foreground text-sm font-bold">Y</span>
+              <span className="text-primary-foreground text-sm font-bold">
+                Y
+              </span>
             </div>
             <span className="font-semibold text-foreground">Yurlo AI</span>
           </div>
-          
+
           {/* Theme Toggle Button */}
           <ThemeToggle />
         </div>
@@ -59,9 +61,7 @@ export function Layout({ children }: LayoutProps) {
           paddingBottom: platform === "ios" ? "90px" : "80px", // iOS uchun qo'shimcha bo'sh joy
         }}
       >
-        <div className="max-w-md mx-auto px-4 sm:px-6">
-          {children}
-        </div>
+        <div className="max-w-md mx-auto px-4 sm:px-6">{children}</div>
       </main>
 
       {/* Enhanced Bottom Navigation */}

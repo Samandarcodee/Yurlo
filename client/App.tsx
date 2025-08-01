@@ -71,7 +71,9 @@ const AppRoutes = () => {
                 : "Yuklanmoqda..."}
             </p>
             {isTelegramReady && (
-              <p className="text-muted-foreground text-sm">Platform: {platform}</p>
+              <p className="text-muted-foreground text-sm">
+                Platform: {platform}
+              </p>
             )}
           </div>
         </div>

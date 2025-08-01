@@ -1,10 +1,30 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
 import {
-  ArrowLeft, TrendingUp, TrendingDown, Calendar, Target, Activity,
-  Heart, Droplets, Footprints, Moon, Utensils, Flame, Award,
-  BarChart3, PieChart, LineChart, Zap, Star, Shield, AlertCircle,
-  ChevronRight, Filter, Download, Share,
+  ArrowLeft,
+  TrendingUp,
+  TrendingDown,
+  Calendar,
+  Target,
+  Activity,
+  Heart,
+  Droplets,
+  Footprints,
+  Moon,
+  Utensils,
+  Flame,
+  Award,
+  BarChart3,
+  PieChart,
+  LineChart,
+  Zap,
+  Star,
+  Shield,
+  AlertCircle,
+  ChevronRight,
+  Filter,
+  Download,
+  Share,
 } from "lucide-react";
 import {
   LineChart as RechartsLineChart,
@@ -50,16 +70,23 @@ import {
 export default function Analytics() {
   const { user } = useUser();
   const { user: telegramUser } = useTelegram();
-  
-  const [selectedPeriod, setSelectedPeriod] = useState<'week' | 'month' | 'year'>('month');
+
+  const [selectedPeriod, setSelectedPeriod] = useState<
+    "week" | "month" | "year"
+  >("month");
   const [overview, setOverview] = useState<AnalyticsOverview | null>(null);
-  const [healthScore, setHealthScore] = useState<{ score: number; factors: any[] } | null>(null);
+  const [healthScore, setHealthScore] = useState<{
+    score: number;
+    factors: any[];
+  } | null>(null);
   const [caloriesData, setCaloriesData] = useState<TrendData | null>(null);
   const [weightData, setWeightData] = useState<TrendData | null>(null);
   const [stepsData, setStepsData] = useState<TrendData | null>(null);
   const [sleepData, setSleepData] = useState<TrendData | null>(null);
-  const [nutritionAnalytics, setNutritionAnalytics] = useState<NutritionAnalytics | null>(null);
-  const [activityAnalytics, setActivityAnalytics] = useState<ActivityAnalytics | null>(null);
+  const [nutritionAnalytics, setNutritionAnalytics] =
+    useState<NutritionAnalytics | null>(null);
+  const [activityAnalytics, setActivityAnalytics] =
+    useState<ActivityAnalytics | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   const telegramId = telegramUser?.id?.toString() || "demo_user_123";
@@ -67,18 +94,30 @@ export default function Analytics() {
   useEffect(() => {
     if (user) {
       setIsLoading(true);
-      
+
       try {
         // Load all analytics data
         const overviewData = getAnalyticsOverview(telegramId);
         const healthScoreData = calculateHealthScore(telegramId);
-        const caloriesChartData = getCaloriesChartData(telegramId, selectedPeriod === 'week' ? 7 : selectedPeriod === 'month' ? 30 : 365);
-        const weightChartData = getWeightChartData(telegramId, selectedPeriod === 'week' ? 7 : selectedPeriod === 'month' ? 30 : 365);
-        const stepsChartData = getStepsChartData(telegramId, selectedPeriod === 'week' ? 7 : selectedPeriod === 'month' ? 30 : 365);
-        const sleepChartData = getSleepChartData(telegramId, selectedPeriod === 'week' ? 7 : selectedPeriod === 'month' ? 30 : 365);
+        const caloriesChartData = getCaloriesChartData(
+          telegramId,
+          selectedPeriod === "week" ? 7 : selectedPeriod === "month" ? 30 : 365,
+        );
+        const weightChartData = getWeightChartData(
+          telegramId,
+          selectedPeriod === "week" ? 7 : selectedPeriod === "month" ? 30 : 365,
+        );
+        const stepsChartData = getStepsChartData(
+          telegramId,
+          selectedPeriod === "week" ? 7 : selectedPeriod === "month" ? 30 : 365,
+        );
+        const sleepChartData = getSleepChartData(
+          telegramId,
+          selectedPeriod === "week" ? 7 : selectedPeriod === "month" ? 30 : 365,
+        );
         const nutritionData = getNutritionAnalytics(telegramId);
         const activityData = getActivityAnalytics(telegramId);
-        
+
         setOverview(overviewData);
         setHealthScore(healthScoreData);
         setCaloriesData(caloriesChartData);
@@ -87,9 +126,8 @@ export default function Analytics() {
         setSleepData(sleepChartData);
         setNutritionAnalytics(nutritionData);
         setActivityAnalytics(activityData);
-        
       } catch (error) {
-        console.error('Error loading analytics data:', error);
+        console.error("Error loading analytics data:", error);
       } finally {
         setIsLoading(false);
       }
@@ -98,38 +136,44 @@ export default function Analytics() {
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case 'increasing': return <TrendingUp className="h-4 w-4 text-green-600" />;
-      case 'decreasing': return <TrendingDown className="h-4 w-4 text-red-600" />;
-      default: return <div className="h-4 w-4 bg-gray-400 rounded-full" />;
+      case "increasing":
+        return <TrendingUp className="h-4 w-4 text-green-600" />;
+      case "decreasing":
+        return <TrendingDown className="h-4 w-4 text-red-600" />;
+      default:
+        return <div className="h-4 w-4 bg-gray-400 rounded-full" />;
     }
   };
 
   const getTrendColor = (trend: string) => {
     switch (trend) {
-      case 'increasing': return 'text-green-600';
-      case 'decreasing': return 'text-red-600';
-      default: return 'text-gray-600';
+      case "increasing":
+        return "text-green-600";
+      case "decreasing":
+        return "text-red-600";
+      default:
+        return "text-gray-600";
     }
   };
 
   const getHealthScoreColor = (score: number) => {
-    if (score >= 80) return 'text-green-600';
-    if (score >= 60) return 'text-yellow-600';
-    return 'text-red-600';
+    if (score >= 80) return "text-green-600";
+    if (score >= 60) return "text-yellow-600";
+    return "text-red-600";
   };
 
   const getHealthScoreBg = (score: number) => {
-    if (score >= 80) return 'bg-green-100';
-    if (score >= 60) return 'bg-yellow-100';
-    return 'bg-red-100';
+    if (score >= 80) return "bg-green-100";
+    if (score >= 60) return "bg-yellow-100";
+    return "bg-red-100";
   };
 
   const chartColors = {
-    primary: '#3B82F6',
-    secondary: '#10B981',
-    accent: '#F59E0B',
-    danger: '#EF4444',
-    purple: '#8B5CF6',
+    primary: "#3B82F6",
+    secondary: "#10B981",
+    accent: "#F59E0B",
+    danger: "#EF4444",
+    purple: "#8B5CF6",
   };
 
   if (isLoading || !overview) {
@@ -164,20 +208,22 @@ export default function Analytics() {
                 <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                   Analytics Dashboard
                 </span>
-                <p className="text-sm text-gray-500">Health Insights & Progress</p>
+                <p className="text-sm text-gray-500">
+                  Health Insights & Progress
+                </p>
               </div>
             </Link>
             <div className="flex space-x-2">
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 size="sm"
                 className="bg-white/70 backdrop-blur-sm border-white/30 hover:bg-white/90 transition-all duration-300 hover:scale-105 shadow-lg"
               >
                 <Filter className="h-4 w-4 mr-2 text-blue-600" />
                 Filter
               </Button>
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 size="sm"
                 className="bg-gradient-to-r from-blue-500 to-purple-600 text-white border-0 hover:from-blue-600 hover:to-purple-700 transition-all duration-300 hover:scale-105 shadow-lg"
               >
@@ -189,77 +235,104 @@ export default function Analytics() {
       </div>
 
       <div className="px-4 py-6 space-y-6">
-                {/* Enhanced Health Score */}
+        {/* Enhanced Health Score */}
         <Card className="border-0 shadow-2xl bg-gradient-to-br from-white/90 via-white/80 to-white/70 backdrop-blur-xl relative overflow-hidden group hover:shadow-3xl transition-all duration-500">
           {/* Background Pattern */}
           <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 to-purple-500/5"></div>
           <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-blue-400/20 to-transparent rounded-full blur-2xl"></div>
-          
+
           <CardContent className="p-8 relative z-10">
             <div className="flex items-center justify-between mb-8">
               <div className="space-y-2">
                 <div className="flex items-center space-x-3">
                   <div className="p-3 rounded-2xl bg-gradient-to-r from-blue-500 to-purple-600 shadow-lg">
                     <Shield className="h-6 w-6 text-white" />
-          </div>
-          <div>
+                  </div>
+                  <div>
                     <h2 className="text-2xl font-bold bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent">
                       Sog'liq Bahosi
-            </h2>
-                    <p className="text-sm text-gray-500">Umumiy salomatlik ko'rsatkichi</p>
+                    </h2>
+                    <p className="text-sm text-gray-500">
+                      Umumiy salomatlik ko'rsatkichi
+                    </p>
                   </div>
                 </div>
               </div>
-              
+
               {/* Animated Score Display */}
               <div className="relative">
                 <div className="w-24 h-24 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 p-1 shadow-2xl animate-pulse">
                   <div className="w-full h-full rounded-full bg-white flex items-center justify-center">
                     <div className="text-center">
-                      <div className={`text-2xl font-bold ${getHealthScoreColor(healthScore?.score || 0)}`}>
+                      <div
+                        className={`text-2xl font-bold ${getHealthScoreColor(healthScore?.score || 0)}`}
+                      >
                         {healthScore?.score || 0}
                       </div>
-                      <div className="text-xs text-gray-400 font-medium">/100</div>
+                      <div className="text-xs text-gray-400 font-medium">
+                        /100
+                      </div>
                     </div>
                   </div>
                 </div>
-                
+
                 {/* Status Badge */}
-                <div className={`absolute -top-2 -right-2 px-3 py-1 rounded-full text-xs font-bold ${getHealthScoreBg(healthScore?.score || 0)} ${getHealthScoreColor(healthScore?.score || 0)} shadow-lg`}>
-                  {(healthScore?.score || 0) >= 80 ? 'A\'lo' : (healthScore?.score || 0) >= 60 ? 'Yaxshi' : 'Yaxshilash kerak'}
+                <div
+                  className={`absolute -top-2 -right-2 px-3 py-1 rounded-full text-xs font-bold ${getHealthScoreBg(healthScore?.score || 0)} ${getHealthScoreColor(healthScore?.score || 0)} shadow-lg`}
+                >
+                  {(healthScore?.score || 0) >= 80
+                    ? "A'lo"
+                    : (healthScore?.score || 0) >= 60
+                      ? "Yaxshi"
+                      : "Yaxshilash kerak"}
                 </div>
               </div>
             </div>
-            
+
             <div className="space-y-4">
               {healthScore?.factors.map((factor, index) => (
-                <div key={index} className="group hover:bg-white/50 p-3 rounded-xl transition-all duration-300">
+                <div
+                  key={index}
+                  className="group hover:bg-white/50 p-3 rounded-xl transition-all duration-300"
+                >
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-medium text-gray-700 group-hover:text-gray-900 transition-colors">{factor.name}</span>
-                    <span className="text-sm font-bold text-gray-600">{Math.round(factor.score)}%</span>
+                    <span className="text-sm font-medium text-gray-700 group-hover:text-gray-900 transition-colors">
+                      {factor.name}
+                    </span>
+                    <span className="text-sm font-bold text-gray-600">
+                      {Math.round(factor.score)}%
+                    </span>
                   </div>
                   <div className="relative">
                     <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
                       <div
                         className={`h-3 rounded-full transition-all duration-1000 ease-out ${
-                          factor.score >= 80 ? 'bg-gradient-to-r from-green-400 to-green-600' :
-                          factor.score >= 60 ? 'bg-gradient-to-r from-yellow-400 to-yellow-600' : 
-                          'bg-gradient-to-r from-red-400 to-red-600'
+                          factor.score >= 80
+                            ? "bg-gradient-to-r from-green-400 to-green-600"
+                            : factor.score >= 60
+                              ? "bg-gradient-to-r from-yellow-400 to-yellow-600"
+                              : "bg-gradient-to-r from-red-400 to-red-600"
                         } shadow-lg`}
-                        style={{ 
+                        style={{
                           width: `${factor.score}%`,
-                          boxShadow: factor.score >= 80 ? '0 0 20px rgba(34, 197, 94, 0.3)' :
-                                     factor.score >= 60 ? '0 0 20px rgba(251, 191, 36, 0.3)' :
-                                     '0 0 20px rgba(239, 68, 68, 0.3)'
+                          boxShadow:
+                            factor.score >= 80
+                              ? "0 0 20px rgba(34, 197, 94, 0.3)"
+                              : factor.score >= 60
+                                ? "0 0 20px rgba(251, 191, 36, 0.3)"
+                                : "0 0 20px rgba(239, 68, 68, 0.3)",
                         }}
                       ></div>
                     </div>
-                    
+
                     {/* Progress Glow Effect */}
-                    <div 
+                    <div
                       className={`absolute top-0 left-0 h-3 rounded-full opacity-50 ${
-                        factor.score >= 80 ? 'bg-green-400' :
-                        factor.score >= 60 ? 'bg-yellow-400' : 'bg-red-400'
+                        factor.score >= 80
+                          ? "bg-green-400"
+                          : factor.score >= 60
+                            ? "bg-yellow-400"
+                            : "bg-red-400"
                       } blur-sm`}
                       style={{ width: `${factor.score}%` }}
                     ></div>
@@ -270,7 +343,7 @@ export default function Analytics() {
           </CardContent>
         </Card>
 
-                {/* Enhanced Overview Cards */}
+        {/* Enhanced Overview Cards */}
         <div className="grid grid-cols-2 gap-4">
           {/* Calories Card */}
           <Card className="border-0 shadow-xl bg-gradient-to-br from-blue-500/90 to-blue-600/90 text-white relative overflow-hidden group hover:shadow-2xl transition-all duration-500 hover:scale-105">
@@ -288,12 +361,17 @@ export default function Analytics() {
               <p className="text-3xl font-bold text-white drop-shadow-lg mb-1">
                 {Math.round(overview.averageCalories)}
               </p>
-              <p className="text-sm text-blue-100 font-medium">Kunlik kaloriya</p>
+              <p className="text-sm text-blue-100 font-medium">
+                Kunlik kaloriya
+              </p>
               <div className="mt-3 w-full bg-white/20 rounded-full h-2">
-                <div className="bg-white/60 h-2 rounded-full transition-all duration-1000" style={{ width: '75%' }}></div>
-          </div>
-        </CardContent>
-      </Card>
+                <div
+                  className="bg-white/60 h-2 rounded-full transition-all duration-1000"
+                  style={{ width: "75%" }}
+                ></div>
+              </div>
+            </CardContent>
+          </Card>
 
           {/* Steps Card */}
           <Card className="border-0 shadow-xl bg-gradient-to-br from-green-500/90 to-emerald-600/90 text-white relative overflow-hidden group hover:shadow-2xl transition-all duration-500 hover:scale-105">
@@ -311,9 +389,16 @@ export default function Analytics() {
               <p className="text-3xl font-bold text-white drop-shadow-lg mb-1">
                 {(overview.averageSteps / 1000).toFixed(1)}K
               </p>
-              <p className="text-sm text-green-100 font-medium">Kunlik qadamlar</p>
+              <p className="text-sm text-green-100 font-medium">
+                Kunlik qadamlar
+              </p>
               <div className="mt-3 w-full bg-white/20 rounded-full h-2">
-                <div className="bg-white/60 h-2 rounded-full transition-all duration-1000" style={{ width: `${Math.min((overview.averageSteps / 10000) * 100, 100)}%` }}></div>
+                <div
+                  className="bg-white/60 h-2 rounded-full transition-all duration-1000"
+                  style={{
+                    width: `${Math.min((overview.averageSteps / 10000) * 100, 100)}%`,
+                  }}
+                ></div>
               </div>
             </CardContent>
           </Card>
@@ -336,7 +421,12 @@ export default function Analytics() {
               </p>
               <p className="text-sm text-purple-100 font-medium">Uyqu vaqti</p>
               <div className="mt-3 w-full bg-white/20 rounded-full h-2">
-                <div className="bg-white/60 h-2 rounded-full transition-all duration-1000" style={{ width: `${Math.min((overview.averageSleep / 8) * 100, 100)}%` }}></div>
+                <div
+                  className="bg-white/60 h-2 rounded-full transition-all duration-1000"
+                  style={{
+                    width: `${Math.min((overview.averageSleep / 8) * 100, 100)}%`,
+                  }}
+                ></div>
               </div>
             </CardContent>
           </Card>
@@ -359,7 +449,12 @@ export default function Analytics() {
               </p>
               <p className="text-sm text-cyan-100 font-medium">Stakan suv</p>
               <div className="mt-3 w-full bg-white/20 rounded-full h-2">
-                <div className="bg-white/60 h-2 rounded-full transition-all duration-1000" style={{ width: `${Math.min((overview.averageWater / 8) * 100, 100)}%` }}></div>
+                <div
+                  className="bg-white/60 h-2 rounded-full transition-all duration-1000"
+                  style={{
+                    width: `${Math.min((overview.averageWater / 8) * 100, 100)}%`,
+                  }}
+                ></div>
               </div>
             </CardContent>
           </Card>
@@ -369,21 +464,25 @@ export default function Analytics() {
         <div className="flex justify-center">
           <div className="bg-white/80 backdrop-blur-xl rounded-2xl p-2 shadow-2xl border border-white/20">
             <div className="grid grid-cols-3 gap-2">
-              {['week', 'month', 'year'].map((period) => (
+              {["week", "month", "year"].map((period) => (
                 <button
                   key={period}
                   onClick={() => setSelectedPeriod(period as any)}
                   className={`px-6 py-3 rounded-xl text-sm font-bold transition-all duration-300 relative overflow-hidden group ${
                     selectedPeriod === period
-                      ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg scale-105'
-                      : 'text-gray-600 hover:bg-white/70 hover:text-gray-800 hover:scale-102'
+                      ? "bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg scale-105"
+                      : "text-gray-600 hover:bg-white/70 hover:text-gray-800 hover:scale-102"
                   }`}
                 >
                   {selectedPeriod === period && (
                     <div className="absolute inset-0 bg-gradient-to-r from-blue-400/20 to-purple-600/20 rounded-xl"></div>
                   )}
                   <span className="relative z-10">
-                    {period === 'week' ? '📅 Hafta' : period === 'month' ? '🗓️ Oy' : '📊 Yil'}
+                    {period === "week"
+                      ? "📅 Hafta"
+                      : period === "month"
+                        ? "🗓️ Oy"
+                        : "📊 Yil"}
                   </span>
                   {selectedPeriod === period && (
                     <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-8 h-1 bg-white/60 rounded-full"></div>
@@ -396,20 +495,20 @@ export default function Analytics() {
 
         <Tabs defaultValue="charts" className="space-y-6">
           <TabsList className="grid w-full grid-cols-3 h-14 rounded-2xl bg-white/80 backdrop-blur-xl shadow-2xl border border-white/20 p-1">
-            <TabsTrigger 
-              value="charts" 
+            <TabsTrigger
+              value="charts"
               className="rounded-xl font-semibold text-sm transition-all duration-300 data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-purple-600 data-[state=active]:text-white data-[state=active]:shadow-lg hover:scale-105"
             >
               📊 Grafiklar
             </TabsTrigger>
-            <TabsTrigger 
-              value="nutrition" 
+            <TabsTrigger
+              value="nutrition"
               className="rounded-xl font-semibold text-sm transition-all duration-300 data-[state=active]:bg-gradient-to-r data-[state=active]:from-green-500 data-[state=active]:to-emerald-600 data-[state=active]:text-white data-[state=active]:shadow-lg hover:scale-105"
             >
               🍎 Oziq
             </TabsTrigger>
-            <TabsTrigger 
-              value="activity" 
+            <TabsTrigger
+              value="activity"
               className="rounded-xl font-semibold text-sm transition-all duration-300 data-[state=active]:bg-gradient-to-r data-[state=active]:from-orange-500 data-[state=active]:to-red-600 data-[state=active]:text-white data-[state=active]:shadow-lg hover:scale-105"
             >
               💪 Faollik
@@ -423,7 +522,7 @@ export default function Analytics() {
               {/* Background Effects */}
               <div className="absolute inset-0 bg-gradient-to-br from-orange-500/5 to-red-500/5"></div>
               <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-bl from-orange-400/20 to-transparent rounded-full blur-3xl"></div>
-              
+
               <CardHeader className="pb-6 relative z-10">
                 <CardTitle className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
@@ -434,13 +533,17 @@ export default function Analytics() {
                       <span className="text-xl font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">
                         Kaloriya Tendensiyasi
                       </span>
-                      <p className="text-sm text-gray-500">Kunlik iste'mol dinamikasi</p>
+                      <p className="text-sm text-gray-500">
+                        Kunlik iste'mol dinamikasi
+                      </p>
                     </div>
                   </div>
                   <div className="flex items-center space-x-3">
                     <div className="flex items-center space-x-2 px-4 py-2 rounded-xl bg-white/60 backdrop-blur-sm shadow-lg">
-                      {getTrendIcon(caloriesData?.trend || 'stable')}
-                      <span className={`text-sm font-bold ${getTrendColor(caloriesData?.trend || 'stable')}`}>
+                      {getTrendIcon(caloriesData?.trend || "stable")}
+                      <span
+                        className={`text-sm font-bold ${getTrendColor(caloriesData?.trend || "stable")}`}
+                      >
                         {caloriesData?.changePercentage}%
                       </span>
                     </div>
@@ -452,41 +555,60 @@ export default function Analytics() {
                   <ResponsiveContainer width="100%" height={220}>
                     <AreaChart data={caloriesData?.data || []}>
                       <defs>
-                        <linearGradient id="caloriesGradient" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="5%" stopColor="#f97316" stopOpacity={0.8}/>
-                          <stop offset="95%" stopColor="#f97316" stopOpacity={0.1}/>
+                        <linearGradient
+                          id="caloriesGradient"
+                          x1="0"
+                          y1="0"
+                          x2="0"
+                          y2="1"
+                        >
+                          <stop
+                            offset="5%"
+                            stopColor="#f97316"
+                            stopOpacity={0.8}
+                          />
+                          <stop
+                            offset="95%"
+                            stopColor="#f97316"
+                            stopOpacity={0.1}
+                          />
                         </linearGradient>
                       </defs>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" opacity={0.6} />
-                      <XAxis 
-                        dataKey="label" 
-                        tick={{ fontSize: 11, fill: '#64748b' }}
+                      <CartesianGrid
+                        strokeDasharray="3 3"
+                        stroke="#e2e8f0"
+                        opacity={0.6}
+                      />
+                      <XAxis
+                        dataKey="label"
+                        tick={{ fontSize: 11, fill: "#64748b" }}
                         axisLine={false}
                         tickLine={false}
                       />
-                      <YAxis 
-                        tick={{ fontSize: 11, fill: '#64748b' }} 
-                        axisLine={false} 
+                      <YAxis
+                        tick={{ fontSize: 11, fill: "#64748b" }}
+                        axisLine={false}
                         tickLine={false}
                       />
-                      <Tooltip 
-                        contentStyle={{ 
-                          backgroundColor: 'rgba(255, 255, 255, 0.95)', 
-                          border: 'none', 
-                          borderRadius: '16px',
-                          boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
-                          backdropFilter: 'blur(10px)'
+                      <Tooltip
+                        contentStyle={{
+                          backgroundColor: "rgba(255, 255, 255, 0.95)",
+                          border: "none",
+                          borderRadius: "16px",
+                          boxShadow:
+                            "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
+                          backdropFilter: "blur(10px)",
                         }}
-                        labelStyle={{ color: '#374151', fontWeight: 'bold' }}
+                        labelStyle={{ color: "#374151", fontWeight: "bold" }}
                       />
-                      <Area 
-                        type="monotone" 
-                        dataKey="value" 
+                      <Area
+                        type="monotone"
+                        dataKey="value"
                         stroke="#f97316"
                         strokeWidth={3}
                         fill="url(#caloriesGradient)"
-                        dot={{ fill: '#f97316', strokeWidth: 2, r: 4 }}
-                        activeDot={{ r: 6, stroke: '#f97316', strokeWidth: 2 }}
+                        dot={{ fill: "#f97316", strokeWidth: 2, r: 4 }}
+                        activeDot={{ r: 6, stroke: "#f97316", strokeWidth: 2 }}
                       />
                     </AreaChart>
                   </ResponsiveContainer>
@@ -499,7 +621,7 @@ export default function Analytics() {
               {/* Background Effects */}
               <div className="absolute inset-0 bg-gradient-to-br from-green-500/5 to-emerald-500/5"></div>
               <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-bl from-green-400/20 to-transparent rounded-full blur-3xl"></div>
-              
+
               <CardHeader className="pb-6 relative z-10">
                 <CardTitle className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
@@ -510,13 +632,17 @@ export default function Analytics() {
                       <span className="text-xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
                         Qadamlar Dinamikasi
                       </span>
-                      <p className="text-sm text-gray-500">Kunlik faollik ko'rsatkichi</p>
+                      <p className="text-sm text-gray-500">
+                        Kunlik faollik ko'rsatkichi
+                      </p>
                     </div>
                   </div>
                   <div className="flex items-center space-x-3">
                     <div className="flex items-center space-x-2 px-4 py-2 rounded-xl bg-white/60 backdrop-blur-sm shadow-lg">
-                      {getTrendIcon(stepsData?.trend || 'stable')}
-                      <span className={`text-sm font-bold ${getTrendColor(stepsData?.trend || 'stable')}`}>
+                      {getTrendIcon(stepsData?.trend || "stable")}
+                      <span
+                        className={`text-sm font-bold ${getTrendColor(stepsData?.trend || "stable")}`}
+                      >
                         {stepsData?.changePercentage}%
                       </span>
                     </div>
@@ -528,35 +654,54 @@ export default function Analytics() {
                   <ResponsiveContainer width="100%" height={220}>
                     <BarChart data={stepsData?.data || []}>
                       <defs>
-                        <linearGradient id="stepsGradient" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="5%" stopColor="#10b981" stopOpacity={1}/>
-                          <stop offset="95%" stopColor="#10b981" stopOpacity={0.6}/>
+                        <linearGradient
+                          id="stepsGradient"
+                          x1="0"
+                          y1="0"
+                          x2="0"
+                          y2="1"
+                        >
+                          <stop
+                            offset="5%"
+                            stopColor="#10b981"
+                            stopOpacity={1}
+                          />
+                          <stop
+                            offset="95%"
+                            stopColor="#10b981"
+                            stopOpacity={0.6}
+                          />
                         </linearGradient>
                       </defs>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" opacity={0.6} />
-                      <XAxis 
-                        dataKey="label" 
-                        tick={{ fontSize: 11, fill: '#64748b' }}
+                      <CartesianGrid
+                        strokeDasharray="3 3"
+                        stroke="#e2e8f0"
+                        opacity={0.6}
+                      />
+                      <XAxis
+                        dataKey="label"
+                        tick={{ fontSize: 11, fill: "#64748b" }}
                         axisLine={false}
                         tickLine={false}
                       />
-                      <YAxis 
-                        tick={{ fontSize: 11, fill: '#64748b' }} 
-                        axisLine={false} 
+                      <YAxis
+                        tick={{ fontSize: 11, fill: "#64748b" }}
+                        axisLine={false}
                         tickLine={false}
                       />
-                      <Tooltip 
-                        contentStyle={{ 
-                          backgroundColor: 'rgba(255, 255, 255, 0.95)', 
-                          border: 'none', 
-                          borderRadius: '16px',
-                          boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
-                          backdropFilter: 'blur(10px)'
+                      <Tooltip
+                        contentStyle={{
+                          backgroundColor: "rgba(255, 255, 255, 0.95)",
+                          border: "none",
+                          borderRadius: "16px",
+                          boxShadow:
+                            "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
+                          backdropFilter: "blur(10px)",
                         }}
-                        labelStyle={{ color: '#374151', fontWeight: 'bold' }}
+                        labelStyle={{ color: "#374151", fontWeight: "bold" }}
                       />
-                      <Bar 
-                        dataKey="value" 
+                      <Bar
+                        dataKey="value"
                         fill="url(#stepsGradient)"
                         radius={[8, 8, 0, 0]}
                         stroke="#10b981"
@@ -574,7 +719,7 @@ export default function Analytics() {
               <Card className="border-0 shadow-2xl bg-gradient-to-br from-white/90 via-white/85 to-white/80 backdrop-blur-xl relative overflow-hidden group hover:shadow-3xl transition-all duration-500">
                 <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-pink-500/5"></div>
                 <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-purple-400/20 to-transparent rounded-full blur-2xl"></div>
-                
+
                 <CardHeader className="pb-4 relative z-10">
                   <CardTitle className="flex items-center space-x-3">
                     <div className="p-2 rounded-xl bg-gradient-to-r from-purple-500 to-pink-600 shadow-lg">
@@ -584,7 +729,9 @@ export default function Analytics() {
                       <span className="text-lg font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
                         Vazn Dinamikasi
                       </span>
-                      <p className="text-xs text-gray-500">Tana vazni o'zgarishi</p>
+                      <p className="text-xs text-gray-500">
+                        Tana vazni o'zgarishi
+                      </p>
                     </div>
                   </CardTitle>
                 </CardHeader>
@@ -593,39 +740,62 @@ export default function Analytics() {
                     <ResponsiveContainer width="100%" height={170}>
                       <RechartsLineChart data={weightData?.data || []}>
                         <defs>
-                          <linearGradient id="weightGradient" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.8}/>
-                            <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0.1}/>
+                          <linearGradient
+                            id="weightGradient"
+                            x1="0"
+                            y1="0"
+                            x2="0"
+                            y2="1"
+                          >
+                            <stop
+                              offset="5%"
+                              stopColor="#8b5cf6"
+                              stopOpacity={0.8}
+                            />
+                            <stop
+                              offset="95%"
+                              stopColor="#8b5cf6"
+                              stopOpacity={0.1}
+                            />
                           </linearGradient>
                         </defs>
-                        <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" opacity={0.5} />
-                        <XAxis 
-                          dataKey="label" 
-                          tick={{ fontSize: 10, fill: '#64748b' }}
+                        <CartesianGrid
+                          strokeDasharray="3 3"
+                          stroke="#e2e8f0"
+                          opacity={0.5}
+                        />
+                        <XAxis
+                          dataKey="label"
+                          tick={{ fontSize: 10, fill: "#64748b" }}
                           axisLine={false}
                           tickLine={false}
                         />
-                        <YAxis 
-                          tick={{ fontSize: 10, fill: '#64748b' }} 
-                          axisLine={false} 
+                        <YAxis
+                          tick={{ fontSize: 10, fill: "#64748b" }}
+                          axisLine={false}
                           tickLine={false}
                         />
-                        <Tooltip 
-                          contentStyle={{ 
-                            backgroundColor: 'rgba(255, 255, 255, 0.95)', 
-                            border: 'none', 
-                            borderRadius: '12px',
-                            boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
-                            backdropFilter: 'blur(8px)'
+                        <Tooltip
+                          contentStyle={{
+                            backgroundColor: "rgba(255, 255, 255, 0.95)",
+                            border: "none",
+                            borderRadius: "12px",
+                            boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1)",
+                            backdropFilter: "blur(8px)",
                           }}
                         />
-                        <Line 
-                          type="monotone" 
-                          dataKey="value" 
+                        <Line
+                          type="monotone"
+                          dataKey="value"
                           stroke="#8b5cf6"
                           strokeWidth={3}
-                          dot={{ fill: '#8b5cf6', strokeWidth: 2, r: 5 }}
-                          activeDot={{ r: 7, stroke: '#8b5cf6', strokeWidth: 2, fill: '#ffffff' }}
+                          dot={{ fill: "#8b5cf6", strokeWidth: 2, r: 5 }}
+                          activeDot={{
+                            r: 7,
+                            stroke: "#8b5cf6",
+                            strokeWidth: 2,
+                            fill: "#ffffff",
+                          }}
                         />
                       </RechartsLineChart>
                     </ResponsiveContainer>
@@ -637,7 +807,7 @@ export default function Analytics() {
               <Card className="border-0 shadow-2xl bg-gradient-to-br from-white/90 via-white/85 to-white/80 backdrop-blur-xl relative overflow-hidden group hover:shadow-3xl transition-all duration-500">
                 <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-blue-500/5"></div>
                 <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-indigo-400/20 to-transparent rounded-full blur-2xl"></div>
-                
+
                 <CardHeader className="pb-4 relative z-10">
                   <CardTitle className="flex items-center space-x-3">
                     <div className="p-2 rounded-xl bg-gradient-to-r from-indigo-500 to-blue-600 shadow-lg">
@@ -656,40 +826,62 @@ export default function Analytics() {
                     <ResponsiveContainer width="100%" height={170}>
                       <AreaChart data={sleepData?.data || []}>
                         <defs>
-                          <linearGradient id="sleepGradient" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="5%" stopColor="#6366f1" stopOpacity={0.8}/>
-                            <stop offset="95%" stopColor="#6366f1" stopOpacity={0.1}/>
+                          <linearGradient
+                            id="sleepGradient"
+                            x1="0"
+                            y1="0"
+                            x2="0"
+                            y2="1"
+                          >
+                            <stop
+                              offset="5%"
+                              stopColor="#6366f1"
+                              stopOpacity={0.8}
+                            />
+                            <stop
+                              offset="95%"
+                              stopColor="#6366f1"
+                              stopOpacity={0.1}
+                            />
                           </linearGradient>
                         </defs>
-                        <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" opacity={0.5} />
-                        <XAxis 
-                          dataKey="label" 
-                          tick={{ fontSize: 10, fill: '#64748b' }}
+                        <CartesianGrid
+                          strokeDasharray="3 3"
+                          stroke="#e2e8f0"
+                          opacity={0.5}
+                        />
+                        <XAxis
+                          dataKey="label"
+                          tick={{ fontSize: 10, fill: "#64748b" }}
                           axisLine={false}
                           tickLine={false}
                         />
-                        <YAxis 
-                          tick={{ fontSize: 10, fill: '#64748b' }} 
-                          axisLine={false} 
+                        <YAxis
+                          tick={{ fontSize: 10, fill: "#64748b" }}
+                          axisLine={false}
                           tickLine={false}
                         />
-                        <Tooltip 
-                          contentStyle={{ 
-                            backgroundColor: 'rgba(255, 255, 255, 0.95)', 
-                            border: 'none', 
-                            borderRadius: '12px',
-                            boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
-                            backdropFilter: 'blur(8px)'
+                        <Tooltip
+                          contentStyle={{
+                            backgroundColor: "rgba(255, 255, 255, 0.95)",
+                            border: "none",
+                            borderRadius: "12px",
+                            boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1)",
+                            backdropFilter: "blur(8px)",
                           }}
                         />
-                        <Area 
-                          type="monotone" 
-                          dataKey="value" 
+                        <Area
+                          type="monotone"
+                          dataKey="value"
                           stroke="#6366f1"
                           strokeWidth={2}
                           fill="url(#sleepGradient)"
-                          dot={{ fill: '#6366f1', strokeWidth: 2, r: 4 }}
-                          activeDot={{ r: 6, stroke: '#6366f1', strokeWidth: 2 }}
+                          dot={{ fill: "#6366f1", strokeWidth: 2, r: 4 }}
+                          activeDot={{
+                            r: 6,
+                            stroke: "#6366f1",
+                            strokeWidth: 2,
+                          }}
                         />
                       </AreaChart>
                     </ResponsiveContainer>
@@ -707,7 +899,7 @@ export default function Analytics() {
                 <Card className="border-0 shadow-2xl bg-gradient-to-br from-white/90 via-white/85 to-white/80 backdrop-blur-xl relative overflow-hidden group hover:shadow-3xl transition-all duration-500">
                   <div className="absolute inset-0 bg-gradient-to-br from-green-500/5 to-emerald-500/5"></div>
                   <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-bl from-green-400/20 to-transparent rounded-full blur-3xl"></div>
-                  
+
                   <CardHeader className="relative z-10">
                     <CardTitle className="flex items-center justify-between">
                       <div className="flex items-center space-x-3">
@@ -718,7 +910,9 @@ export default function Analytics() {
                           <span className="text-xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
                             Makro Tarkibi
                           </span>
-                          <p className="text-sm text-gray-500">Protein, uglevodlar va yog'lar nisbati</p>
+                          <p className="text-sm text-gray-500">
+                            Protein, uglevodlar va yog'lar nisbati
+                          </p>
                         </div>
                       </div>
                       <Badge className="bg-green-100 text-green-800 font-bold">
@@ -733,22 +927,32 @@ export default function Analytics() {
                         <div className="w-8 h-8 bg-white/20 rounded-xl flex items-center justify-center mb-3">
                           <div className="w-4 h-4 bg-white rounded-full"></div>
                         </div>
-                        <p className="text-sm font-medium opacity-90">Protein</p>
-                        <p className="text-2xl font-bold">{nutritionAnalytics.macroDistribution.protein}%</p>
+                        <p className="text-sm font-medium opacity-90">
+                          Protein
+                        </p>
+                        <p className="text-2xl font-bold">
+                          {nutritionAnalytics.macroDistribution.protein}%
+                        </p>
                       </div>
                       <div className="bg-gradient-to-br from-green-500/90 to-emerald-600/90 text-white p-4 rounded-2xl shadow-lg hover:scale-105 transition-all duration-300">
                         <div className="w-8 h-8 bg-white/20 rounded-xl flex items-center justify-center mb-3">
                           <div className="w-4 h-4 bg-white rounded-full"></div>
                         </div>
-                        <p className="text-sm font-medium opacity-90">Karbohidrat</p>
-                        <p className="text-2xl font-bold">{nutritionAnalytics.macroDistribution.carbs}%</p>
+                        <p className="text-sm font-medium opacity-90">
+                          Karbohidrat
+                        </p>
+                        <p className="text-2xl font-bold">
+                          {nutritionAnalytics.macroDistribution.carbs}%
+                        </p>
                       </div>
                       <div className="bg-gradient-to-br from-yellow-500/90 to-orange-600/90 text-white p-4 rounded-2xl shadow-lg hover:scale-105 transition-all duration-300">
                         <div className="w-8 h-8 bg-white/20 rounded-xl flex items-center justify-center mb-3">
                           <div className="w-4 h-4 bg-white rounded-full"></div>
                         </div>
                         <p className="text-sm font-medium opacity-90">Yog'</p>
-                        <p className="text-2xl font-bold">{nutritionAnalytics.macroDistribution.fat}%</p>
+                        <p className="text-2xl font-bold">
+                          {nutritionAnalytics.macroDistribution.fat}%
+                        </p>
                       </div>
                     </div>
 
@@ -758,9 +962,23 @@ export default function Analytics() {
                         <RechartsPieChart>
                           <Pie
                             data={[
-                              { name: 'Protein', value: nutritionAnalytics.macroDistribution.protein, fill: '#3B82F6' },
-                              { name: 'Karbohidrat', value: nutritionAnalytics.macroDistribution.carbs, fill: '#10B981' },
-                              { name: 'Yog\'', value: nutritionAnalytics.macroDistribution.fat, fill: '#F59E0B' },
+                              {
+                                name: "Protein",
+                                value:
+                                  nutritionAnalytics.macroDistribution.protein,
+                                fill: "#3B82F6",
+                              },
+                              {
+                                name: "Karbohidrat",
+                                value:
+                                  nutritionAnalytics.macroDistribution.carbs,
+                                fill: "#10B981",
+                              },
+                              {
+                                name: "Yog'",
+                                value: nutritionAnalytics.macroDistribution.fat,
+                                fill: "#F59E0B",
+                              },
                             ]}
                             cx="50%"
                             cy="50%"
@@ -771,13 +989,13 @@ export default function Analytics() {
                             stroke="#ffffff"
                             strokeWidth={3}
                           />
-                          <Tooltip 
-                            contentStyle={{ 
-                              backgroundColor: 'rgba(255, 255, 255, 0.95)', 
-                              border: 'none', 
-                              borderRadius: '16px',
-                              boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)',
-                              backdropFilter: 'blur(10px)'
+                          <Tooltip
+                            contentStyle={{
+                              backgroundColor: "rgba(255, 255, 255, 0.95)",
+                              border: "none",
+                              borderRadius: "16px",
+                              boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1)",
+                              backdropFilter: "blur(10px)",
                             }}
                           />
                         </RechartsPieChart>
@@ -790,7 +1008,7 @@ export default function Analytics() {
                 <Card className="border-0 shadow-2xl bg-gradient-to-br from-white/90 via-white/85 to-white/80 backdrop-blur-xl relative overflow-hidden group hover:shadow-3xl transition-all duration-500">
                   <div className="absolute inset-0 bg-gradient-to-br from-orange-500/5 to-yellow-500/5"></div>
                   <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-bl from-orange-400/20 to-transparent rounded-full blur-3xl"></div>
-                  
+
                   <CardHeader className="relative z-10">
                     <CardTitle className="flex items-center justify-between">
                       <div className="flex items-center space-x-3">
@@ -801,7 +1019,9 @@ export default function Analytics() {
                           <span className="text-xl font-bold bg-gradient-to-r from-orange-600 to-yellow-600 bg-clip-text text-transparent">
                             Eng Ko'p Iste'mol Qilingan
                           </span>
-                          <p className="text-sm text-gray-500">Sevimli taomlaringiz</p>
+                          <p className="text-sm text-gray-500">
+                            Sevimli taomlaringiz
+                          </p>
                         </div>
                       </div>
                       <Badge className="bg-orange-100 text-orange-800 font-bold">
@@ -813,29 +1033,51 @@ export default function Analytics() {
                     <div className="bg-white/40 backdrop-blur-sm rounded-2xl p-4 shadow-lg">
                       <div className="space-y-4">
                         {nutritionAnalytics.topFoods.map((food, index) => (
-                          <div key={index} className="group hover:bg-white/60 p-4 rounded-2xl transition-all duration-300 hover:scale-102 cursor-pointer">
+                          <div
+                            key={index}
+                            className="group hover:bg-white/60 p-4 rounded-2xl transition-all duration-300 hover:scale-102 cursor-pointer"
+                          >
                             <div className="flex items-center justify-between">
                               <div className="flex items-center space-x-4">
                                 <div className="relative">
-                                  <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg ${
-                                    index === 0 ? 'bg-gradient-to-r from-yellow-400 to-yellow-600' :
-                                    index === 1 ? 'bg-gradient-to-r from-gray-400 to-gray-600' :
-                                    index === 2 ? 'bg-gradient-to-r from-orange-500 to-orange-700' : 
-                                    'bg-gradient-to-r from-blue-400 to-blue-600'
-                                  }`}>
-                                    <span className="text-white font-bold text-lg">#{index + 1}</span>
+                                  <div
+                                    className={`w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg ${
+                                      index === 0
+                                        ? "bg-gradient-to-r from-yellow-400 to-yellow-600"
+                                        : index === 1
+                                          ? "bg-gradient-to-r from-gray-400 to-gray-600"
+                                          : index === 2
+                                            ? "bg-gradient-to-r from-orange-500 to-orange-700"
+                                            : "bg-gradient-to-r from-blue-400 to-blue-600"
+                                    }`}
+                                  >
+                                    <span className="text-white font-bold text-lg">
+                                      #{index + 1}
+                                    </span>
                                   </div>
-                                  
+
                                   {/* Medal Icons */}
                                   {index < 3 && (
                                     <div className="absolute -top-2 -right-2">
-                                      {index === 0 && <div className="text-yellow-500 text-lg">🥇</div>}
-                                      {index === 1 && <div className="text-gray-400 text-lg">🥈</div>}
-                                      {index === 2 && <div className="text-orange-600 text-lg">🥉</div>}
+                                      {index === 0 && (
+                                        <div className="text-yellow-500 text-lg">
+                                          🥇
+                                        </div>
+                                      )}
+                                      {index === 1 && (
+                                        <div className="text-gray-400 text-lg">
+                                          🥈
+                                        </div>
+                                      )}
+                                      {index === 2 && (
+                                        <div className="text-orange-600 text-lg">
+                                          🥉
+                                        </div>
+                                      )}
                                     </div>
                                   )}
                                 </div>
-                                
+
                                 <div>
                                   <h3 className="font-bold text-gray-800 group-hover:text-gray-900 transition-colors">
                                     {food.name}
@@ -845,19 +1087,25 @@ export default function Analytics() {
                                   </p>
                                 </div>
                               </div>
-                              
+
                               <div className="text-right">
                                 <div className="flex items-center space-x-2">
                                   <Flame className="h-4 w-4 text-orange-500" />
-                                  <span className="font-bold text-gray-800">{food.calories}</span>
-                                  <span className="text-sm text-gray-500">kcal</span>
+                                  <span className="font-bold text-gray-800">
+                                    {food.calories}
+                                  </span>
+                                  <span className="text-sm text-gray-500">
+                                    kcal
+                                  </span>
                                 </div>
-                                
+
                                 {/* Progress Bar */}
                                 <div className="mt-2 w-24 bg-gray-200 rounded-full h-2">
-                                  <div 
+                                  <div
                                     className="bg-gradient-to-r from-orange-400 to-yellow-500 h-2 rounded-full transition-all duration-1000"
-                                    style={{ width: `${Math.min((food.frequency / Math.max(...nutritionAnalytics.topFoods.map(f => f.frequency))) * 100, 100)}%` }}
+                                    style={{
+                                      width: `${Math.min((food.frequency / Math.max(...nutritionAnalytics.topFoods.map((f) => f.frequency))) * 100, 100)}%`,
+                                    }}
                                   ></div>
                                 </div>
                               </div>
@@ -893,13 +1141,20 @@ export default function Analytics() {
                       <p className="text-3xl font-bold text-white drop-shadow-lg mb-1">
                         {activityAnalytics.totalWorkouts}
                       </p>
-                      <p className="text-sm text-blue-100 font-medium">Jami mashqlar</p>
+                      <p className="text-sm text-blue-100 font-medium">
+                        Jami mashqlar
+                      </p>
                       <div className="mt-3 w-full bg-white/20 rounded-full h-2">
-                        <div className="bg-white/60 h-2 rounded-full transition-all duration-1000" style={{ width: `${Math.min((activityAnalytics.totalWorkouts / 50) * 100, 100)}%` }}></div>
+                        <div
+                          className="bg-white/60 h-2 rounded-full transition-all duration-1000"
+                          style={{
+                            width: `${Math.min((activityAnalytics.totalWorkouts / 50) * 100, 100)}%`,
+                          }}
+                        ></div>
                       </div>
                     </CardContent>
                   </Card>
-                  
+
                   <Card className="border-0 shadow-xl bg-gradient-to-br from-red-500/90 to-orange-600/90 text-white relative overflow-hidden group hover:shadow-2xl transition-all duration-500 hover:scale-105">
                     <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent"></div>
                     <div className="absolute top-0 right-0 w-20 h-20 bg-white/10 rounded-full blur-xl"></div>
@@ -915,9 +1170,16 @@ export default function Analytics() {
                       <p className="text-3xl font-bold text-white drop-shadow-lg mb-1">
                         {activityAnalytics.caloriesBurned}
                       </p>
-                      <p className="text-sm text-red-100 font-medium">Yoqilgan kaloriya</p>
+                      <p className="text-sm text-red-100 font-medium">
+                        Yoqilgan kaloriya
+                      </p>
                       <div className="mt-3 w-full bg-white/20 rounded-full h-2">
-                        <div className="bg-white/60 h-2 rounded-full transition-all duration-1000" style={{ width: `${Math.min((activityAnalytics.caloriesBurned / 3000) * 100, 100)}%` }}></div>
+                        <div
+                          className="bg-white/60 h-2 rounded-full transition-all duration-1000"
+                          style={{
+                            width: `${Math.min((activityAnalytics.caloriesBurned / 3000) * 100, 100)}%`,
+                          }}
+                        ></div>
                       </div>
                     </CardContent>
                   </Card>
@@ -927,7 +1189,7 @@ export default function Analytics() {
                 <Card className="border-0 shadow-2xl bg-gradient-to-br from-white/90 via-white/85 to-white/80 backdrop-blur-xl relative overflow-hidden group hover:shadow-3xl transition-all duration-500">
                   <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-indigo-500/5"></div>
                   <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-bl from-purple-400/20 to-transparent rounded-full blur-3xl"></div>
-                  
+
                   <CardHeader className="relative z-10">
                     <CardTitle className="flex items-center justify-between">
                       <div className="flex items-center space-x-3">
@@ -938,7 +1200,9 @@ export default function Analytics() {
                           <span className="text-xl font-bold bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
                             Sevimli Mashqlar
                           </span>
-                          <p className="text-sm text-gray-500">Ko'p bajarilgan mashqlar</p>
+                          <p className="text-sm text-gray-500">
+                            Ko'p bajarilgan mashqlar
+                          </p>
                         </div>
                       </div>
                       <Badge className="bg-purple-100 text-purple-800 font-bold">
@@ -949,59 +1213,80 @@ export default function Analytics() {
                   <CardContent className="relative z-10">
                     <div className="bg-white/40 backdrop-blur-sm rounded-2xl p-4 shadow-lg">
                       <div className="space-y-4">
-                        {activityAnalytics.favoriteWorkouts.map((workout, index) => (
-                          <div key={index} className="group hover:bg-white/60 p-4 rounded-2xl transition-all duration-300 hover:scale-102 cursor-pointer">
-                            <div className="flex items-center justify-between">
-                              <div className="flex items-center space-x-4">
-                                <div className="relative">
-                                  <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg ${
-                                    index === 0 ? 'bg-gradient-to-r from-purple-500 to-indigo-600' :
-                                    index === 1 ? 'bg-gradient-to-r from-blue-500 to-cyan-600' :
-                                    'bg-gradient-to-r from-green-500 to-emerald-600'
-                                  }`}>
-                                    <span className="text-white font-bold">
-                                      {workout.type === 'cardio' ? '🏃' :
-                                       workout.type === 'strength' ? '💪' :
-                                       workout.type === 'yoga' ? '🧘' :
-                                       workout.type === 'swimming' ? '🏊' : '🏋️'
-                                      }
+                        {activityAnalytics.favoriteWorkouts.map(
+                          (workout, index) => (
+                            <div
+                              key={index}
+                              className="group hover:bg-white/60 p-4 rounded-2xl transition-all duration-300 hover:scale-102 cursor-pointer"
+                            >
+                              <div className="flex items-center justify-between">
+                                <div className="flex items-center space-x-4">
+                                  <div className="relative">
+                                    <div
+                                      className={`w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg ${
+                                        index === 0
+                                          ? "bg-gradient-to-r from-purple-500 to-indigo-600"
+                                          : index === 1
+                                            ? "bg-gradient-to-r from-blue-500 to-cyan-600"
+                                            : "bg-gradient-to-r from-green-500 to-emerald-600"
+                                      }`}
+                                    >
+                                      <span className="text-white font-bold">
+                                        {workout.type === "cardio"
+                                          ? "🏃"
+                                          : workout.type === "strength"
+                                            ? "💪"
+                                            : workout.type === "yoga"
+                                              ? "🧘"
+                                              : workout.type === "swimming"
+                                                ? "🏊"
+                                                : "🏋️"}
+                                      </span>
+                                    </div>
+
+                                    {/* Rank Badge */}
+                                    <div className="absolute -top-2 -right-2 w-6 h-6 bg-yellow-400 rounded-full flex items-center justify-center">
+                                      <span className="text-xs font-bold text-yellow-800">
+                                        #{index + 1}
+                                      </span>
+                                    </div>
+                                  </div>
+
+                                  <div>
+                                    <h3 className="font-bold text-gray-800 group-hover:text-gray-900 transition-colors capitalize">
+                                      {workout.type}
+                                    </h3>
+                                    <p className="text-sm text-gray-500">
+                                      {workout.count} sessiya bajarildi
+                                    </p>
+                                  </div>
+                                </div>
+
+                                <div className="text-right">
+                                  <div className="flex items-center space-x-2">
+                                    <Activity className="h-4 w-4 text-purple-500" />
+                                    <span className="font-bold text-gray-800">
+                                      {workout.minutes}
+                                    </span>
+                                    <span className="text-sm text-gray-500">
+                                      daqiqa
                                     </span>
                                   </div>
-                                  
-                                  {/* Rank Badge */}
-                                  <div className="absolute -top-2 -right-2 w-6 h-6 bg-yellow-400 rounded-full flex items-center justify-center">
-                                    <span className="text-xs font-bold text-yellow-800">#{index + 1}</span>
+
+                                  {/* Progress Bar */}
+                                  <div className="mt-2 w-24 bg-gray-200 rounded-full h-2">
+                                    <div
+                                      className="bg-gradient-to-r from-purple-400 to-indigo-500 h-2 rounded-full transition-all duration-1000"
+                                      style={{
+                                        width: `${Math.min((workout.count / Math.max(...activityAnalytics.favoriteWorkouts.map((w) => w.count))) * 100, 100)}%`,
+                                      }}
+                                    ></div>
                                   </div>
-                                </div>
-                                
-                                <div>
-                                  <h3 className="font-bold text-gray-800 group-hover:text-gray-900 transition-colors capitalize">
-                                    {workout.type}
-                                  </h3>
-                                  <p className="text-sm text-gray-500">
-                                    {workout.count} sessiya bajarildi
-                                  </p>
-                                </div>
-                              </div>
-                              
-                              <div className="text-right">
-                                <div className="flex items-center space-x-2">
-                                  <Activity className="h-4 w-4 text-purple-500" />
-                                  <span className="font-bold text-gray-800">{workout.minutes}</span>
-                                  <span className="text-sm text-gray-500">daqiqa</span>
-                                </div>
-                                
-                                {/* Progress Bar */}
-                                <div className="mt-2 w-24 bg-gray-200 rounded-full h-2">
-                                  <div 
-                                    className="bg-gradient-to-r from-purple-400 to-indigo-500 h-2 rounded-full transition-all duration-1000"
-                                    style={{ width: `${Math.min((workout.count / Math.max(...activityAnalytics.favoriteWorkouts.map(w => w.count))) * 100, 100)}%` }}
-                                  ></div>
                                 </div>
                               </div>
                             </div>
-                          </div>
-                        ))}
+                          ),
+                        )}
                       </div>
                     </div>
                   </CardContent>
@@ -1011,7 +1296,7 @@ export default function Analytics() {
                 <Card className="border-0 shadow-2xl bg-gradient-to-br from-white/90 via-white/85 to-white/80 backdrop-blur-xl relative overflow-hidden group hover:shadow-3xl transition-all duration-500">
                   <div className="absolute inset-0 bg-gradient-to-br from-green-500/5 to-emerald-500/5"></div>
                   <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-bl from-green-400/20 to-transparent rounded-full blur-3xl"></div>
-                  
+
                   <CardHeader className="relative z-10">
                     <CardTitle className="flex items-center justify-between">
                       <div className="flex items-center space-x-3">
@@ -1022,16 +1307,25 @@ export default function Analytics() {
                           <span className="text-xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
                             Taraqqiyot Bahosi
                           </span>
-                          <p className="text-sm text-gray-500">Izchillik va muvaffaqiyat</p>
+                          <p className="text-sm text-gray-500">
+                            Izchillik va muvaffaqiyat
+                          </p>
                         </div>
                       </div>
-                      <Badge className={`font-bold ${
-                        activityAnalytics.progressScore >= 80 ? 'bg-green-100 text-green-800' :
-                        activityAnalytics.progressScore >= 60 ? 'bg-yellow-100 text-yellow-800' :
-                        'bg-red-100 text-red-800'
-                      }`}>
-                        {activityAnalytics.progressScore >= 80 ? '🔥 A\'lo' :
-                         activityAnalytics.progressScore >= 60 ? '⭐ Yaxshi' : '💪 Yaxshilanish kerak'}
+                      <Badge
+                        className={`font-bold ${
+                          activityAnalytics.progressScore >= 80
+                            ? "bg-green-100 text-green-800"
+                            : activityAnalytics.progressScore >= 60
+                              ? "bg-yellow-100 text-yellow-800"
+                              : "bg-red-100 text-red-800"
+                        }`}
+                      >
+                        {activityAnalytics.progressScore >= 80
+                          ? "🔥 A'lo"
+                          : activityAnalytics.progressScore >= 60
+                            ? "⭐ Yaxshi"
+                            : "💪 Yaxshilanish kerak"}
                       </Badge>
                     </CardTitle>
                   </CardHeader>
@@ -1042,60 +1336,79 @@ export default function Analytics() {
                           <div className="w-24 h-24 rounded-full bg-gradient-to-r from-green-400 to-emerald-600 p-1 shadow-2xl">
                             <div className="w-full h-full rounded-full bg-white flex items-center justify-center">
                               <div className="text-center">
-                                <div className={`text-3xl font-bold ${
-                                  activityAnalytics.progressScore >= 80 ? 'text-green-600' :
-                                  activityAnalytics.progressScore >= 60 ? 'text-yellow-600' :
-                                  'text-red-600'
-                                }`}>
+                                <div
+                                  className={`text-3xl font-bold ${
+                                    activityAnalytics.progressScore >= 80
+                                      ? "text-green-600"
+                                      : activityAnalytics.progressScore >= 60
+                                        ? "text-yellow-600"
+                                        : "text-red-600"
+                                  }`}
+                                >
                                   {activityAnalytics.progressScore}
                                 </div>
-                                <div className="text-xs text-gray-400 font-medium">%</div>
+                                <div className="text-xs text-gray-400 font-medium">
+                                  %
+                                </div>
                               </div>
                             </div>
                           </div>
-                          
+
                           {/* Animated Ring */}
                           <div className="absolute inset-0 rounded-full border-4 border-green-200 animate-pulse"></div>
                         </div>
-                        
-                        <p className="text-sm text-gray-600 mt-4 font-medium">Izchillik ko'rsatkichi</p>
+
+                        <p className="text-sm text-gray-600 mt-4 font-medium">
+                          Izchillik ko'rsatkichi
+                        </p>
                       </div>
-                      
+
                       {/* Enhanced Progress Bar */}
                       <div className="relative mb-4">
                         <div className="w-full bg-gray-200 rounded-full h-4 overflow-hidden">
                           <div
                             className={`h-4 rounded-full transition-all duration-2000 ease-out ${
-                              activityAnalytics.progressScore >= 80 ? 'bg-gradient-to-r from-green-400 to-emerald-600' :
-                              activityAnalytics.progressScore >= 60 ? 'bg-gradient-to-r from-yellow-400 to-orange-500' :
-                              'bg-gradient-to-r from-red-400 to-pink-500'
+                              activityAnalytics.progressScore >= 80
+                                ? "bg-gradient-to-r from-green-400 to-emerald-600"
+                                : activityAnalytics.progressScore >= 60
+                                  ? "bg-gradient-to-r from-yellow-400 to-orange-500"
+                                  : "bg-gradient-to-r from-red-400 to-pink-500"
                             } shadow-lg`}
-                            style={{ 
+                            style={{
                               width: `${activityAnalytics.progressScore}%`,
-                              boxShadow: activityAnalytics.progressScore >= 80 ? '0 0 20px rgba(34, 197, 94, 0.3)' :
-                                         activityAnalytics.progressScore >= 60 ? '0 0 20px rgba(251, 191, 36, 0.3)' :
-                                         '0 0 20px rgba(239, 68, 68, 0.3)'
+                              boxShadow:
+                                activityAnalytics.progressScore >= 80
+                                  ? "0 0 20px rgba(34, 197, 94, 0.3)"
+                                  : activityAnalytics.progressScore >= 60
+                                    ? "0 0 20px rgba(251, 191, 36, 0.3)"
+                                    : "0 0 20px rgba(239, 68, 68, 0.3)",
                             }}
                           ></div>
                         </div>
-                        
+
                         {/* Progress Glow Effect */}
-                        <div 
+                        <div
                           className={`absolute top-0 left-0 h-4 rounded-full opacity-50 ${
-                            activityAnalytics.progressScore >= 80 ? 'bg-green-400' :
-                            activityAnalytics.progressScore >= 60 ? 'bg-yellow-400' : 
-                            'bg-red-400'
+                            activityAnalytics.progressScore >= 80
+                              ? "bg-green-400"
+                              : activityAnalytics.progressScore >= 60
+                                ? "bg-yellow-400"
+                                : "bg-red-400"
                           } blur-sm`}
-                          style={{ width: `${activityAnalytics.progressScore}%` }}
+                          style={{
+                            width: `${activityAnalytics.progressScore}%`,
+                          }}
                         ></div>
                       </div>
-                      
+
                       {/* Progress Tips */}
                       <div className="text-center">
                         <p className="text-xs text-gray-500">
-                          {activityAnalytics.progressScore >= 80 ? '🎉 Ajoyib! Davom eting!' :
-                           activityAnalytics.progressScore >= 60 ? '👍 Yaxshi, biroz ko\'proq harakat!' :
-                           '💪 Mashqlarni muntazam qilib baring!'}
+                          {activityAnalytics.progressScore >= 80
+                            ? "🎉 Ajoyib! Davom eting!"
+                            : activityAnalytics.progressScore >= 60
+                              ? "👍 Yaxshi, biroz ko'proq harakat!"
+                              : "💪 Mashqlarni muntazam qilib baring!"}
                         </p>
                       </div>
                     </div>

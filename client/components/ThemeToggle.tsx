@@ -12,22 +12,22 @@ export function ThemeToggle({ className }: ThemeToggleProps) {
 
   const toggleTheme = () => {
     // Cycle through themes: light -> dark -> system
-    if (theme === 'light') {
-      setTheme('dark');
-    } else if (theme === 'dark') {
-      setTheme('system');
+    if (theme === "light") {
+      setTheme("dark");
+    } else if (theme === "dark") {
+      setTheme("system");
     } else {
-      setTheme('light');
+      setTheme("light");
     }
-    
+
     hapticFeedback.selection();
   };
 
   const getIcon = () => {
-    if (theme === 'system') {
+    if (theme === "system") {
       return <Monitor className="w-4 h-4 text-foreground" />;
     }
-    return effectiveTheme === 'dark' ? (
+    return effectiveTheme === "dark" ? (
       <Sun className="w-4 h-4 text-foreground" />
     ) : (
       <Moon className="w-4 h-4 text-foreground" />
@@ -35,9 +35,9 @@ export function ThemeToggle({ className }: ThemeToggleProps) {
   };
 
   const getAriaLabel = () => {
-    if (theme === 'light') return 'Switch to dark mode';
-    if (theme === 'dark') return 'Switch to system mode';
-    return 'Switch to light mode';
+    if (theme === "light") return "Switch to dark mode";
+    if (theme === "dark") return "Switch to system mode";
+    return "Switch to light mode";
   };
 
   return (
@@ -50,4 +50,4 @@ export function ThemeToggle({ className }: ThemeToggleProps) {
       {getIcon()}
     </button>
   );
-} 
+}

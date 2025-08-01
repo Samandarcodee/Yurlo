@@ -4,12 +4,12 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { 
-  Select, 
-  SelectContent, 
-  SelectItem, 
-  SelectTrigger, 
-  SelectValue 
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from "@/components/ui/select";
 import {
   LineChart,
@@ -56,10 +56,13 @@ const generateMockData = () => {
   const last30Days = Array.from({ length: 30 }, (_, i) => {
     const date = new Date();
     date.setDate(date.getDate() - (29 - i));
-    
+
     return {
-      date: date.toISOString().split('T')[0],
-      dateShort: date.toLocaleDateString('uz-UZ', { month: 'short', day: 'numeric' }),
+      date: date.toISOString().split("T")[0],
+      dateShort: date.toLocaleDateString("uz-UZ", {
+        month: "short",
+        day: "numeric",
+      }),
       calories: Math.floor(Math.random() * 400) + 1800,
       caloriesBurned: Math.floor(Math.random() * 300) + 200,
       water: Math.floor(Math.random() * 4) + 6,
@@ -74,45 +77,47 @@ const generateMockData = () => {
 };
 
 const nutritionData = [
-  { name: 'Oqsillar', value: 25, color: '#22C55E' },
-  { name: 'Yog\'lar', value: 30, color: '#EF4444' },
-  { name: 'Uglevdalar', value: 45, color: '#3B82F6' },
+  { name: "Oqsillar", value: 25, color: "#22C55E" },
+  { name: "Yog'lar", value: 30, color: "#EF4444" },
+  { name: "Uglevdalar", value: 45, color: "#3B82F6" },
 ];
 
 const weeklyProgressData = [
-  { day: 'Du', calories: 2100, target: 2200, burned: 300 },
-  { day: 'Se', calories: 1980, target: 2200, burned: 450 },
-  { day: 'Cho', calories: 2300, target: 2200, burned: 280 },
-  { day: 'Pa', calories: 2150, target: 2200, burned: 380 },
-  { day: 'Ju', calories: 1850, target: 2200, burned: 520 },
-  { day: 'Sha', calories: 2400, target: 2200, burned: 200 },
-  { day: 'Ya', calories: 2180, target: 2200, burned: 350 },
+  { day: "Du", calories: 2100, target: 2200, burned: 300 },
+  { day: "Se", calories: 1980, target: 2200, burned: 450 },
+  { day: "Cho", calories: 2300, target: 2200, burned: 280 },
+  { day: "Pa", calories: 2150, target: 2200, burned: 380 },
+  { day: "Ju", calories: 1850, target: 2200, burned: 520 },
+  { day: "Sha", calories: 2400, target: 2200, burned: 200 },
+  { day: "Ya", calories: 2180, target: 2200, burned: 350 },
 ];
 
 const goalProgressData = [
-  { name: 'Calorie Goal', value: 85, color: '#22C55E' },
-  { name: 'Water Goal', value: 92, color: '#3B82F6' },
-  { name: 'Activity Goal', value: 78, color: '#F59E0B' },
-  { name: 'Sleep Goal', value: 65, color: '#8B5CF6' },
+  { name: "Calorie Goal", value: 85, color: "#22C55E" },
+  { name: "Water Goal", value: 92, color: "#3B82F6" },
+  { name: "Activity Goal", value: 78, color: "#F59E0B" },
+  { name: "Sleep Goal", value: 65, color: "#8B5CF6" },
 ];
 
 // === UTILITY FUNCTIONS ===
-const calculateTrend = (data: number[]): { direction: 'up' | 'down' | 'stable'; percentage: number } => {
-  if (data.length < 2) return { direction: 'stable', percentage: 0 };
-  
+const calculateTrend = (
+  data: number[],
+): { direction: "up" | "down" | "stable"; percentage: number } => {
+  if (data.length < 2) return { direction: "stable", percentage: 0 };
+
   const recent = data.slice(-7).reduce((a, b) => a + b, 0) / 7;
   const previous = data.slice(-14, -7).reduce((a, b) => a + b, 0) / 7;
-  
+
   const change = ((recent - previous) / previous) * 100;
-  
+
   return {
-    direction: change > 5 ? 'up' : change < -5 ? 'down' : 'stable',
+    direction: change > 5 ? "up" : change < -5 ? "down" : "stable",
     percentage: Math.abs(change),
   };
 };
 
 const formatNumber = (num: number) => {
-  return new Intl.NumberFormat('uz-UZ').format(num);
+  return new Intl.NumberFormat("uz-UZ").format(num);
 };
 
 // === COMPONENTS ===
@@ -120,18 +125,18 @@ interface StatCardProps {
   title: string;
   value: string | number;
   subtitle?: string;
-  trend?: { direction: 'up' | 'down' | 'stable'; percentage: number };
+  trend?: { direction: "up" | "down" | "stable"; percentage: number };
   icon: React.ElementType;
   color: string;
 }
 
-const StatCard: React.FC<StatCardProps> = ({ 
-  title, 
-  value, 
-  subtitle, 
-  trend, 
-  icon: Icon, 
-  color 
+const StatCard: React.FC<StatCardProps> = ({
+  title,
+  value,
+  subtitle,
+  trend,
+  icon: Icon,
+  color,
 }) => (
   <Card className="glass-light hover-lift">
     <CardContent className="p-6">
@@ -146,16 +151,20 @@ const StatCard: React.FC<StatCardProps> = ({
           </div>
           {trend && (
             <div className="flex items-center space-x-1">
-              {trend.direction === 'up' ? (
+              {trend.direction === "up" ? (
                 <TrendingUp className="w-4 h-4 text-green-500" />
-              ) : trend.direction === 'down' ? (
+              ) : trend.direction === "down" ? (
                 <TrendingDown className="w-4 h-4 text-red-500" />
               ) : null}
-              <span className={`text-sm ${
-                trend.direction === 'up' ? 'text-green-500' : 
-                trend.direction === 'down' ? 'text-red-500' : 
-                'text-gray-500'
-              }`}>
+              <span
+                className={`text-sm ${
+                  trend.direction === "up"
+                    ? "text-green-500"
+                    : trend.direction === "down"
+                      ? "text-red-500"
+                      : "text-gray-500"
+                }`}
+              >
                 {trend.percentage.toFixed(1)}%
               </span>
             </div>
@@ -177,12 +186,12 @@ interface ProgressRingProps {
   size?: number;
 }
 
-const ProgressRing: React.FC<ProgressRingProps> = ({ 
-  value, 
-  max, 
-  label, 
-  color, 
-  size = 120 
+const ProgressRing: React.FC<ProgressRingProps> = ({
+  value,
+  max,
+  label,
+  color,
+  size = 120,
 }) => {
   const percentage = (value / max) * 100;
   const circumference = 2 * Math.PI * 45;
@@ -232,25 +241,36 @@ export default function AdvancedAnalytics() {
   const [activeTab, setActiveTab] = useState("overview");
 
   const mockData = useMemo(() => generateMockData(), []);
-  
-  const caloriesTrend = useMemo(() => 
-    calculateTrend(mockData.map(d => d.calories)), [mockData]
-  );
-  
-  const weightTrend = useMemo(() => 
-    calculateTrend(mockData.map(d => d.weight)), [mockData]
+
+  const caloriesTrend = useMemo(
+    () => calculateTrend(mockData.map((d) => d.calories)),
+    [mockData],
   );
 
-  const averageCalories = useMemo(() => 
-    Math.round(mockData.reduce((sum, d) => sum + d.calories, 0) / mockData.length), [mockData]
+  const weightTrend = useMemo(
+    () => calculateTrend(mockData.map((d) => d.weight)),
+    [mockData],
   );
 
-  const averageSteps = useMemo(() => 
-    Math.round(mockData.reduce((sum, d) => sum + d.steps, 0) / mockData.length), [mockData]
+  const averageCalories = useMemo(
+    () =>
+      Math.round(
+        mockData.reduce((sum, d) => sum + d.calories, 0) / mockData.length,
+      ),
+    [mockData],
+  );
+
+  const averageSteps = useMemo(
+    () =>
+      Math.round(
+        mockData.reduce((sum, d) => sum + d.steps, 0) / mockData.length,
+      ),
+    [mockData],
   );
 
   const currentWeight = mockData[mockData.length - 1]?.weight || 70;
-  const targetWeight = user?.goal === 'lose' ? 65 : user?.goal === 'gain' ? 75 : 70;
+  const targetWeight =
+    user?.goal === "lose" ? 65 : user?.goal === "gain" ? 75 : 70;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-mint-50 via-white to-water-50 p-4">
@@ -261,9 +281,11 @@ export default function AdvancedAnalytics() {
             <h1 className="text-3xl font-bold bg-gradient-to-r from-mint-600 to-water-600 bg-clip-text text-transparent">
               Analytics Dashboard
             </h1>
-            <p className="text-muted-foreground">Sog'ligingiz holati haqida batafsil ma'lumot</p>
+            <p className="text-muted-foreground">
+              Sog'ligingiz holati haqida batafsil ma'lumot
+            </p>
           </div>
-          
+
           <div className="flex items-center space-x-2">
             <Select value={timeRange} onValueChange={setTimeRange}>
               <SelectTrigger className="w-40">
@@ -276,7 +298,7 @@ export default function AdvancedAnalytics() {
                 <SelectItem value="1year">So'nggi yil</SelectItem>
               </SelectContent>
             </Select>
-            
+
             <Button variant="outline" size="sm">
               <Download className="w-4 h-4 mr-2" />
               Export
@@ -294,7 +316,7 @@ export default function AdvancedAnalytics() {
             icon={Flame}
             color="bg-gradient-to-r from-red-500 to-orange-500"
           />
-          
+
           <StatCard
             title="Joriy Vazn"
             value={currentWeight.toFixed(1)}
@@ -303,7 +325,7 @@ export default function AdvancedAnalytics() {
             icon={Target}
             color="bg-gradient-to-r from-green-500 to-emerald-500"
           />
-          
+
           <StatCard
             title="O'rtacha Qadamlar"
             value={formatNumber(averageSteps)}
@@ -311,7 +333,7 @@ export default function AdvancedAnalytics() {
             icon={Activity}
             color="bg-gradient-to-r from-blue-500 to-cyan-500"
           />
-          
+
           <StatCard
             title="Suv Iste'moli"
             value="8.2"
@@ -322,17 +344,30 @@ export default function AdvancedAnalytics() {
         </div>
 
         {/* Main Analytics */}
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+        <Tabs
+          value={activeTab}
+          onValueChange={setActiveTab}
+          className="space-y-6"
+        >
           <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="overview" className="flex items-center space-x-2">
+            <TabsTrigger
+              value="overview"
+              className="flex items-center space-x-2"
+            >
               <BarChart3 className="w-4 h-4" />
               <span>Umumiy</span>
             </TabsTrigger>
-            <TabsTrigger value="nutrition" className="flex items-center space-x-2">
+            <TabsTrigger
+              value="nutrition"
+              className="flex items-center space-x-2"
+            >
               <PieChartIcon className="w-4 h-4" />
               <span>Ovqatlanish</span>
             </TabsTrigger>
-            <TabsTrigger value="activity" className="flex items-center space-x-2">
+            <TabsTrigger
+              value="activity"
+              className="flex items-center space-x-2"
+            >
               <Activity className="w-4 h-4" />
               <span>Faollik</span>
             </TabsTrigger>
@@ -359,27 +394,27 @@ export default function AdvancedAnalytics() {
                       <CartesianGrid strokeDasharray="3 3" />
                       <XAxis dataKey="dateShort" />
                       <YAxis />
-                      <Tooltip 
+                      <Tooltip
                         formatter={(value, name) => [
-                          `${value} kaloriya`, 
-                          name === 'calories' ? 'Iste\'mol' : 'Yoqilgan'
+                          `${value} kaloriya`,
+                          name === "calories" ? "Iste'mol" : "Yoqilgan",
                         ]}
                       />
                       <Legend />
-                      <Line 
-                        type="monotone" 
-                        dataKey="calories" 
-                        stroke="#22C55E" 
+                      <Line
+                        type="monotone"
+                        dataKey="calories"
+                        stroke="#22C55E"
                         strokeWidth={3}
-                        dot={{ fill: '#22C55E', strokeWidth: 2, r: 4 }}
+                        dot={{ fill: "#22C55E", strokeWidth: 2, r: 4 }}
                         name="Iste'mol"
                       />
-                      <Line 
-                        type="monotone" 
-                        dataKey="caloriesBurned" 
-                        stroke="#EF4444" 
+                      <Line
+                        type="monotone"
+                        dataKey="caloriesBurned"
+                        stroke="#EF4444"
                         strokeWidth={3}
-                        dot={{ fill: '#EF4444', strokeWidth: 2, r: 4 }}
+                        dot={{ fill: "#EF4444", strokeWidth: 2, r: 4 }}
                         name="Yoqilgan"
                       />
                     </LineChart>
@@ -400,8 +435,8 @@ export default function AdvancedAnalytics() {
                     <AreaChart data={mockData}>
                       <CartesianGrid strokeDasharray="3 3" />
                       <XAxis dataKey="dateShort" />
-                      <YAxis domain={['dataMin - 1', 'dataMax + 1']} />
-                      <Tooltip formatter={(value) => [`${value} kg`, 'Vazn']} />
+                      <YAxis domain={["dataMin - 1", "dataMax + 1"]} />
+                      <Tooltip formatter={(value) => [`${value} kg`, "Vazn"]} />
                       <Area
                         type="monotone"
                         dataKey="weight"
@@ -410,9 +445,23 @@ export default function AdvancedAnalytics() {
                         strokeWidth={2}
                       />
                       <defs>
-                        <linearGradient id="weightGradient" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="5%" stopColor="#8B5CF6" stopOpacity={0.8}/>
-                          <stop offset="95%" stopColor="#8B5CF6" stopOpacity={0.1}/>
+                        <linearGradient
+                          id="weightGradient"
+                          x1="0"
+                          y1="0"
+                          x2="0"
+                          y2="1"
+                        >
+                          <stop
+                            offset="5%"
+                            stopColor="#8B5CF6"
+                            stopOpacity={0.8}
+                          />
+                          <stop
+                            offset="95%"
+                            stopColor="#8B5CF6"
+                            stopOpacity={0.1}
+                          />
                         </linearGradient>
                       </defs>
                     </AreaChart>
@@ -434,9 +483,24 @@ export default function AdvancedAnalytics() {
                     <YAxis />
                     <Tooltip />
                     <Legend />
-                    <Bar dataKey="calories" fill="#22C55E" name="Iste'mol" radius={[4, 4, 0, 0]} />
-                    <Bar dataKey="target" fill="#94A3B8" name="Maqsad" radius={[4, 4, 0, 0]} />
-                    <Bar dataKey="burned" fill="#EF4444" name="Yoqilgan" radius={[4, 4, 0, 0]} />
+                    <Bar
+                      dataKey="calories"
+                      fill="#22C55E"
+                      name="Iste'mol"
+                      radius={[4, 4, 0, 0]}
+                    />
+                    <Bar
+                      dataKey="target"
+                      fill="#94A3B8"
+                      name="Maqsad"
+                      radius={[4, 4, 0, 0]}
+                    />
+                    <Bar
+                      dataKey="burned"
+                      fill="#EF4444"
+                      name="Yoqilgan"
+                      radius={[4, 4, 0, 0]}
+                    />
                   </BarChart>
                 </ResponsiveContainer>
               </CardContent>
@@ -459,7 +523,9 @@ export default function AdvancedAnalytics() {
                         cx="50%"
                         cy="50%"
                         labelLine={false}
-                        label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                        label={({ name, percent }) =>
+                          `${name} ${(percent * 100).toFixed(0)}%`
+                        }
                         outerRadius={100}
                         fill="#8884d8"
                         dataKey="value"
@@ -528,7 +594,12 @@ export default function AdvancedAnalytics() {
                       <CartesianGrid strokeDasharray="3 3" />
                       <XAxis dataKey="dateShort" />
                       <YAxis />
-                      <Tooltip formatter={(value) => [`${formatNumber(value as number)}`, 'Qadamlar']} />
+                      <Tooltip
+                        formatter={(value) => [
+                          `${formatNumber(value as number)}`,
+                          "Qadamlar",
+                        ]}
+                      />
                       <Area
                         type="monotone"
                         dataKey="steps"
@@ -537,9 +608,23 @@ export default function AdvancedAnalytics() {
                         strokeWidth={2}
                       />
                       <defs>
-                        <linearGradient id="stepsGradient" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="5%" stopColor="#F59E0B" stopOpacity={0.8}/>
-                          <stop offset="95%" stopColor="#F59E0B" stopOpacity={0.1}/>
+                        <linearGradient
+                          id="stepsGradient"
+                          x1="0"
+                          y1="0"
+                          x2="0"
+                          y2="1"
+                        >
+                          <stop
+                            offset="5%"
+                            stopColor="#F59E0B"
+                            stopOpacity={0.8}
+                          />
+                          <stop
+                            offset="95%"
+                            stopColor="#F59E0B"
+                            stopOpacity={0.1}
+                          />
                         </linearGradient>
                       </defs>
                     </AreaChart>
@@ -560,11 +645,15 @@ export default function AdvancedAnalytics() {
                       </div>
                       <div>
                         <p className="font-medium">Jami Qadam</p>
-                        <p className="text-sm text-muted-foreground">So'nggi 7 kun</p>
+                        <p className="text-sm text-muted-foreground">
+                          So'nggi 7 kun
+                        </p>
                       </div>
                     </div>
                     <div className="text-right">
-                      <p className="text-2xl font-bold">{formatNumber(65432)}</p>
+                      <p className="text-2xl font-bold">
+                        {formatNumber(65432)}
+                      </p>
                       <p className="text-sm text-activity-600">+12% o'sish</p>
                     </div>
                   </div>
@@ -576,7 +665,9 @@ export default function AdvancedAnalytics() {
                       </div>
                       <div>
                         <p className="font-medium">Yoqilgan Kaloriya</p>
-                        <p className="text-sm text-muted-foreground">So'nggi 7 kun</p>
+                        <p className="text-sm text-muted-foreground">
+                          So'nggi 7 kun
+                        </p>
                       </div>
                     </div>
                     <div className="text-right">
@@ -592,7 +683,9 @@ export default function AdvancedAnalytics() {
                       </div>
                       <div>
                         <p className="font-medium">Faol Vaqt</p>
-                        <p className="text-sm text-muted-foreground">Kunlik o'rtacha</p>
+                        <p className="text-sm text-muted-foreground">
+                          Kunlik o'rtacha
+                        </p>
                       </div>
                     </div>
                     <div className="text-right">
@@ -615,14 +708,20 @@ export default function AdvancedAnalytics() {
                 </CardHeader>
                 <CardContent>
                   <ResponsiveContainer width="100%" height={300}>
-                    <RadialBarChart data={goalProgressData} innerRadius="20%" outerRadius="90%">
+                    <RadialBarChart
+                      data={goalProgressData}
+                      innerRadius="20%"
+                      outerRadius="90%"
+                    >
                       <RadialBar
                         dataKey="value"
                         cornerRadius={8}
                         fill="#8884d8"
                       />
                       <Legend />
-                      <Tooltip formatter={(value) => [`${value}%`, 'Progress']} />
+                      <Tooltip
+                        formatter={(value) => [`${value}%`, "Progress"]}
+                      />
                     </RadialBarChart>
                   </ResponsiveContainer>
                 </CardContent>
@@ -643,7 +742,9 @@ export default function AdvancedAnalytics() {
                     </div>
                     <div className="flex-1">
                       <p className="font-medium">Haftalik Maqsad</p>
-                      <p className="text-sm text-muted-foreground">7 kun ketma-ket calorie goal</p>
+                      <p className="text-sm text-muted-foreground">
+                        7 kun ketma-ket calorie goal
+                      </p>
                     </div>
                     <Badge variant="secondary">Yangi!</Badge>
                   </div>
@@ -654,7 +755,9 @@ export default function AdvancedAnalytics() {
                     </div>
                     <div className="flex-1">
                       <p className="font-medium">Suv Qahramoni</p>
-                      <p className="text-sm text-muted-foreground">14 kun ketma-ket hydration goal</p>
+                      <p className="text-sm text-muted-foreground">
+                        14 kun ketma-ket hydration goal
+                      </p>
                     </div>
                     <Badge variant="outline">2 kun qoldi</Badge>
                   </div>
@@ -665,7 +768,9 @@ export default function AdvancedAnalytics() {
                     </div>
                     <div className="flex-1">
                       <p className="font-medium">Step Master</p>
-                      <p className="text-sm text-muted-foreground">10,000+ qadamlar</p>
+                      <p className="text-sm text-muted-foreground">
+                        10,000+ qadamlar
+                      </p>
                     </div>
                     <Badge variant="secondary">3/7</Badge>
                   </div>
@@ -682,8 +787,12 @@ export default function AdvancedAnalytics() {
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm text-muted-foreground">Joriy vazn</p>
-                      <p className="text-2xl font-bold">{currentWeight.toFixed(1)} kg</p>
+                      <p className="text-sm text-muted-foreground">
+                        Joriy vazn
+                      </p>
+                      <p className="text-2xl font-bold">
+                        {currentWeight.toFixed(1)} kg
+                      </p>
                     </div>
                     <div className="text-center">
                       <p className="text-sm text-muted-foreground">Maqsad</p>
@@ -696,14 +805,22 @@ export default function AdvancedAnalytics() {
                       </p>
                     </div>
                   </div>
-                  
-                  <Progress 
-                    value={Math.min(100, Math.abs(currentWeight - targetWeight) * 20)} 
+
+                  <Progress
+                    value={Math.min(
+                      100,
+                      Math.abs(currentWeight - targetWeight) * 20,
+                    )}
                     className="h-3"
                   />
-                  
+
                   <p className="text-sm text-center text-muted-foreground">
-                    {user?.goal === 'lose' ? 'Yoqish' : user?.goal === 'gain' ? 'Olish' : 'Saqlash'} maqsadi
+                    {user?.goal === "lose"
+                      ? "Yoqish"
+                      : user?.goal === "gain"
+                        ? "Olish"
+                        : "Saqlash"}{" "}
+                    maqsadi
                   </p>
                 </div>
               </CardContent>

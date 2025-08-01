@@ -15,11 +15,11 @@ export default async function handler(req, res) {
     if (req.method === "GET") {
       // Get user data by Telegram ID
       const { telegram_id } = req.query;
-      
+
       if (!telegram_id) {
-        return res.status(400).json({ 
+        return res.status(400).json({
           error: "telegram_id parameter is required",
-          success: false 
+          success: false,
         });
       }
 
@@ -43,9 +43,9 @@ export default async function handler(req, res) {
         current_weight: null,
         gender: null,
         birth_date: null,
-        activity_level: 'moderate',
+        activity_level: "moderate",
         created_at: new Date().toISOString(),
-        last_active: new Date().toISOString()
+        last_active: new Date().toISOString(),
       };
 
       const initData = {
@@ -55,14 +55,14 @@ export default async function handler(req, res) {
         default_goals: {
           calories: userData.daily_calorie_goal,
           water: userData.daily_water_goal,
-          steps: userData.daily_steps_goal
+          steps: userData.daily_steps_goal,
         },
         app_config: {
-          theme: 'light',
+          theme: "light",
           language: userData.language_code,
           notifications_enabled: true,
           ai_suggestions: true,
-          haptic_feedback: true
+          haptic_feedback: true,
         },
         features_enabled: {
           food_tracking: true,
@@ -71,21 +71,20 @@ export default async function handler(req, res) {
           sleep_tracking: true,
           workout_tracking: true,
           analytics: true,
-          ai_recommendations: true
-        }
+          ai_recommendations: true,
+        },
       };
 
       console.log("✅ User data retrieved successfully:", telegram_id);
       return res.status(200).json(initData);
-
     } else if (req.method === "POST") {
       // Initialize/Update user data
       const userData = req.body;
-      
+
       if (!userData.telegram_id) {
-        return res.status(400).json({ 
+        return res.status(400).json({
           error: "telegram_id is required",
-          success: false 
+          success: false,
         });
       }
 
@@ -97,7 +96,7 @@ export default async function handler(req, res) {
         id: Math.floor(Math.random() * 1000000),
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
-        profile_completed: false
+        profile_completed: false,
       };
 
       // Prepare response
@@ -108,27 +107,25 @@ export default async function handler(req, res) {
         onboarding_required: !savedUser.profile_completed,
         next_steps: [
           "Complete profile setup",
-          "Set health goals", 
-          "Start tracking meals"
-        ]
+          "Set health goals",
+          "Start tracking meals",
+        ],
       };
 
       console.log("✅ User initialized successfully:", userData.telegram_id);
       return res.status(200).json(response);
-
     } else {
-      return res.status(405).json({ 
+      return res.status(405).json({
         error: "Method not allowed",
-        success: false 
+        success: false,
       });
     }
-
   } catch (error) {
     console.error("❌ API Error:", error);
-    return res.status(500).json({ 
+    return res.status(500).json({
       error: "Internal server error",
       success: false,
-      details: error.message 
+      details: error.message,
     });
   }
 }

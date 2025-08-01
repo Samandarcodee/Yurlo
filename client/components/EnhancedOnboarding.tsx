@@ -8,7 +8,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -31,39 +37,37 @@ import { z } from "zod";
 
 // === VALIDATION SCHEMAS ===
 const PersonalInfoSchema = z.object({
-  name: z.string()
+  name: z
+    .string()
     .min(2, "Ism kamida 2 ta harf bo'lishi kerak")
     .max(50, "Ism 50 ta harfdan oshmasligi kerak"),
   gender: z.enum(["male", "female"], {
-    errorMap: () => ({ message: "Jinsiyatni tanlang" })
+    errorMap: () => ({ message: "Jinsiyatni tanlang" }),
   }),
-  birthYear: z.string()
-    .refine((val) => {
-      const year = parseInt(val);
-      const currentYear = new Date().getFullYear();
-      return year >= 1900 && year <= currentYear - 13;
-    }, "Yoshingiz 13 dan katta bo'lishi kerak"),
+  birthYear: z.string().refine((val) => {
+    const year = parseInt(val);
+    const currentYear = new Date().getFullYear();
+    return year >= 1900 && year <= currentYear - 13;
+  }, "Yoshingiz 13 dan katta bo'lishi kerak"),
 });
 
 const BodyMetricsSchema = z.object({
-  height: z.string()
-    .refine((val) => {
-      const height = parseFloat(val);
-      return height >= 100 && height <= 250;
-    }, "Bo'y 100-250 sm oralig'ida bo'lishi kerak"),
-  weight: z.string()
-    .refine((val) => {
-      const weight = parseFloat(val);
-      return weight >= 30 && weight <= 300;
-    }, "Vazn 30-300 kg oralig'ida bo'lishi kerak"),
+  height: z.string().refine((val) => {
+    const height = parseFloat(val);
+    return height >= 100 && height <= 250;
+  }, "Bo'y 100-250 sm oralig'ida bo'lishi kerak"),
+  weight: z.string().refine((val) => {
+    const weight = parseFloat(val);
+    return weight >= 30 && weight <= 300;
+  }, "Vazn 30-300 kg oralig'ida bo'lishi kerak"),
   activityLevel: z.enum(["low", "medium", "high"], {
-    errorMap: () => ({ message: "Faollik darajasini tanlang" })
+    errorMap: () => ({ message: "Faollik darajasini tanlang" }),
   }),
 });
 
 const HealthGoalsSchema = z.object({
   goal: z.enum(["lose", "maintain", "gain"], {
-    errorMap: () => ({ message: "Maqsadni tanlang" })
+    errorMap: () => ({ message: "Maqsadni tanlang" }),
   }),
   targetWeight: z.string().optional(),
   timeline: z.enum(["1month", "3months", "6months", "1year"]).optional(),
@@ -106,52 +110,52 @@ interface OnboardingStep {
 // === STEP DEFINITIONS ===
 const ONBOARDING_STEPS: OnboardingStep[] = [
   {
-    id: 'welcome',
-    title: 'Xush kelibsiz!',
-    description: 'Caloria AI bilan sog\'liq sayohatingizni boshlang',
+    id: "welcome",
+    title: "Xush kelibsiz!",
+    description: "Caloria AI bilan sog'liq sayohatingizni boshlang",
     icon: Sparkles,
     progress: 15,
   },
   {
-    id: 'personal-info',
-    title: 'Shaxsiy ma\'lumotlar',
-    description: 'Ismingiz, yoshingiz va jinsiyatingiz',
+    id: "personal-info",
+    title: "Shaxsiy ma'lumotlar",
+    description: "Ismingiz, yoshingiz va jinsiyatingiz",
     icon: User,
     progress: 35,
     validation: PersonalInfoSchema,
   },
   {
-    id: 'body-metrics',
-    title: 'Tana o\'lchamlari',
-    description: 'Bo\'y, vazn va faollik darajangiz',
+    id: "body-metrics",
+    title: "Tana o'lchamlari",
+    description: "Bo'y, vazn va faollik darajangiz",
     icon: Ruler,
     progress: 55,
     validation: BodyMetricsSchema,
   },
   {
-    id: 'health-goals',
-    title: 'Sog\'liq maqsadlari',
-    description: 'Nimaga erishmoqchisiz?',
+    id: "health-goals",
+    title: "Sog'liq maqsadlari",
+    description: "Nimaga erishmoqchisiz?",
     icon: Target,
     progress: 75,
     validation: HealthGoalsSchema,
   },
   {
-    id: 'preferences',
-    title: 'Shaxsiy sozlamalar',
-    description: 'Uyqu rejimi va tilni sozlang',
+    id: "preferences",
+    title: "Shaxsiy sozlamalar",
+    description: "Uyqu rejimi va tilni sozlang",
     icon: Clock,
     progress: 90,
     isOptional: true,
     validation: PreferencesSchema,
   },
   {
-    id: 'completion',
-    title: 'Tayyor!',
-    description: 'Profilingiz muvaffaqiyatli sozlandi',
+    id: "completion",
+    title: "Tayyor!",
+    description: "Profilingiz muvaffaqiyatli sozlandi",
     icon: CheckCircle,
     progress: 100,
-  }
+  },
 ];
 
 // === ANIMATION VARIANTS ===
@@ -166,7 +170,7 @@ const stepVariants = {
     opacity: 1,
     scale: 1,
     transition: {
-      type: "spring",
+      type: "spring" as const,
       stiffness: 300,
       damping: 30,
     },
@@ -176,7 +180,7 @@ const stepVariants = {
     opacity: 0,
     scale: 0.8,
     transition: {
-      type: "spring",
+      type: "spring" as const,
       stiffness: 300,
       damping: 30,
     },
@@ -185,11 +189,11 @@ const stepVariants = {
 
 const progressVariants = {
   initial: { width: 0 },
-  animate: { 
+  animate: {
     width: "100%",
     transition: {
       duration: 0.8,
-      ease: "easeOut",
+      ease: "easeOut" as const,
     },
   },
 };
@@ -199,11 +203,11 @@ export default function EnhancedOnboarding() {
   const navigate = useNavigate();
   const { updateUser } = useUser();
   const { user: telegramUser, hapticFeedback } = useTelegram();
-  
+
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
-  
+
   const [formData, setFormData] = useState<OnboardingData>({
     name: telegramUser?.first_name || "",
     gender: "",
@@ -216,8 +220,12 @@ export default function EnhancedOnboarding() {
     timeline: "",
     sleepTime: "",
     wakeTime: "",
-    language: telegramUser?.language_code === "uz" ? "uz" : 
-               telegramUser?.language_code === "ru" ? "ru" : "en",
+    language:
+      telegramUser?.language_code === "uz"
+        ? "uz"
+        : telegramUser?.language_code === "ru"
+          ? "ru"
+          : "en",
     notifications: true,
   });
 
@@ -226,13 +234,16 @@ export default function EnhancedOnboarding() {
   const isFirstStep = currentStepIndex === 0;
 
   // === UTILITY FUNCTIONS ===
-  const updateFormData = useCallback((field: keyof OnboardingData, value: string | boolean) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
-    // Clear error when user starts typing
-    if (errors[field]) {
-      setErrors(prev => ({ ...prev, [field]: "" }));
-    }
-  }, [errors]);
+  const updateFormData = useCallback(
+    (field: keyof OnboardingData, value: string | boolean) => {
+      setFormData((prev) => ({ ...prev, [field]: value }));
+      // Clear error when user starts typing
+      if (errors[field]) {
+        setErrors((prev) => ({ ...prev, [field]: "" }));
+      }
+    },
+    [errors],
+  );
 
   const validateCurrentStep = useCallback(() => {
     const step = currentStep;
@@ -245,7 +256,7 @@ export default function EnhancedOnboarding() {
     } catch (error) {
       if (error instanceof z.ZodError) {
         const newErrors: Record<string, string> = {};
-        error.errors.forEach(err => {
+        error.errors.forEach((err) => {
           if (err.path.length > 0) {
             newErrors[err.path[0] as string] = err.message;
           }
@@ -263,23 +274,23 @@ export default function EnhancedOnboarding() {
     }
 
     hapticFeedback.impact("light");
-    
+
     if (currentStepIndex < ONBOARDING_STEPS.length - 1) {
-      setCurrentStepIndex(prev => prev + 1);
+      setCurrentStepIndex((prev) => prev + 1);
     }
   }, [currentStepIndex, currentStep, validateCurrentStep, hapticFeedback]);
 
   const prevStep = useCallback(() => {
     hapticFeedback.impact("light");
     if (currentStepIndex > 0) {
-      setCurrentStepIndex(prev => prev - 1);
+      setCurrentStepIndex((prev) => prev - 1);
     }
   }, [currentStepIndex, hapticFeedback]);
 
   const submitOnboarding = useCallback(async () => {
     setLoading(true);
     hapticFeedback.impact("heavy");
-    
+
     try {
       // Calculate BMR and daily calories
       const age = new Date().getFullYear() - parseInt(formData.birthYear);
@@ -300,7 +311,10 @@ export default function EnhancedOnboarding() {
       };
 
       const dailyCalories = Math.round(
-        bmr * activityMultiplier[formData.activityLevel as keyof typeof activityMultiplier]
+        bmr *
+          activityMultiplier[
+            formData.activityLevel as keyof typeof activityMultiplier
+          ],
       );
 
       // Create user profile
@@ -325,15 +339,14 @@ export default function EnhancedOnboarding() {
 
       // Update user context
       updateUser(userProfile);
-      
+
       // Celebrate completion
       hapticFeedback.notification("success");
-      
+
       // Navigate to main app
       setTimeout(() => {
         navigate("/", { replace: true });
       }, 2000);
-      
     } catch (error) {
       console.error("Onboarding error:", error);
       hapticFeedback.notification("error");
@@ -355,13 +368,13 @@ export default function EnhancedOnboarding() {
           </div>
         </div>
       </div>
-      
+
       <div className="space-y-4">
         <h2 className="text-3xl font-bold bg-gradient-to-r from-mint-600 to-water-600 bg-clip-text text-transparent">
           Salom, {telegramUser?.first_name || "Foydalanuvchi"}! 👋
         </h2>
         <p className="text-lg text-muted-foreground max-w-md mx-auto">
-          Caloria AI bilan sog'liq sayohatingizni boshlang. Bir necha daqiqada 
+          Caloria AI bilan sog'liq sayohatingizni boshlang. Bir necha daqiqada
           shaxsiy profilingizni sozlab olamiz.
         </p>
       </div>
@@ -369,7 +382,9 @@ export default function EnhancedOnboarding() {
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-8">
         <div className="p-4 bg-success-50 rounded-xl text-center">
           <Heart className="w-8 h-8 text-success-600 mx-auto mb-2" />
-          <p className="text-sm font-medium text-success-800">Sog'liq Kuzatuvi</p>
+          <p className="text-sm font-medium text-success-800">
+            Sog'liq Kuzatuvi
+          </p>
         </div>
         <div className="p-4 bg-water-50 rounded-xl text-center">
           <Zap className="w-8 h-8 text-water-600 mx-auto mb-2" />
@@ -387,7 +402,9 @@ export default function EnhancedOnboarding() {
     <div className="space-y-6">
       <div className="space-y-4">
         <div>
-          <Label htmlFor="name" className="text-sm font-medium">Ismingiz</Label>
+          <Label htmlFor="name" className="text-sm font-medium">
+            Ismingiz
+          </Label>
           <Input
             id="name"
             value={formData.name}
@@ -395,7 +412,9 @@ export default function EnhancedOnboarding() {
             placeholder="Ismingizni kiriting"
             className={errors.name ? "border-red-500" : ""}
           />
-          {errors.name && <p className="text-sm text-red-500 mt-1">{errors.name}</p>}
+          {errors.name && (
+            <p className="text-sm text-red-500 mt-1">{errors.name}</p>
+          )}
         </div>
 
         <div>
@@ -414,12 +433,19 @@ export default function EnhancedOnboarding() {
               <Label htmlFor="female">Ayol</Label>
             </div>
           </RadioGroup>
-          {errors.gender && <p className="text-sm text-red-500 mt-1">{errors.gender}</p>}
+          {errors.gender && (
+            <p className="text-sm text-red-500 mt-1">{errors.gender}</p>
+          )}
         </div>
 
         <div>
-          <Label htmlFor="birthYear" className="text-sm font-medium">Tug'ilgan yil</Label>
-          <Select value={formData.birthYear} onValueChange={(value) => updateFormData("birthYear", value)}>
+          <Label htmlFor="birthYear" className="text-sm font-medium">
+            Tug'ilgan yil
+          </Label>
+          <Select
+            value={formData.birthYear}
+            onValueChange={(value) => updateFormData("birthYear", value)}
+          >
             <SelectTrigger className={errors.birthYear ? "border-red-500" : ""}>
               <SelectValue placeholder="Yilni tanlang" />
             </SelectTrigger>
@@ -434,7 +460,9 @@ export default function EnhancedOnboarding() {
               })}
             </SelectContent>
           </Select>
-          {errors.birthYear && <p className="text-sm text-red-500 mt-1">{errors.birthYear}</p>}
+          {errors.birthYear && (
+            <p className="text-sm text-red-500 mt-1">{errors.birthYear}</p>
+          )}
         </div>
       </div>
     </div>
@@ -444,7 +472,9 @@ export default function EnhancedOnboarding() {
     <div className="space-y-6">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <Label htmlFor="height" className="text-sm font-medium">Bo'y (sm)</Label>
+          <Label htmlFor="height" className="text-sm font-medium">
+            Bo'y (sm)
+          </Label>
           <Input
             id="height"
             type="number"
@@ -453,11 +483,15 @@ export default function EnhancedOnboarding() {
             placeholder="175"
             className={errors.height ? "border-red-500" : ""}
           />
-          {errors.height && <p className="text-sm text-red-500 mt-1">{errors.height}</p>}
+          {errors.height && (
+            <p className="text-sm text-red-500 mt-1">{errors.height}</p>
+          )}
         </div>
 
         <div>
-          <Label htmlFor="weight" className="text-sm font-medium">Vazn (kg)</Label>
+          <Label htmlFor="weight" className="text-sm font-medium">
+            Vazn (kg)
+          </Label>
           <Input
             id="weight"
             type="number"
@@ -466,7 +500,9 @@ export default function EnhancedOnboarding() {
             placeholder="70"
             className={errors.weight ? "border-red-500" : ""}
           />
-          {errors.weight && <p className="text-sm text-red-500 mt-1">{errors.weight}</p>}
+          {errors.weight && (
+            <p className="text-sm text-red-500 mt-1">{errors.weight}</p>
+          )}
         </div>
       </div>
 
@@ -480,28 +516,42 @@ export default function EnhancedOnboarding() {
           <div className="flex items-center space-x-3 p-3 rounded-lg border hover:bg-gray-50">
             <RadioGroupItem value="low" id="low" />
             <div className="flex-1">
-              <Label htmlFor="low" className="font-medium">Kam faol</Label>
-              <p className="text-sm text-muted-foreground">Asosan o'tirib ishlash, kam sport</p>
+              <Label htmlFor="low" className="font-medium">
+                Kam faol
+              </Label>
+              <p className="text-sm text-muted-foreground">
+                Asosan o'tirib ishlash, kam sport
+              </p>
             </div>
           </div>
-          
+
           <div className="flex items-center space-x-3 p-3 rounded-lg border hover:bg-gray-50">
             <RadioGroupItem value="medium" id="medium" />
             <div className="flex-1">
-              <Label htmlFor="medium" className="font-medium">O'rtacha faol</Label>
-              <p className="text-sm text-muted-foreground">Haftada 3-5 marta sport</p>
+              <Label htmlFor="medium" className="font-medium">
+                O'rtacha faol
+              </Label>
+              <p className="text-sm text-muted-foreground">
+                Haftada 3-5 marta sport
+              </p>
             </div>
           </div>
-          
+
           <div className="flex items-center space-x-3 p-3 rounded-lg border hover:bg-gray-50">
             <RadioGroupItem value="high" id="high" />
             <div className="flex-1">
-              <Label htmlFor="high" className="font-medium">Juda faol</Label>
-              <p className="text-sm text-muted-foreground">Har kuni sport, og'ir jismoniy ish</p>
+              <Label htmlFor="high" className="font-medium">
+                Juda faol
+              </Label>
+              <p className="text-sm text-muted-foreground">
+                Har kuni sport, og'ir jismoniy ish
+              </p>
             </div>
           </div>
         </RadioGroup>
-        {errors.activityLevel && <p className="text-sm text-red-500 mt-1">{errors.activityLevel}</p>}
+        {errors.activityLevel && (
+          <p className="text-sm text-red-500 mt-1">{errors.activityLevel}</p>
+        )}
       </div>
     </div>
   );
@@ -518,31 +568,45 @@ export default function EnhancedOnboarding() {
           <div className="flex items-center space-x-3 p-4 rounded-lg border hover:bg-gray-50">
             <RadioGroupItem value="lose" id="lose" />
             <div className="flex-1">
-              <Label htmlFor="lose" className="font-medium">Vazn kamaytirishz</Label>
-              <p className="text-sm text-muted-foreground">Sog'lom usulda vazn yo'qotish</p>
+              <Label htmlFor="lose" className="font-medium">
+                Vazn kamaytirishz
+              </Label>
+              <p className="text-sm text-muted-foreground">
+                Sog'lom usulda vazn yo'qotish
+              </p>
             </div>
             <span className="text-2xl">🔥</span>
           </div>
-          
+
           <div className="flex items-center space-x-3 p-4 rounded-lg border hover:bg-gray-50">
             <RadioGroupItem value="maintain" id="maintain" />
             <div className="flex-1">
-              <Label htmlFor="maintain" className="font-medium">Vaznni saqlash</Label>
-              <p className="text-sm text-muted-foreground">Joriy vaznni barqaror ushlab turish</p>
+              <Label htmlFor="maintain" className="font-medium">
+                Vaznni saqlash
+              </Label>
+              <p className="text-sm text-muted-foreground">
+                Joriy vaznni barqaror ushlab turish
+              </p>
             </div>
             <span className="text-2xl">⚖️</span>
           </div>
-          
+
           <div className="flex items-center space-x-3 p-4 rounded-lg border hover:bg-gray-50">
             <RadioGroupItem value="gain" id="gain" />
             <div className="flex-1">
-              <Label htmlFor="gain" className="font-medium">Vazn ko'tarish</Label>
-              <p className="text-sm text-muted-foreground">Sog'lom usulda vazn olish</p>
+              <Label htmlFor="gain" className="font-medium">
+                Vazn ko'tarish
+              </Label>
+              <p className="text-sm text-muted-foreground">
+                Sog'lom usulda vazn olish
+              </p>
             </div>
             <span className="text-2xl">💪</span>
           </div>
         </RadioGroup>
-        {errors.goal && <p className="text-sm text-red-500 mt-1">{errors.goal}</p>}
+        {errors.goal && (
+          <p className="text-sm text-red-500 mt-1">{errors.goal}</p>
+        )}
       </div>
     </div>
   );
@@ -555,37 +619,48 @@ export default function EnhancedOnboarding() {
         </div>
         <div className="absolute inset-0 w-24 h-24 mx-auto rounded-full bg-success-500 opacity-30 animate-ping"></div>
       </div>
-      
+
       <div className="space-y-4">
         <h2 className="text-3xl font-bold text-success-600">
           Tabriklaymiz! 🎉
         </h2>
         <p className="text-lg text-muted-foreground max-w-md mx-auto">
-          Profilingiz muvaffaqiyatli sozlandi. Endi Caloria AI bilan 
-          sog'liq sayohatingizni boshlashingiz mumkin!
+          Profilingiz muvaffaqiyatli sozlandi. Endi Caloria AI bilan sog'liq
+          sayohatingizni boshlashingiz mumkin!
         </p>
       </div>
 
       <div className="bg-gradient-success p-6 rounded-2xl text-center">
-        <h3 className="font-semibold text-success-800 mb-2">Sizning kunlik maqsadingiz:</h3>
+        <h3 className="font-semibold text-success-800 mb-2">
+          Sizning kunlik maqsadingiz:
+        </h3>
         <div className="text-3xl font-bold text-success-900">
           {useMemo(() => {
-            const age = new Date().getFullYear() - parseInt(formData.birthYear || "2000");
+            const age =
+              new Date().getFullYear() - parseInt(formData.birthYear || "2000");
             const heightNum = parseFloat(formData.height || "170");
             const weightNum = parseFloat(formData.weight || "70");
-            
+
             let bmr = 0;
             if (formData.gender === "male") {
-              bmr = 88.362 + 13.397 * weightNum + 4.799 * heightNum - 5.677 * age;
+              bmr =
+                88.362 + 13.397 * weightNum + 4.799 * heightNum - 5.677 * age;
             } else {
-              bmr = 447.593 + 9.247 * weightNum + 3.098 * heightNum - 4.33 * age;
+              bmr =
+                447.593 + 9.247 * weightNum + 3.098 * heightNum - 4.33 * age;
             }
-            
+
             const activityMultiplier = { low: 1.2, medium: 1.55, high: 1.725 };
-            const dailyCalories = Math.round(bmr * activityMultiplier[formData.activityLevel as keyof typeof activityMultiplier]);
-            
+            const dailyCalories = Math.round(
+              bmr *
+                activityMultiplier[
+                  formData.activityLevel as keyof typeof activityMultiplier
+                ],
+            );
+
             return dailyCalories;
-          }, [formData])} kaloriya
+          }, [formData])}{" "}
+          kaloriya
         </div>
       </div>
     </div>
@@ -594,15 +669,15 @@ export default function EnhancedOnboarding() {
   // === RENDER CURRENT STEP CONTENT ===
   const renderStepContent = () => {
     switch (currentStep.id) {
-      case 'welcome':
+      case "welcome":
         return renderWelcomeStep();
-      case 'personal-info':
+      case "personal-info":
         return renderPersonalInfoStep();
-      case 'body-metrics':
+      case "body-metrics":
         return renderBodyMetricsStep();
-      case 'health-goals':
+      case "health-goals":
         return renderHealthGoalsStep();
-      case 'preferences':
+      case "preferences":
         return (
           <div className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
@@ -625,10 +700,13 @@ export default function EnhancedOnboarding() {
                 />
               </div>
             </div>
-            
+
             <div>
               <Label>Til</Label>
-              <Select value={formData.language} onValueChange={(value) => updateFormData("language", value)}>
+              <Select
+                value={formData.language}
+                onValueChange={(value) => updateFormData("language", value)}
+              >
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
@@ -641,7 +719,7 @@ export default function EnhancedOnboarding() {
             </div>
           </div>
         );
-      case 'completion':
+      case "completion":
         return renderCompletionStep();
       default:
         return null;
@@ -664,7 +742,7 @@ export default function EnhancedOnboarding() {
               </Badge>
             )}
           </div>
-          
+
           <div className="relative">
             <Progress value={currentStep.progress} className="h-3" />
             <motion.div
@@ -675,7 +753,7 @@ export default function EnhancedOnboarding() {
               style={{ width: `${currentStep.progress}%` }}
             />
           </div>
-          
+
           <p className="text-xs text-muted-foreground mt-2">
             {currentStep.progress}% tayyor
           </p>
@@ -689,10 +767,12 @@ export default function EnhancedOnboarding() {
                 <currentStep.icon className="w-8 h-8 text-white" />
               </div>
             </div>
-            <CardTitle className="text-2xl font-bold">{currentStep.title}</CardTitle>
+            <CardTitle className="text-2xl font-bold">
+              {currentStep.title}
+            </CardTitle>
             <p className="text-muted-foreground">{currentStep.description}</p>
           </CardHeader>
-          
+
           <CardContent className="px-6 pb-6">
             <AnimatePresence mode="wait">
               <motion.div
@@ -719,20 +799,20 @@ export default function EnhancedOnboarding() {
             <ArrowLeft className="w-4 h-4" />
             Orqaga
           </Button>
-          
+
           <div className="flex gap-2">
             {ONBOARDING_STEPS.map((_, index) => (
               <div
                 key={index}
                 className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                  index <= currentStepIndex 
-                    ? "bg-mint-500 scale-125" 
+                  index <= currentStepIndex
+                    ? "bg-mint-500 scale-125"
                     : "bg-gray-300"
                 }`}
               />
             ))}
           </div>
-          
+
           {isLastStep ? (
             <Button
               onClick={submitOnboarding}
@@ -743,10 +823,7 @@ export default function EnhancedOnboarding() {
               <CheckCircle className="w-4 h-4" />
             </Button>
           ) : (
-            <Button
-              onClick={nextStep}
-              className="flex items-center gap-2"
-            >
+            <Button onClick={nextStep} className="flex items-center gap-2">
               Keyingisi
               <ArrowRight className="w-4 h-4" />
             </Button>

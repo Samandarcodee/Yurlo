@@ -59,20 +59,25 @@ export function useActionLoading() {
 
 export function useAsyncOperation() {
   const loadingState = useLoadingState(false);
-  
-  const executeAsync = useCallback(async (operation: () => Promise<void>) => {
-    loadingState.startLoading();
-    try {
-      await operation();
-    } catch (error) {
-      loadingState.setError(error instanceof Error ? error.message : 'An error occurred');
-    } finally {
-      loadingState.stopLoading();
-    }
-  }, [loadingState]);
+
+  const executeAsync = useCallback(
+    async (operation: () => Promise<void>) => {
+      loadingState.startLoading();
+      try {
+        await operation();
+      } catch (error) {
+        loadingState.setError(
+          error instanceof Error ? error.message : "An error occurred",
+        );
+      } finally {
+        loadingState.stopLoading();
+      }
+    },
+    [loadingState],
+  );
 
   return {
     ...loadingState,
     executeAsync,
   };
-} 
+}

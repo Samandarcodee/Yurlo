@@ -1,4 +1,12 @@
-import { User, Globe, Bell, Shield, HelpCircle, LogOut, Palette } from "lucide-react";
+import {
+  User,
+  Globe,
+  Bell,
+  Shield,
+  HelpCircle,
+  LogOut,
+  Palette,
+} from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
@@ -8,10 +16,10 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 
 function ThemeIndicator() {
   const { theme, effectiveTheme } = useTheme();
-  
+
   return (
     <p className="text-sm text-muted-foreground">
-      {theme === 'system' ? `Auto (${effectiveTheme})` : theme} mode
+      {theme === "system" ? `Auto (${effectiveTheme})` : theme} mode
     </p>
   );
 }
@@ -97,7 +105,7 @@ export default function Settings() {
             <p className="text-sm text-muted-foreground">
               Ilova ko'rinishini o'zingizga moslashtiring
             </p>
-            
+
             {/* Theme Toggle Controls */}
             <div className="flex items-center justify-between p-4 border rounded-lg bg-card">
               <div className="flex items-center gap-3">
@@ -121,7 +129,7 @@ export default function Settings() {
                 </div>
                 <div className="text-xs text-muted-foreground">Kaloriya</div>
               </div>
-              
+
               <div className="flex items-center justify-between p-3 border rounded-lg bg-gradient-to-r from-blue-50 to-green-50 dark:from-blue-950/20 dark:to-green-950/20">
                 <div className="flex items-center gap-3">
                   <div className="w-8 h-8 rounded-full bg-gradient-water"></div>
@@ -142,8 +150,9 @@ export default function Settings() {
             {/* Theme Information */}
             <div className="p-3 bg-muted/50 rounded-lg">
               <p className="text-xs text-muted-foreground">
-                💡 <strong>Auto</strong> rejimi Telegram va tizim sozlamalariga asoslangan.
-                Qo'lda o'zgartirilganda sizning tanlovingiz saqlanadi.
+                💡 <strong>Auto</strong> rejimi Telegram va tizim sozlamalariga
+                asoslangan. Qo'lda o'zgartirilganda sizning tanlovingiz
+                saqlanadi.
               </p>
             </div>
           </div>

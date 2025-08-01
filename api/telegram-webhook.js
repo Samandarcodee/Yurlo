@@ -84,7 +84,7 @@ export default async function handler(req, res) {
           is_premium: user.is_premium || false,
           joined_at: new Date().toISOString(),
           last_active: new Date().toISOString(),
-          is_new_user: true
+          is_new_user: true,
         };
 
         console.log("💾 User data collected:", userData);
@@ -99,21 +99,21 @@ export default async function handler(req, res) {
     const checkExistingUser = async (telegramId) => {
       try {
         console.log(`🔍 Checking existing user: ${telegramId}`);
-        
+
         // Check in-memory storage
         const isRegistered = registeredUsers.has(telegramId);
-        
+
         if (isRegistered) {
           console.log(`✅ User ${telegramId} is already registered`);
           return true;
         }
-        
+
         // In production, you would also check database:
         /*
         const dbUser = await database.findUser({ telegram_id: telegramId });
         return !!dbUser;
         */
-        
+
         console.log(`🆕 User ${telegramId} is new`);
         return false;
       } catch (error) {
@@ -139,12 +139,12 @@ export default async function handler(req, res) {
       try {
         // Simulate saving to database
         console.log("💾 Saving user to database:", userData.telegram_id);
-        
+
         // In production, you would:
         // 1. Save to PostgreSQL/MongoDB/etc
         // 2. Create user profile with default settings
         // 3. Initialize tracking data
-        
+
         // For now, we'll simulate with a success response
         const dbUser = {
           ...userData,
@@ -160,9 +160,9 @@ export default async function handler(req, res) {
           current_weight: null,
           gender: null,
           birth_date: null,
-          activity_level: 'moderate'
+          activity_level: "moderate",
         };
-        
+
         console.log("✅ User saved to database:", dbUser.id);
         return dbUser;
       } catch (error) {
@@ -174,11 +174,14 @@ export default async function handler(req, res) {
     // Send user data to Mini App initialization endpoint
     const initializeUserData = async (userData) => {
       try {
-        console.log("🚀 Initializing user data for Mini App:", userData.telegram_id);
-        
+        console.log(
+          "🚀 Initializing user data for Mini App:",
+          userData.telegram_id,
+        );
+
         // Save to database first
         const dbUser = await saveUserToDatabase(userData);
-        
+
         if (!dbUser) {
           throw new Error("Failed to save user to database");
         }
@@ -190,24 +193,27 @@ export default async function handler(req, res) {
           default_goals: {
             calories: dbUser.daily_calorie_goal,
             water: dbUser.daily_water_goal,
-            steps: dbUser.daily_steps_goal
+            steps: dbUser.daily_steps_goal,
           },
           app_config: {
-            theme: 'light',
+            theme: "light",
             language: userData.language_code,
             notifications_enabled: true,
-            ai_suggestions: true
-          }
+            ai_suggestions: true,
+          },
         };
 
         // Initialize user via API
         try {
-          const apiResponse = await fetch(`${MINI_APP_URL}/api/user/initialize`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(userData)
-          });
-          
+          const apiResponse = await fetch(
+            `${MINI_APP_URL}/api/user/initialize`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(userData),
+            },
+          );
+
           if (apiResponse.ok) {
             const apiData = await apiResponse.json();
             console.log("🔗 User initialized via API:", apiData.success);
@@ -215,14 +221,17 @@ export default async function handler(req, res) {
             console.warn("⚠️ API initialization failed, using local data");
           }
         } catch (apiError) {
-          console.warn("⚠️ API not available, using local initialization:", apiError.message);
+          console.warn(
+            "⚠️ API not available, using local initialization:",
+            apiError.message,
+          );
         }
-        
+
         console.log("📱 User initialization data prepared:", {
           telegram_id: userData.telegram_id,
-          needs_onboarding: initData.onboarding_required
+          needs_onboarding: initData.onboarding_required,
         });
-        
+
         return initData;
       } catch (error) {
         console.error("❌ Error initializing user data:", error);
@@ -234,13 +243,13 @@ export default async function handler(req, res) {
     const updateUserActivity = async (telegramId) => {
       try {
         console.log("📈 Updating user activity:", telegramId);
-        
+
         // In production, update last_active timestamp in database
         const updateData = {
           last_active: new Date().toISOString(),
-          bot_interactions: 1 // increment counter
+          bot_interactions: 1, // increment counter
         };
-        
+
         return true;
       } catch (error) {
         console.error("❌ Error updating user activity:", error);
@@ -252,18 +261,18 @@ export default async function handler(req, res) {
     if (update.message?.text === "/start") {
       const chatId = update.message.chat.id;
       const user = update.message.from;
-      
+
       try {
         // Collect comprehensive user data
         const userData = await getUserData(user);
-        
+
         if (!userData) {
           throw new Error("Failed to collect user data");
         }
 
         // Check if user already exists
         const isExistingUser = await checkExistingUser(userData.telegram_id);
-        
+
         // Update user activity first
         await updateUserActivity(userData.telegram_id);
 
@@ -289,14 +298,15 @@ export default async function handler(req, res) {
           });
 
           console.log(`👋 Returning user welcomed: ${userData.telegram_id}`);
-
         } else {
           // New user - full registration process
-          console.log(`🆕 New user registration started: ${userData.telegram_id}`);
-          
+          console.log(
+            `🆕 New user registration started: ${userData.telegram_id}`,
+          );
+
           // Initialize user data for Mini App
           const initData = await initializeUserData(userData);
-          
+
           if (!initData) {
             throw new Error("Failed to initialize user data");
           }
@@ -323,10 +333,10 @@ export default async function handler(req, res) {
 
 <b>👤 Sizning ma'lumotlaringiz:</b>
 • ID: <code>${userData.telegram_id}</code>
-• Ism: ${userData.first_name}${userData.last_name ? ` ${userData.last_name}` : ''}
-• Username: ${userData.username ? `@${userData.username}` : 'Belgilanmagan'}
+• Ism: ${userData.first_name}${userData.last_name ? ` ${userData.last_name}` : ""}
+• Username: ${userData.username ? `@${userData.username}` : "Belgilanmagan"}
 • Til: ${userData.language_code.toUpperCase()}
-${userData.is_premium ? '• ⭐ Premium foydalanuvchi' : ''}
+${userData.is_premium ? "• ⭐ Premium foydalanuvchi" : ""}
 
 <b>🚀 Boshlash uchun Mini App'ni oching va profilingizni to'ldiring!</b>
 
@@ -341,13 +351,12 @@ ${userData.is_premium ? '• ⭐ Premium foydalanuvchi' : ''}
             telegram_id: userData.telegram_id,
             name: `${userData.first_name} ${userData.last_name}`.trim(),
             username: userData.username,
-            timestamp: new Date().toISOString()
+            timestamp: new Date().toISOString(),
           });
         }
-
       } catch (error) {
         console.error("❌ Error in /start command:", error);
-        
+
         // Fallback message if data collection fails
         const fallbackMessage = `🤖 <b>Salom! Caloria AI'ga xush kelibsiz!</b>
 
@@ -415,10 +424,10 @@ Ilova tugmasini bosib, sog'liq kuzatuvini boshlang!`,
             // Get user data from API
             const user = update.callback_query.from;
             const telegramId = user.id.toString();
-            
+
             // Update user activity
             await updateUserActivity(telegramId);
-            
+
             // Try to get real user data
             let reportData = {
               meals: 0,
@@ -429,12 +438,14 @@ Ilova tugmasini bosib, sog'liq kuzatuvini boshlang!`,
               maxWater: 8,
               activity: 0,
               steps: 0,
-              maxSteps: 10000
+              maxSteps: 10000,
             };
 
             try {
               // In production, fetch from API
-              const userResponse = await fetch(`${MINI_APP_URL}/api/user/initialize?telegram_id=${telegramId}`);
+              const userResponse = await fetch(
+                `${MINI_APP_URL}/api/user/initialize?telegram_id=${telegramId}`,
+              );
               if (userResponse.ok) {
                 const userData = await userResponse.json();
                 if (userData.success) {
@@ -448,15 +459,21 @@ Ilova tugmasini bosib, sog'liq kuzatuvini boshlang!`,
             }
 
             // Calculate progress percentages
-            const calorieProgress = Math.round((reportData.calories / reportData.maxCalories) * 100);
-            const waterProgress = Math.round((reportData.water / reportData.maxWater) * 100);
-            const stepProgress = Math.round((reportData.steps / reportData.maxSteps) * 100);
-            
+            const calorieProgress = Math.round(
+              (reportData.calories / reportData.maxCalories) * 100,
+            );
+            const waterProgress = Math.round(
+              (reportData.water / reportData.maxWater) * 100,
+            );
+            const stepProgress = Math.round(
+              (reportData.steps / reportData.maxSteps) * 100,
+            );
+
             // Create progress bars
             const createProgressBar = (percentage) => {
               const filled = Math.floor(percentage / 10);
               const empty = 10 - filled;
-              return '▓'.repeat(filled) + '░'.repeat(empty) + ` ${percentage}%`;
+              return "▓".repeat(filled) + "░".repeat(empty) + ` ${percentage}%`;
             };
 
             const reportMessage = `📊 <b>Tezkor Hisobot - ${user.first_name}</b>
@@ -464,7 +481,7 @@ Ilova tugmasini bosib, sog'liq kuzatuvini boshlang!`,
 📅 <b>Bugungi natijalar:</b>
 
 🥗 <b>Ovqatlar:</b> ${reportData.meals}/${reportData.maxMeals} ta
-${reportData.meals === 0 ? '🔴' : reportData.meals < reportData.maxMeals ? '🟡' : '🟢'} ${reportData.meals === 0 ? 'Hali ovqat qo\'shilmagan' : reportData.meals >= reportData.maxMeals ? 'Maqsad bajarildi!' : 'Davom eting!'}
+${reportData.meals === 0 ? "🔴" : reportData.meals < reportData.maxMeals ? "🟡" : "🟢"} ${reportData.meals === 0 ? "Hali ovqat qo'shilmagan" : reportData.meals >= reportData.maxMeals ? "Maqsad bajarildi!" : "Davom eting!"}
 
 🔥 <b>Kaloriyalar:</b> ${reportData.calories}/${reportData.maxCalories} kcal
 ${createProgressBar(calorieProgress)}
@@ -477,24 +494,24 @@ ${createProgressBar(stepProgress)}
 
 ⏱️ <b>Faollik:</b> ${reportData.activity} daqiqa
 
-${calorieProgress < 50 && waterProgress < 50 && stepProgress < 50 ? 
-  '💪 <b>Bugun yanada faol bo\'ling!</b>' :
-  calorieProgress >= 80 && waterProgress >= 80 && stepProgress >= 80 ?
-  '🎉 <b>Ajoyib natija! Davom eting!</b>' :
-  '👍 <b>Yaxshi ketayapti, davom eting!</b>'
+${
+  calorieProgress < 50 && waterProgress < 50 && stepProgress < 50
+    ? "💪 <b>Bugun yanada faol bo'ling!</b>"
+    : calorieProgress >= 80 && waterProgress >= 80 && stepProgress >= 80
+      ? "🎉 <b>Ajoyib natija! Davom eting!</b>"
+      : "👍 <b>Yaxshi ketayapti, davom eting!</b>"
 }
 
-<i>Oxirgi yangilanish: ${new Date().toLocaleTimeString('uz-UZ')}</i>
+<i>Oxirgi yangilanish: ${new Date().toLocaleTimeString("uz-UZ")}</i>
 
 📱 Batafsil ma'lumot va yangilanish uchun Mini App'ni oching! 👇`;
 
             await sendMessage(chatId, reportMessage, {
               reply_markup: createMiniAppKeyboard(),
             });
-
           } catch (error) {
             console.error("❌ Error generating quick report:", error);
-            
+
             // Fallback message
             await sendMessage(
               chatId,
@@ -507,6 +524,7 @@ ${calorieProgress < 50 && waterProgress < 50 && stepProgress < 50 ?
                 reply_markup: createMiniAppKeyboard(),
               },
             );
+          }
         } else if (callbackData === "help") {
           await sendMessage(
             chatId,

@@ -1,9 +1,21 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
 import {
-  ArrowLeft, Droplets, Plus, Minus, Target, TrendingUp, Award,
-  Clock, CheckCircle, Calendar, BarChart, Lightbulb, Settings,
-  Activity, Zap,
+  ArrowLeft,
+  Droplets,
+  Plus,
+  Minus,
+  Target,
+  TrendingUp,
+  Award,
+  Clock,
+  CheckCircle,
+  Calendar,
+  BarChart,
+  Lightbulb,
+  Settings,
+  Activity,
+  Zap,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -18,30 +30,43 @@ import { Separator } from "@/components/ui/separator";
 import { useUser } from "@/contexts/UserContext";
 import { useTelegram } from "@/hooks/use-telegram";
 import {
-  getTodayWater, addWaterEntry, getWaterGoals, updateWaterGoals,
-  getWaterInsights, getWaterHistory, addSampleWaterData, calculateWaterGoal,
-  QUICK_WATER_AMOUNTS, WATER_TYPES, createWaterReminders,
-  WaterSession, WaterGoals, WaterInsights, WaterEntry,
+  getTodayWater,
+  addWaterEntry,
+  getWaterGoals,
+  updateWaterGoals,
+  getWaterInsights,
+  getWaterHistory,
+  addSampleWaterData,
+  calculateWaterGoal,
+  QUICK_WATER_AMOUNTS,
+  WATER_TYPES,
+  createWaterReminders,
+  WaterSession,
+  WaterGoals,
+  WaterInsights,
+  WaterEntry,
 } from "@/utils/waterTracking";
 
 export default function WaterTracker() {
   const { user } = useUser();
   const { user: telegramUser } = useTelegram();
-  
+
   const [todayWater, setTodayWater] = useState<WaterSession | null>(null);
   const [waterGoals, setWaterGoals] = useState<WaterGoals | null>(null);
   const [insights, setInsights] = useState<WaterInsights | null>(null);
   const [history, setHistory] = useState<WaterSession[]>([]);
-  
+
   // Quick add states
   const [selectedAmount, setSelectedAmount] = useState<number>(1);
-  const [selectedType, setSelectedType] = useState<'water' | 'tea' | 'coffee' | 'juice' | 'smoothie' | 'other'>('water');
+  const [selectedType, setSelectedType] = useState<
+    "water" | "tea" | "coffee" | "juice" | "smoothie" | "other"
+  >("water");
   const [notes, setNotes] = useState("");
-  
+
   // Goals editing states
   const [isEditingGoals, setIsEditingGoals] = useState(false);
   const [tempGoals, setTempGoals] = useState<WaterGoals | null>(null);
-  
+
   const telegramId = telegramUser?.id?.toString() || "demo_user_123";
 
   useEffect(() => {
@@ -49,34 +74,44 @@ export default function WaterTracker() {
       // Initialize data
       const waterGoal = calculateWaterGoal(user);
       addSampleWaterData(telegramId, waterGoal);
-      
+
       // Load today's data
       const today = getTodayWater(telegramId);
       setTodayWater(today);
-      
+
       // Load goals
       const goals = getWaterGoals(telegramId);
       setWaterGoals(goals);
       setTempGoals(goals);
-      
+
       // Load insights
       const insightsData = getWaterInsights(telegramId);
       setInsights(insightsData);
-      
+
       // Load history
       const historyData = getWaterHistory(telegramId, 7);
       setHistory(historyData);
-      
+
       // Create reminders
       createWaterReminders(telegramId);
     }
   }, [user, telegramId]);
 
-  const handleAddWater = (amount: number, type = selectedType, temperature: 'cold' | 'room' | 'warm' = 'room') => {
-    const updated = addWaterEntry(telegramId, amount, type, temperature, notes.trim() || undefined);
+  const handleAddWater = (
+    amount: number,
+    type = selectedType,
+    temperature: "cold" | "room" | "warm" = "room",
+  ) => {
+    const updated = addWaterEntry(
+      telegramId,
+      amount,
+      type,
+      temperature,
+      notes.trim() || undefined,
+    );
     setTodayWater(updated);
     setNotes("");
-    
+
     // Refresh insights
     const newInsights = getWaterInsights(telegramId);
     setInsights(newInsights);
@@ -96,9 +131,24 @@ export default function WaterTracker() {
   }, [todayWater]);
 
   const getHydrationLevel = (progress: number) => {
-    if (progress >= 100) return { label: "A'lo", color: "bg-green-100 text-green-800", icon: "🌟" };
-    if (progress >= 80) return { label: "Yaxshi", color: "bg-blue-100 text-blue-800", icon: "💧" };
-    if (progress >= 60) return { label: "O'rtacha", color: "bg-yellow-100 text-yellow-800", icon: "⚡" };
+    if (progress >= 100)
+      return {
+        label: "A'lo",
+        color: "bg-green-100 text-green-800",
+        icon: "🌟",
+      };
+    if (progress >= 80)
+      return {
+        label: "Yaxshi",
+        color: "bg-blue-100 text-blue-800",
+        icon: "💧",
+      };
+    if (progress >= 60)
+      return {
+        label: "O'rtacha",
+        color: "bg-yellow-100 text-yellow-800",
+        icon: "⚡",
+      };
     return { label: "Kam", color: "bg-red-100 text-red-800", icon: "⚠️" };
   };
 
@@ -122,7 +172,9 @@ export default function WaterTracker() {
           <div className="flex items-center justify-between">
             <Link to="/" className="flex items-center space-x-2">
               <ArrowLeft className="h-6 w-6 text-gray-600" />
-              <span className="text-lg font-semibold text-gray-900">Suv Tracker</span>
+              <span className="text-lg font-semibold text-gray-900">
+                Suv Tracker
+              </span>
             </Link>
             <Badge variant="secondary" className={hydrationStatus.color}>
               {hydrationStatus.icon} {hydrationStatus.label}
@@ -143,10 +195,10 @@ export default function WaterTracker() {
                 </h2>
                 <p className="text-blue-100">Bugungi suv iste'moli</p>
               </div>
-              
+
               <div className="relative">
-                <Progress 
-                  value={todayProgress} 
+                <Progress
+                  value={todayProgress}
                   className="h-4 bg-blue-400 [&>*]:bg-white"
                 />
                 <div className="flex justify-between text-sm mt-2 text-blue-100">
@@ -155,11 +207,13 @@ export default function WaterTracker() {
                   <span>{todayWater.goal}</span>
                 </div>
               </div>
-              
+
               {todayWater.goalReached && (
                 <div className="mt-4 p-3 bg-white/20 rounded-xl">
                   <CheckCircle className="h-6 w-6 mx-auto mb-1" />
-                  <p className="text-sm font-medium">Bugungi maqsad bajarildi! 🎉</p>
+                  <p className="text-sm font-medium">
+                    Bugungi maqsad bajarildi! 🎉
+                  </p>
                 </div>
               )}
             </div>
@@ -168,10 +222,18 @@ export default function WaterTracker() {
 
         <Tabs defaultValue="log" className="space-y-4">
           <TabsList className="grid w-full grid-cols-4 h-12 rounded-2xl bg-white shadow-md">
-            <TabsTrigger value="log" className="rounded-xl">Log</TabsTrigger>
-            <TabsTrigger value="insights" className="rounded-xl">Analytics</TabsTrigger>
-            <TabsTrigger value="history" className="rounded-xl">Tarix</TabsTrigger>
-            <TabsTrigger value="goals" className="rounded-xl">Goals</TabsTrigger>
+            <TabsTrigger value="log" className="rounded-xl">
+              Log
+            </TabsTrigger>
+            <TabsTrigger value="insights" className="rounded-xl">
+              Analytics
+            </TabsTrigger>
+            <TabsTrigger value="history" className="rounded-xl">
+              Tarix
+            </TabsTrigger>
+            <TabsTrigger value="goals" className="rounded-xl">
+              Goals
+            </TabsTrigger>
           </TabsList>
 
           {/* Log Tab */}
@@ -197,8 +259,8 @@ export default function WaterTracker() {
                         onClick={() => setSelectedAmount(item.amount)}
                         className={`p-3 rounded-xl border-2 transition-all ${
                           selectedAmount === item.amount
-                            ? 'border-blue-500 bg-blue-50 text-blue-700'
-                            : 'border-gray-200 hover:border-blue-300'
+                            ? "border-blue-500 bg-blue-50 text-blue-700"
+                            : "border-gray-200 hover:border-blue-300"
                         }`}
                       >
                         <div className="text-xl mb-1">{item.icon}</div>
@@ -206,7 +268,7 @@ export default function WaterTracker() {
                       </button>
                     ))}
                   </div>
-                  
+
                   <div className="mt-3">
                     <Slider
                       value={[selectedAmount]}
@@ -218,7 +280,9 @@ export default function WaterTracker() {
                     />
                     <div className="flex justify-between text-xs text-gray-500 mt-1">
                       <span>0.25</span>
-                      <span className="font-medium">{selectedAmount} stakan</span>
+                      <span className="font-medium">
+                        {selectedAmount} stakan
+                      </span>
                       <span>3.0</span>
                     </div>
                   </div>
@@ -236,8 +300,8 @@ export default function WaterTracker() {
                         onClick={() => setSelectedType(item.type)}
                         className={`p-3 rounded-xl border-2 transition-all ${
                           selectedType === item.type
-                            ? 'border-blue-500 bg-blue-50 text-blue-700'
-                            : 'border-gray-200 hover:border-blue-300'
+                            ? "border-blue-500 bg-blue-50 text-blue-700"
+                            : "border-gray-200 hover:border-blue-300"
                         }`}
                       >
                         <div className="text-lg mb-1">{item.icon}</div>
@@ -249,7 +313,10 @@ export default function WaterTracker() {
 
                 {/* Notes */}
                 <div>
-                  <Label htmlFor="notes" className="text-sm font-medium text-gray-700">
+                  <Label
+                    htmlFor="notes"
+                    className="text-sm font-medium text-gray-700"
+                  >
                     Izoh (ixtiyoriy)
                   </Label>
                   <Textarea
@@ -284,36 +351,54 @@ export default function WaterTracker() {
                   <div className="text-center py-8 text-gray-500">
                     <Droplets className="h-12 w-12 mx-auto mb-3 opacity-50" />
                     <p>Hali hech qanday suv qo'shilmagan</p>
-                    <p className="text-sm">Yuqoridan birinchi bo'lakni qo'shing</p>
+                    <p className="text-sm">
+                      Yuqoridan birinchi bo'lakni qo'shing
+                    </p>
                   </div>
                 ) : (
                   <div className="space-y-3">
                     {todayWater.entries
-                      .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
+                      .sort(
+                        (a, b) =>
+                          new Date(b.timestamp).getTime() -
+                          new Date(a.timestamp).getTime(),
+                      )
                       .map((entry, index) => (
-                        <div key={entry.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-xl">
+                        <div
+                          key={entry.id}
+                          className="flex items-center justify-between p-3 bg-gray-50 rounded-xl"
+                        >
                           <div className="flex items-center space-x-3">
                             <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                              {WATER_TYPES.find(t => t.type === entry.type)?.icon || '💧'}
+                              {WATER_TYPES.find((t) => t.type === entry.type)
+                                ?.icon || "💧"}
                             </div>
                             <div>
                               <p className="font-medium text-gray-900">
                                 {entry.amount} stakan
                               </p>
                               <p className="text-sm text-gray-500">
-                                {WATER_TYPES.find(t => t.type === entry.type)?.label}
+                                {
+                                  WATER_TYPES.find((t) => t.type === entry.type)
+                                    ?.label
+                                }
                                 {entry.notes && ` • ${entry.notes}`}
                               </p>
                             </div>
                           </div>
                           <div className="text-right">
                             <p className="text-sm font-medium text-gray-900">
-                              {new Date(entry.timestamp).toLocaleTimeString('en-US', {
-                                hour: '2-digit',
-                                minute: '2-digit'
-                              })}
+                              {new Date(entry.timestamp).toLocaleTimeString(
+                                "en-US",
+                                {
+                                  hour: "2-digit",
+                                  minute: "2-digit",
+                                },
+                              )}
                             </p>
-                            <p className="text-xs text-gray-500">{entry.volume}ml</p>
+                            <p className="text-xs text-gray-500">
+                              {entry.volume}ml
+                            </p>
                           </div>
                         </div>
                       ))}
@@ -329,15 +414,19 @@ export default function WaterTracker() {
               <Card className="border-0 shadow-lg">
                 <CardContent className="p-4 text-center">
                   <TrendingUp className="h-8 w-8 text-blue-600 mx-auto mb-2" />
-                  <p className="text-2xl font-bold text-gray-900">{insights.dailyAverage}</p>
+                  <p className="text-2xl font-bold text-gray-900">
+                    {insights.dailyAverage}
+                  </p>
                   <p className="text-sm text-gray-500">Kunlik o'rtacha</p>
                 </CardContent>
               </Card>
-              
+
               <Card className="border-0 shadow-lg">
                 <CardContent className="p-4 text-center">
                   <Award className="h-8 w-8 text-yellow-600 mx-auto mb-2" />
-                  <p className="text-2xl font-bold text-gray-900">{insights.streak.current}</p>
+                  <p className="text-2xl font-bold text-gray-900">
+                    {insights.streak.current}
+                  </p>
                   <p className="text-sm text-gray-500">Kun ketma-ketlik</p>
                 </CardContent>
               </Card>
@@ -355,45 +444,57 @@ export default function WaterTracker() {
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-gray-600">A'lo</span>
                     <div className="flex-1 mx-3 bg-gray-200 rounded-full h-2">
-                      <div 
-                        className="bg-green-500 h-2 rounded-full" 
-                        style={{ width: `${insights.hydrationLevel.excellent}%` }}
+                      <div
+                        className="bg-green-500 h-2 rounded-full"
+                        style={{
+                          width: `${insights.hydrationLevel.excellent}%`,
+                        }}
                       ></div>
                     </div>
-                    <span className="text-sm font-medium">{insights.hydrationLevel.excellent}%</span>
+                    <span className="text-sm font-medium">
+                      {insights.hydrationLevel.excellent}%
+                    </span>
                   </div>
-                  
+
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-gray-600">Yaxshi</span>
                     <div className="flex-1 mx-3 bg-gray-200 rounded-full h-2">
-                      <div 
-                        className="bg-blue-500 h-2 rounded-full" 
+                      <div
+                        className="bg-blue-500 h-2 rounded-full"
                         style={{ width: `${insights.hydrationLevel.good}%` }}
                       ></div>
                     </div>
-                    <span className="text-sm font-medium">{insights.hydrationLevel.good}%</span>
+                    <span className="text-sm font-medium">
+                      {insights.hydrationLevel.good}%
+                    </span>
                   </div>
-                  
+
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-gray-600">O'rtacha</span>
                     <div className="flex-1 mx-3 bg-gray-200 rounded-full h-2">
-                      <div 
-                        className="bg-yellow-500 h-2 rounded-full" 
-                        style={{ width: `${insights.hydrationLevel.moderate}%` }}
+                      <div
+                        className="bg-yellow-500 h-2 rounded-full"
+                        style={{
+                          width: `${insights.hydrationLevel.moderate}%`,
+                        }}
                       ></div>
                     </div>
-                    <span className="text-sm font-medium">{insights.hydrationLevel.moderate}%</span>
+                    <span className="text-sm font-medium">
+                      {insights.hydrationLevel.moderate}%
+                    </span>
                   </div>
-                  
+
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-gray-600">Kam</span>
                     <div className="flex-1 mx-3 bg-gray-200 rounded-full h-2">
-                      <div 
-                        className="bg-red-500 h-2 rounded-full" 
+                      <div
+                        className="bg-red-500 h-2 rounded-full"
                         style={{ width: `${insights.hydrationLevel.poor}%` }}
                       ></div>
                     </div>
-                    <span className="text-sm font-medium">{insights.hydrationLevel.poor}%</span>
+                    <span className="text-sm font-medium">
+                      {insights.hydrationLevel.poor}%
+                    </span>
                   </div>
                 </div>
               </CardContent>
@@ -412,51 +513,71 @@ export default function WaterTracker() {
                   <span className="text-sm text-gray-600">Teri sog'ligi</span>
                   <div className="flex items-center space-x-2">
                     <div className="w-24 bg-gray-200 rounded-full h-2">
-                      <div 
-                        className="bg-pink-500 h-2 rounded-full" 
-                        style={{ width: `${insights.healthBenefits.skinHealth}%` }}
+                      <div
+                        className="bg-pink-500 h-2 rounded-full"
+                        style={{
+                          width: `${insights.healthBenefits.skinHealth}%`,
+                        }}
                       ></div>
                     </div>
-                    <span className="text-sm font-medium w-10">{insights.healthBenefits.skinHealth}%</span>
+                    <span className="text-sm font-medium w-10">
+                      {insights.healthBenefits.skinHealth}%
+                    </span>
                   </div>
                 </div>
-                
+
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-600">Energiya darajasi</span>
+                  <span className="text-sm text-gray-600">
+                    Energiya darajasi
+                  </span>
                   <div className="flex items-center space-x-2">
                     <div className="w-24 bg-gray-200 rounded-full h-2">
-                      <div 
-                        className="bg-yellow-500 h-2 rounded-full" 
-                        style={{ width: `${insights.healthBenefits.energyLevel}%` }}
+                      <div
+                        className="bg-yellow-500 h-2 rounded-full"
+                        style={{
+                          width: `${insights.healthBenefits.energyLevel}%`,
+                        }}
                       ></div>
                     </div>
-                    <span className="text-sm font-medium w-10">{insights.healthBenefits.energyLevel}%</span>
+                    <span className="text-sm font-medium w-10">
+                      {insights.healthBenefits.energyLevel}%
+                    </span>
                   </div>
                 </div>
-                
+
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-600">Detoksifikatsiya</span>
+                  <span className="text-sm text-gray-600">
+                    Detoksifikatsiya
+                  </span>
                   <div className="flex items-center space-x-2">
                     <div className="w-24 bg-gray-200 rounded-full h-2">
-                      <div 
-                        className="bg-green-500 h-2 rounded-full" 
-                        style={{ width: `${insights.healthBenefits.detoxification}%` }}
+                      <div
+                        className="bg-green-500 h-2 rounded-full"
+                        style={{
+                          width: `${insights.healthBenefits.detoxification}%`,
+                        }}
                       ></div>
                     </div>
-                    <span className="text-sm font-medium w-10">{insights.healthBenefits.detoxification}%</span>
+                    <span className="text-sm font-medium w-10">
+                      {insights.healthBenefits.detoxification}%
+                    </span>
                   </div>
                 </div>
-                
+
                 <div className="flex justify-between items-center">
                   <span className="text-sm text-gray-600">Vazn nazorati</span>
                   <div className="flex items-center space-x-2">
                     <div className="w-24 bg-gray-200 rounded-full h-2">
-                      <div 
-                        className="bg-blue-500 h-2 rounded-full" 
-                        style={{ width: `${insights.healthBenefits.weightManagement}%` }}
+                      <div
+                        className="bg-blue-500 h-2 rounded-full"
+                        style={{
+                          width: `${insights.healthBenefits.weightManagement}%`,
+                        }}
                       ></div>
                     </div>
-                    <span className="text-sm font-medium w-10">{insights.healthBenefits.weightManagement}%</span>
+                    <span className="text-sm font-medium w-10">
+                      {insights.healthBenefits.weightManagement}%
+                    </span>
                   </div>
                 </div>
               </CardContent>
@@ -474,7 +595,10 @@ export default function WaterTracker() {
                 <CardContent>
                   <div className="space-y-2">
                     {insights.recommendations.map((rec, index) => (
-                      <div key={index} className="flex items-start space-x-2 p-3 bg-yellow-50 rounded-xl">
+                      <div
+                        key={index}
+                        className="flex items-start space-x-2 p-3 bg-yellow-50 rounded-xl"
+                      >
                         <div className="w-2 h-2 bg-yellow-500 rounded-full mt-2 flex-shrink-0"></div>
                         <p className="text-sm text-gray-700">{rec}</p>
                       </div>
@@ -503,11 +627,18 @@ export default function WaterTracker() {
                 ) : (
                   <div className="space-y-3">
                     {history.map((session) => (
-                      <div key={session.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
+                      <div
+                        key={session.id}
+                        className="flex items-center justify-between p-4 bg-gray-50 rounded-xl"
+                      >
                         <div className="flex items-center space-x-3">
-                          <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                            session.goalReached ? 'bg-green-100' : 'bg-gray-100'
-                          }`}>
+                          <div
+                            className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                              session.goalReached
+                                ? "bg-green-100"
+                                : "bg-gray-100"
+                            }`}
+                          >
                             {session.goalReached ? (
                               <CheckCircle className="h-5 w-5 text-green-600" />
                             ) : (
@@ -516,11 +647,14 @@ export default function WaterTracker() {
                           </div>
                           <div>
                             <p className="font-medium text-gray-900">
-                              {new Date(session.date).toLocaleDateString('uz-UZ', {
-                                weekday: 'short',
-                                month: 'short',
-                                day: 'numeric'
-                              })}
+                              {new Date(session.date).toLocaleDateString(
+                                "uz-UZ",
+                                {
+                                  weekday: "short",
+                                  month: "short",
+                                  day: "numeric",
+                                },
+                              )}
                             </p>
                             <p className="text-sm text-gray-500">
                               {session.entries.length} ta yozuv
@@ -532,7 +666,10 @@ export default function WaterTracker() {
                             {session.totalIntake.toFixed(1)} / {session.goal}
                           </p>
                           <p className="text-sm text-gray-500">
-                            {Math.round((session.totalIntake / session.goal) * 100)}%
+                            {Math.round(
+                              (session.totalIntake / session.goal) * 100,
+                            )}
+                            %
                           </p>
                         </div>
                       </div>
@@ -556,16 +693,27 @@ export default function WaterTracker() {
                 {isEditingGoals ? (
                   <div className="space-y-4">
                     <div>
-                      <Label htmlFor="dailyGlasses">Kunlik maqsad (stakan)</Label>
+                      <Label htmlFor="dailyGlasses">
+                        Kunlik maqsad (stakan)
+                      </Label>
                       <Input
                         id="dailyGlasses"
                         type="number"
                         value={tempGoals?.dailyGlasses}
-                        onChange={(e) => setTempGoals(prev => prev ? { ...prev, dailyGlasses: parseInt(e.target.value) } : null)}
+                        onChange={(e) =>
+                          setTempGoals((prev) =>
+                            prev
+                              ? {
+                                  ...prev,
+                                  dailyGlasses: parseInt(e.target.value),
+                                }
+                              : null,
+                          )
+                        }
                         className="mt-1"
                       />
                     </div>
-                    
+
                     <div className="flex space-x-2">
                       <Button
                         onClick={handleUpdateGoals}
@@ -589,26 +737,36 @@ export default function WaterTracker() {
                   <div className="space-y-4">
                     <div className="flex justify-between items-center p-4 bg-gray-50 rounded-xl">
                       <div>
-                        <p className="font-medium text-gray-900">Kunlik maqsad</p>
-                        <p className="text-sm text-gray-500">Har kuni ichish kerak bo'lgan suv</p>
+                        <p className="font-medium text-gray-900">
+                          Kunlik maqsad
+                        </p>
+                        <p className="text-sm text-gray-500">
+                          Har kuni ichish kerak bo'lgan suv
+                        </p>
                       </div>
                       <div className="text-right">
-                        <p className="text-xl font-bold text-blue-600">{waterGoals.dailyGlasses}</p>
+                        <p className="text-xl font-bold text-blue-600">
+                          {waterGoals.dailyGlasses}
+                        </p>
                         <p className="text-sm text-gray-500">stakan</p>
                       </div>
                     </div>
-                    
+
                     <div className="flex justify-between items-center p-4 bg-gray-50 rounded-xl">
                       <div>
                         <p className="font-medium text-gray-900">Hajm</p>
-                        <p className="text-sm text-gray-500">Millilitr hisobida</p>
+                        <p className="text-sm text-gray-500">
+                          Millilitr hisobida
+                        </p>
                       </div>
                       <div className="text-right">
-                        <p className="text-xl font-bold text-blue-600">{waterGoals.dailyVolume}</p>
+                        <p className="text-xl font-bold text-blue-600">
+                          {waterGoals.dailyVolume}
+                        </p>
                         <p className="text-sm text-gray-500">ml</p>
                       </div>
                     </div>
-                    
+
                     <Button
                       onClick={() => setIsEditingGoals(true)}
                       variant="outline"
