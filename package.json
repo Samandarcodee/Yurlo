@@ -28,9 +28,13 @@
     "bot:webhook": "node scripts/set-webhook-vercel.js",
     "bot:webhook:remove": "node scripts/set-webhook-vercel.js remove",
     "bot:info": "node -e \"import('./scripts/setup-bot.js').then(m => m.getBotInfo())\"",
-    "vercel-build": "npm run build:client"
+    "vercel-build": "npm run build:client",
+    "test:db": "tsx client/utils/database-test-runner.ts",
+    "test:migration": "tsx client/utils/database-test-runner.ts migration",
+    "test:schema": "tsx client/utils/database-test-runner.ts schema"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.53.0",
     "dotenv": "^17.2.0",
     "express": "^4.18.2",
     "recharts": "^2.8.0",
@@ -104,7 +108,7 @@
     "tailwindcss": "^3.4.11",
     "tailwindcss-animate": "^1.0.7",
     "three": "^0.176.0",
-    "tsx": "^4.7.0",
+    "tsx": "^4.20.3",
     "typescript": "^5.5.3",
     "vaul": "^0.9.3",
     "vite": "^6.2.2",

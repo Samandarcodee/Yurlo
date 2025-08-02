@@ -10,6 +10,7 @@ import {
   logEnvironmentInfo,
   shouldUseLocalStorage,
 } from "../utils/environment";
+import { databaseService, UserProfile as DBUserProfile } from "../lib/supabase";
 
 export interface UserProfile {
   telegramId?: string;
@@ -77,51 +78,70 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
         const telegramId = telegramUser?.id?.toString() || "demo_user_123";
         console.log("Telegram user ID:", telegramId);
 
-        // Avval localStorage'dan tekshiramiz
-        const storageKey = `userProfile_${telegramId}`;
-        const savedProfile = localStorage.getItem(storageKey);
-        console.log("Saved profile from localStorage:", savedProfile);
+        // Database'dan foydalanuvchi ma'lumotlarini olish
+        const dbProfile = await databaseService.getUserProfile(telegramId);
+        
+        if (dbProfile) {
+          // Database'dan kelgan ma'lumotlarni formatlash
+          const profileData: UserProfile = {
+            telegramId: dbProfile.telegram_id,
+            name: dbProfile.name,
+            gender: dbProfile.gender,
+            birthYear: dbProfile.birth_year,
+            age: dbProfile.age,
+            height: dbProfile.height,
+            weight: dbProfile.weight,
+            activityLevel: dbProfile.activity_level,
+            goal: dbProfile.goal,
+            sleepTime: dbProfile.sleep_time,
+            wakeTime: dbProfile.wake_time,
+            language: dbProfile.language,
+            bmr: dbProfile.bmr,
+            dailyCalories: dbProfile.daily_calories,
+            isFirstTime: dbProfile.is_first_time,
+            createdAt: dbProfile.created_at || new Date().toISOString(),
+            updatedAt: dbProfile.updated_at,
+          };
 
-        if (savedProfile) {
-          try {
-            const profileData = JSON.parse(savedProfile);
-            console.log("Parsed profile data:", profileData);
+          // Telegram user ma'lumotlarini yangilash
+          if (telegramUser) {
+            profileData.name = profileData.name || telegramUser.first_name;
+            if (telegramUser.language_code && !profileData.language) {
+              profileData.language =
+                telegramUser.language_code === "uz"
+                  ? "uz"
+                  : telegramUser.language_code === "ru"
+                    ? "ru"
+                    : "en";
+            }
+          }
 
-            // Ma'lumotlar to'g'ri formatda ekanligini tekshirish
-            if (profileData && profileData.name && profileData.age) {
-              // Telegram user ma'lumotlarini qo'shish/yangilash
-              if (telegramUser) {
-                profileData.telegramId = telegramId;
-                profileData.name = profileData.name || telegramUser.first_name;
-                if (telegramUser.language_code && !profileData.language) {
-                  profileData.language =
-                    telegramUser.language_code === "uz"
-                      ? "uz"
-                      : telegramUser.language_code === "ru"
-                        ? "ru"
-                        : "en";
-                }
+          setUser(profileData);
+          setIsFirstTime(profileData.isFirstTime);
+          console.log("User loaded from database successfully. isFirstTime:", profileData.isFirstTime);
+        } else {
+          // Database'da yo'q bo'lsa localStorage'dan olish (fallback)
+          const storageKey = `userProfile_${telegramId}`;
+          const savedProfile = localStorage.getItem(storageKey);
+          
+          if (savedProfile) {
+            try {
+              const profileData = JSON.parse(savedProfile);
+              if (profileData && profileData.name && profileData.age) {
+                setUser(profileData);
+                setIsFirstTime(profileData.isFirstTime);
+                console.log("User loaded from localStorage (fallback). isFirstTime:", profileData.isFirstTime);
+              } else {
+                setIsFirstTime(true);
               }
-
-              // isFirstTime ni profile data'dan olish yoki false qilish
-              profileData.isFirstTime = profileData.isFirstTime !== undefined ? profileData.isFirstTime : false;
-              
-              setUser(profileData);
-              setIsFirstTime(profileData.isFirstTime);
-              console.log("User loaded from localStorage successfully. isFirstTime:", profileData.isFirstTime);
-            } else {
-              console.log("Invalid profile data, clearing localStorage");
-              localStorage.removeItem(storageKey);
+            } catch (parseError) {
+              console.error("localStorage parse error:", parseError);
               setIsFirstTime(true);
             }
-          } catch (parseError) {
-            console.error("localStorage parse error:", parseError);
-            localStorage.removeItem(storageKey);
+          } else {
+            console.log("No saved profile found - yangi foydalanuvchi");
             setIsFirstTime(true);
           }
-        } else {
-          console.log("No saved profile found - yangi foydalanuvchi");
-          setIsFirstTime(true);
         }
       } catch (error) {
         console.error("Foydalanuvchi ma'lumotlarini yuklashda xatolik:", error);
@@ -160,7 +180,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
     }
   }, [isLoading, hasInitialized]);
 
-  const updateUser = (userData: UserProfile) => {
+  const updateUser = async (userData: UserProfile) => {
     console.log("Updating user data:", userData);
 
     // Telegram user ma'lumotlarini qo'shish
@@ -184,15 +204,52 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
     setUser(userData);
     setIsFirstTime(false);
 
-    // Telegram ID asosida localStorage key yaratish va saqlash
+    // Database'ga saqlash
     const telegramId = telegramUser?.id?.toString() || "demo_user_123";
-    const storageKey = `userProfile_${telegramId}`;
     
     try {
+      // Database'ga saqlash uchun formatlash
+      const dbProfile: Omit<DBUserProfile, 'id' | 'created_at' | 'updated_at'> = {
+        telegram_id: userData.telegramId,
+        name: userData.name,
+        gender: userData.gender,
+        birth_year: userData.birthYear,
+        age: userData.age,
+        height: userData.height,
+        weight: userData.weight,
+        activity_level: userData.activityLevel,
+        goal: userData.goal,
+        sleep_time: userData.sleepTime,
+        wake_time: userData.wakeTime,
+        language: userData.language,
+        bmr: userData.bmr,
+        daily_calories: userData.dailyCalories,
+        is_first_time: userData.isFirstTime,
+      };
+
+      // Database'da mavjud bo'lsa yangilash, yo'q bo'lsa yaratish
+      const existingProfile = await databaseService.getUserProfile(telegramId);
+      
+      if (existingProfile) {
+        await databaseService.updateUserProfile(telegramId, dbProfile);
+        console.log("User data updated in database successfully");
+      } else {
+        await databaseService.createUserProfile(dbProfile);
+        console.log("User data created in database successfully");
+      }
+
+      // localStorage'ga ham saqlash (fallback uchun)
+      const storageKey = `userProfile_${telegramId}`;
       localStorage.setItem(storageKey, JSON.stringify(userData));
-      console.log("User data saved to localStorage successfully. isFirstTime:", userData.isFirstTime);
+      console.log("User data saved to localStorage (backup) successfully");
+      
     } catch (error) {
-      console.error("Error saving user data to localStorage:", error);
+      console.error("Error saving user data:", error);
+      
+      // Database xatoligida localStorage'ga saqlash
+      const storageKey = `userProfile_${telegramId}`;
+      localStorage.setItem(storageKey, JSON.stringify(userData));
+      console.log("User data saved to localStorage (fallback) due to database error");
     }
   };
 
