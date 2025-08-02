@@ -3,7 +3,6 @@ import { Home, Camera, Brain, BarChart3, Settings } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useTelegram } from "@/hooks/use-telegram";
 import { useEffect } from "react";
-import { ThemeToggle } from "./ThemeToggle";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -21,14 +20,10 @@ export function Layout({ children }: LayoutProps) {
     { path: "/profile", icon: Settings, label: "Profil" },
   ];
 
-  // Telegram WebApp theme'ga moslashish
+  // Always use dark theme
   useEffect(() => {
-    if (colorScheme === "dark") {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
-  }, [colorScheme]);
+    document.documentElement.classList.add("dark");
+  }, []);
 
   const handleNavClick = () => {
     // Telegram'da haptic feedback
@@ -53,10 +48,7 @@ export function Layout({ children }: LayoutProps) {
             </div>
           </div>
 
-          {/* Theme Toggle */}
-          <div className="flex items-center space-x-2">
-            <ThemeToggle />
-          </div>
+          {/* Right side header actions can go here */}
         </div>
       </header>
 

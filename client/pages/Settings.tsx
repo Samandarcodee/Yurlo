@@ -12,14 +12,12 @@ import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { useTheme } from "@/contexts/ThemeContext";
-import { ThemeToggle } from "@/components/ThemeToggle";
+
 
 function ThemeIndicator() {
-  const { theme, effectiveTheme } = useTheme();
-
   return (
     <p className="text-sm text-muted-foreground">
-      {theme === "system" ? `Auto (${effectiveTheme})` : theme} mode
+      Doim tungi rejim
     </p>
   );
 }
@@ -117,7 +115,7 @@ export default function Settings() {
                   <ThemeIndicator />
                 </div>
               </div>
-              <ThemeToggle />
+              <span className="text-sm text-muted-foreground">Tungi rejim</span>
             </div>
 
             {/* Theme Preview Cards */}

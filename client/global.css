@@ -55,38 +55,8 @@
     line-height: 1.5;
   }
 
+  /* Faqat dark mode ishlatiladi */
   :root {
-    --background: 210 20% 98%;
-    --foreground: 214 32% 17%;
-    --card: 224 71% 6%;
-    --card-foreground: 213 31% 91%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 214 32% 17%;
-    --primary: 140 65% 50%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 158 64% 88%;
-    --secondary-foreground: 140 66% 24%;
-    --muted: 215 28% 17%;
-    --muted-foreground: 217 10% 65%;
-    --accent: 200 100% 85%;
-    --accent-foreground: 200 100% 25%;
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 100%;
-    --border: 215 28% 18%;
-    --input: 215 28% 18%;
-    --ring: 140 65% 50%;
-    --radius: 0.75rem;
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
-  }
-
-  .dark {
     --background: 224 71% 4%;
     --foreground: 213 31% 91%;
     --card: 224 71% 6%;
@@ -106,6 +76,7 @@
     --border: 215 28% 18%;
     --input: 215 28% 18%;
     --ring: 140 65% 50%;
+    --radius: 0.75rem;
     --sidebar-background: 224 71% 4%;
     --sidebar-foreground: 213 31% 91%;
     --sidebar-primary: 210 20% 98%;

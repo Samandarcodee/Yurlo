@@ -1,73 +1,37 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
-import { useTelegram } from "../hooks/use-telegram";
+import React, { createContext, useContext, useEffect } from "react";
 
-type Theme = "light" | "dark" | "system";
+type Theme = "dark";
 
 interface ThemeContextType {
   theme: Theme;
   setTheme: (theme: Theme) => void;
-  effectiveTheme: "light" | "dark";
+  effectiveTheme: "dark";
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setTheme] = useState<Theme>("system");
-  const { colorScheme: telegramColorScheme } = useTelegram();
+  // Always use dark theme
+  const theme: Theme = "dark";
+  const effectiveTheme: "dark" = "dark";
 
-  // Determine effective theme
-  const effectiveTheme = React.useMemo(() => {
-    if (theme === "system") {
-      // Use Telegram theme if available, otherwise system preference
-      if (telegramColorScheme) {
-        return telegramColorScheme;
-      }
-      return window.matchMedia("(prefers-color-scheme: dark)").matches
-        ? "dark"
-        : "light";
-    }
-    return theme as "light" | "dark";
-  }, [theme, telegramColorScheme]);
-
-  // Load saved theme preference
-  useEffect(() => {
-    const savedTheme = localStorage.getItem("theme") as Theme;
-    if (savedTheme && ["light", "dark", "system"].includes(savedTheme)) {
-      setTheme(savedTheme);
-    }
-  }, []);
-
-  // Apply theme to document
+  // Apply dark theme to document on mount
   useEffect(() => {
     const root = document.documentElement;
 
-    // Remove previous theme classes
-    root.classList.remove("light", "dark");
+    // Remove any existing theme classes
+    root.classList.remove("light");
 
-    // Add current theme class
-    root.classList.add(effectiveTheme);
+    // Always add dark theme class
+    root.classList.add("dark");
 
     // Save theme preference
-    localStorage.setItem("theme", theme);
-  }, [theme, effectiveTheme]);
-
-  // Listen to system theme changes
-  useEffect(() => {
-    if (theme === "system") {
-      const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-      const handleChange = () => {
-        // Trigger re-render to update effectiveTheme
-        setTheme("system");
-      };
-
-      mediaQuery.addEventListener("change", handleChange);
-      return () => mediaQuery.removeEventListener("change", handleChange);
-    }
-  }, [theme]);
+    localStorage.setItem("theme", "dark");
+  }, []);
 
   const value: ThemeContextType = {
     theme,
-    setTheme,
+    setTheme: () => {}, // No-op since we only use dark theme
     effectiveTheme,
   };
 
