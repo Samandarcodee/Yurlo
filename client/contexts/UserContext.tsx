@@ -235,12 +235,19 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 };
 
-// Custom hook: foydalanuvchi birinchi marta kirganda onboarding'ga yo'naltirish
+// Custom hook: foydalanuvchi birinchi marta kirganda welcome sahifasiga yo'naltirish
 export const useOnboardingCheck = () => {
   const { user, isLoading, isFirstTime } = useUser();
+  
+  // Check if user has already visited welcome page
+  const hasVisitedWelcome = localStorage.getItem('hasVisitedWelcome') === 'true';
+  
+  // Check if user explicitly started onboarding
+  const hasStartedOnboarding = localStorage.getItem('hasStartedOnboarding') === 'true';
 
   return {
-    shouldShowOnboarding: !isLoading && isFirstTime && !user,
+    shouldShowWelcome: !isLoading && isFirstTime && !user && !hasVisitedWelcome,
+    shouldShowOnboarding: !isLoading && isFirstTime && !user && hasStartedOnboarding,
     isReady: !isLoading,
   };
 };

@@ -30,6 +30,7 @@ import WaterTracker from "./pages/WaterTracker";
 import WorkoutTracker from "./pages/WorkoutTracker";
 import NotFound from "./pages/NotFound";
 import ErrorBoundary from "./components/ErrorBoundary";
+import Welcome from "./pages/Welcome";
 
 // Error Fallback Component
 const ErrorFallback = ({ error, resetErrorBoundary }: { error: Error; resetErrorBoundary: () => void }) => {
@@ -71,7 +72,7 @@ const ErrorFallback = ({ error, resetErrorBoundary }: { error: Error; resetError
 };
 
 const AppRoutes = () => {
-  const { shouldShowOnboarding, isReady } = useOnboardingCheck();
+  const { shouldShowWelcome, shouldShowOnboarding, isReady } = useOnboardingCheck();
   const { user } = useUser();
   const {
     isLoading: isTelegramLoading,
@@ -83,6 +84,7 @@ const AppRoutes = () => {
   const [loadingTimeout, setLoadingTimeout] = React.useState(false);
 
   console.log("Routing debug:", {
+    shouldShowWelcome,
     shouldShowOnboarding,
     isReady,
     hasUser: !!user,
@@ -131,9 +133,20 @@ const AppRoutes = () => {
     );
   }
 
-  // Fixed onboarding routing - show only once for new users  
+  // Show welcome page first for new users
+  if (shouldShowWelcome) {
+    console.log("Showing welcome page for new user");
+    localStorage.setItem('hasVisitedWelcome', 'true');
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800">
+        <Welcome />
+      </div>
+    );
+  }
+
+  // Show onboarding only after user clicked Start from welcome page
   if (shouldShowOnboarding) {
-    console.log("Showing onboarding because shouldShowOnboarding is true");
+    console.log("Showing onboarding because user clicked Start");
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800">
         <FixedOnboarding />
@@ -146,6 +159,7 @@ const AppRoutes = () => {
       <Routes>
         <Route path="/" element={<FixedIndex />} />
         <Route path="/index-legacy" element={<Index />} />
+        <Route path="/welcome" element={<Welcome />} />
         <Route path="/onboarding" element={<FixedOnboarding />} />
         <Route path="/onboarding-legacy" element={<Onboarding />} />
         <Route path="/telegram-onboarding" element={<TelegramOnboarding />} />

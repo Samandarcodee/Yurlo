@@ -194,6 +194,10 @@ export default function FixedOnboarding() {
       console.log("Completing onboarding with user data:", userData);
       updateUser(userData);
       
+      // Clear onboarding flags
+      localStorage.removeItem('hasStartedOnboarding');
+      localStorage.setItem('completedOnboarding', 'true');
+      
       hapticFeedback.notification('success');
       showAlert('Ma\'lumotlar muvaffaqiyatli saqlandi!');
       
