@@ -15,6 +15,14 @@ import {
   MoreHorizontal,
   Bell,
   Zap,
+  Heart,
+  Award,
+  Timer,
+  Coffee,
+  Utensils,
+  Shield,
+  Play,
+  BarChart3,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";

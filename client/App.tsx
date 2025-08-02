@@ -10,6 +10,7 @@ import { ThemeProvider } from "./contexts/ThemeContext";
 import { useTelegram } from "./hooks/use-telegram";
 import Index from "./pages/Index";
 import FixedIndex from "./pages/FixedIndex";
+import EnhancedIndex from "./pages/EnhancedIndex";
 import AddMeal from "./pages/AddMeal";
 import Assistant from "./pages/Assistant";
 import Analytics from "./pages/Analytics";
@@ -21,11 +22,14 @@ import Profile from "./pages/Profile";
 import EnhancedProfile from "./pages/EnhancedProfile";
 import ComprehensiveProfile from "./pages/ComprehensiveProfile";
 import ProfessionalProfile from "./pages/ProfessionalProfile";
+import CompleteProfile from "./pages/CompleteProfile";
 import EnhancedAddMeal from "./pages/EnhancedAddMeal";
 import SuperiorAddMeal from "./pages/SuperiorAddMeal";
 import DailyTracking from "./pages/DailyTracking";
 import SleepTracker from "./pages/SleepTracker";
+import EnhancedSleepTracker from "./pages/EnhancedSleepTracker";
 import StepTracker from "./pages/StepTracker";
+import EnhancedStepTracker from "./pages/EnhancedStepTracker";
 import WaterTracker from "./pages/WaterTracker";
 import WorkoutTracker from "./pages/WorkoutTracker";
 import NotFound from "./pages/NotFound";
@@ -157,13 +161,15 @@ const AppRoutes = () => {
   return (
     <Layout>
       <Routes>
-        <Route path="/" element={<FixedIndex />} />
+        <Route path="/" element={<EnhancedIndex />} />
+        <Route path="/index-fixed" element={<FixedIndex />} />
         <Route path="/index-legacy" element={<Index />} />
         <Route path="/welcome" element={<Welcome />} />
         <Route path="/onboarding" element={<FixedOnboarding />} />
         <Route path="/onboarding-legacy" element={<Onboarding />} />
         <Route path="/telegram-onboarding" element={<TelegramOnboarding />} />
-        <Route path="/profile" element={<ProfessionalProfile />} />
+        <Route path="/profile" element={<CompleteProfile />} />
+        <Route path="/profile-professional" element={<ProfessionalProfile />} />
         <Route path="/profile-legacy" element={<Profile />} />
         <Route path="/profile-enhanced" element={<EnhancedProfile />} />
         <Route path="/profile-comprehensive" element={<ComprehensiveProfile />} />
@@ -173,8 +179,10 @@ const AppRoutes = () => {
         <Route path="/daily-tracking" element={<DailyTracking />} />
         <Route path="/assistant" element={<Assistant />} />
         <Route path="/analytics" element={<Analytics />} />
-        <Route path="/sleep-tracker" element={<SleepTracker />} />
-        <Route path="/step-tracker" element={<StepTracker />} />
+        <Route path="/sleep-tracker" element={<EnhancedSleepTracker />} />
+        <Route path="/sleep-tracker-legacy" element={<SleepTracker />} />
+        <Route path="/step-tracker" element={<EnhancedStepTracker />} />
+        <Route path="/step-tracker-legacy" element={<StepTracker />} />
         <Route path="/water-tracker" element={<WaterTracker />} />
         <Route path="/workout-tracker" element={<WorkoutTracker />} />
         <Route path="/settings" element={<Settings />} />
