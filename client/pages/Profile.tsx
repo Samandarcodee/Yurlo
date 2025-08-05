@@ -53,6 +53,7 @@ export default function Profile() {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [editing, setEditing] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [editedProfile, setEditedProfile] = useState<UserProfile | null>(null);
 
   useEffect(() => {
@@ -68,12 +69,23 @@ export default function Profile() {
   const handleSave = async () => {
     if (!editedProfile) return;
 
+    // Validation
+    if (!editedProfile.name?.trim()) {
+      setError("Ism kiritilishi shart");
+      return;
+    }
+    if (!editedProfile.birthYear || !editedProfile.height || !editedProfile.weight) {
+      setError("Barcha maydonlar to'ldirilishi shart");
+      return;
+    }
+
     setLoading(true);
+    setError(null);
     try {
       // BMR qayta hisoblash
-      const age = new Date().getFullYear() - parseInt(editedProfile.birthYear);
-      const heightNum = parseFloat(editedProfile.height);
-      const weightNum = parseFloat(editedProfile.weight);
+      const age = new Date().getFullYear() - parseInt(editedProfile.birthYear || "1990");
+      const heightNum = parseFloat(editedProfile.height || "170");
+      const weightNum = parseFloat(editedProfile.weight || "70");
 
       let bmr = 0;
       if (editedProfile.gender === "male") {
@@ -82,17 +94,14 @@ export default function Profile() {
         bmr = 447.593 + 9.247 * weightNum + 3.098 * heightNum - 4.33 * age;
       }
 
-      const activityMultiplier = {
+      const activityMultiplier: Record<string, number> = {
         low: 1.2,
         medium: 1.55,
         high: 1.725,
       };
 
       const dailyCalories = Math.round(
-        bmr *
-          activityMultiplier[
-            editedProfile.activityLevel as keyof typeof activityMultiplier
-          ],
+        bmr * activityMultiplier[editedProfile.activityLevel] || bmr * 1.2
       );
 
       const updatedProfile = {
@@ -115,9 +124,13 @@ export default function Profile() {
         localStorage.setItem("userProfile", JSON.stringify(updatedProfile));
         setProfile(updatedProfile);
         setEditing(false);
+        setError(null);
+      } else {
+        setError("Profil yangilanmadi. Iltimos, qaytadan urinib ko'ring.");
       }
     } catch (error) {
       console.error("Profil yangilanmadi:", error);
+      setError("Xatolik yuz berdi. Iltimos, qaytadan urinib ko'ring.");
     }
     setLoading(false);
   };
@@ -162,6 +175,7 @@ export default function Profile() {
   };
 
   const getBMICategory = (bmi: number) => {
+    if (bmi <= 0) return { label: "Ma'lumot yo'q", color: "text-gray-500" };
     if (bmi < 18.5) return { label: "Kam vazn", color: "text-blue-600" };
     if (bmi < 25) return { label: "Normal", color: "text-green-600" };
     if (bmi < 30) return { label: "Ortiqcha vazn", color: "text-yellow-600" };
@@ -194,8 +208,9 @@ export default function Profile() {
     );
   }
 
-  const bmi =
-    parseFloat(profile.weight) / Math.pow(parseFloat(profile.height) / 100, 2);
+  const bmi = profile.height && profile.weight
+    ? parseFloat(profile.weight) / Math.pow(parseFloat(profile.height) / 100, 2)
+    : 0;
   const bmiCategory = getBMICategory(bmi);
 
   return (
@@ -249,6 +264,7 @@ export default function Profile() {
                         )
                       }
                       className="mt-1"
+                      placeholder="Ismingizni kiriting"
                     />
                   </div>
                   <div>
@@ -262,6 +278,9 @@ export default function Profile() {
                         )
                       }
                       className="mt-1"
+                      placeholder="1990"
+                      min="1900"
+                      max="2024"
                     />
                   </div>
                   <div>
@@ -275,6 +294,9 @@ export default function Profile() {
                         )
                       }
                       className="mt-1"
+                      placeholder="170"
+                      min="100"
+                      max="250"
                     />
                   </div>
                   <div>
@@ -288,6 +310,9 @@ export default function Profile() {
                         )
                       }
                       className="mt-1"
+                      placeholder="70"
+                      min="30"
+                      max="300"
                     />
                   </div>
                 </div>
@@ -341,6 +366,11 @@ export default function Profile() {
                   </div>
                 </div>
 
+                {error && (
+                  <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+                    {error}
+                  </div>
+                )}
                 <Button
                   onClick={handleSave}
                   disabled={loading}
@@ -437,7 +467,7 @@ export default function Profile() {
               </div>
               <h3 className="font-bold text-lg mb-1">BMI</h3>
               <p className="text-2xl font-bold text-foreground">
-                {bmi.toFixed(1)}
+                {bmi > 0 ? bmi.toFixed(1) : "—"}
               </p>
               <p className={`text-sm font-medium ${bmiCategory.color}`}>
                 {bmiCategory.label}
