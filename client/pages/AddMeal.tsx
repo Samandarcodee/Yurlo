@@ -277,6 +277,21 @@ export default function AddMeal() {
         caloriesConsumed: totalCalories,
       });
 
+      // Push notify via Telegram (best-effort, respects user setting)
+      try {
+        const enabled = localStorage.getItem(`notif_meals_${telegramId}`);
+        if (enabled === null || enabled === 'true') {
+          await fetch('/api/notify', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              chat_id: telegramId,
+              template: 'meal_saved',
+            }),
+          });
+        }
+      } catch {}
+
       // Show success and navigate back
       alert(`✅ ${newMeal.name} qo'shildi! (${newMeal.calories} kal)`);
       navigate("/");

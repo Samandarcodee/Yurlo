@@ -115,6 +115,20 @@ export default function WaterTracker() {
     // Refresh insights
     const newInsights = getWaterInsights(telegramId);
     setInsights(newInsights);
+
+    // Notify if goal reached (respects user setting)
+    if (updated.goalReached) {
+      try {
+        const enabled = localStorage.getItem(`notif_water_${telegramId}`);
+        if (enabled === null || enabled === 'true') {
+          fetch('/api/notify', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ chat_id: telegramId, template: 'water_goal' }),
+          });
+        }
+      } catch {}
+    }
   };
 
   const handleUpdateGoals = () => {

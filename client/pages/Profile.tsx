@@ -31,40 +31,31 @@ import {
   Save,
   Settings as SettingsIcon,
 } from "lucide-react";
-
-interface UserProfile {
-  name: string;
-  gender: string;
-  birthYear: string;
-  age: number;
-  height: string;
-  weight: string;
-  activityLevel: string;
-  goal: string;
-  sleepTime: string;
-  wakeTime: string;
-  language: string;
-  bmr: number;
-  dailyCalories: number;
-  createdAt: string;
-}
+import { useUser, UserProfile as ContextUserProfile } from "@/contexts/UserContext";
 
 export default function Profile() {
-  const [profile, setProfile] = useState<UserProfile | null>(null);
+  const { user, updateUser, isLoading, clearUser } = useUser();
   const [editing, setEditing] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [editedProfile, setEditedProfile] = useState<UserProfile | null>(null);
+  const [editedProfile, setEditedProfile] = useState<ContextUserProfile | null>(null);
+  const [notifMeals, setNotifMeals] = useState<boolean>(true);
+  const [notifWater, setNotifWater] = useState<boolean>(true);
+  const [aiTips, setAiTips] = useState<boolean>(true);
 
   useEffect(() => {
-    // localStorage'dan profil ma'lumotlarini olish
-    const savedProfile = localStorage.getItem("userProfile");
-    if (savedProfile) {
-      const profileData = JSON.parse(savedProfile);
-      setProfile(profileData);
-      setEditedProfile(profileData);
+    if (user) {
+      setEditedProfile(user);
+      // Load settings from localStorage (per user)
+      const uid = user.telegramId || "demo_user_123";
+      const meals = localStorage.getItem(`notif_meals_${uid}`);
+      const water = localStorage.getItem(`notif_water_${uid}`);
+      const ai = localStorage.getItem(`ai_tips_${uid}`);
+      setNotifMeals(meals ? meals === "true" : true);
+      setNotifWater(water ? water === "true" : true);
+      setAiTips(ai ? ai === "true" : true);
     }
-  }, []);
+  }, [user]);
 
   const handleSave = async () => {
     if (!editedProfile) return;
@@ -72,6 +63,10 @@ export default function Profile() {
     // Validation
     if (!editedProfile.name?.trim()) {
       setError("Ism kiritilishi shart");
+      return;
+    }
+    if (!editedProfile.gender) {
+      setError("Jinsni tanlang");
       return;
     }
     if (!editedProfile.birthYear || !editedProfile.height || !editedProfile.weight) {
@@ -104,30 +99,18 @@ export default function Profile() {
         bmr * activityMultiplier[editedProfile.activityLevel] || bmr * 1.2
       );
 
-      const updatedProfile = {
+      const updatedProfile: ContextUserProfile = {
         ...editedProfile,
         age,
         bmr: Math.round(bmr),
         dailyCalories,
+        createdAt: editedProfile.createdAt || new Date().toISOString(),
+        isFirstTime: false,
       };
 
-      // Backend'ga yuborish
-      const response = await fetch("/api/user/profile", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(updatedProfile),
-      });
-
-      if (response.ok) {
-        localStorage.setItem("userProfile", JSON.stringify(updatedProfile));
-        setProfile(updatedProfile);
-        setEditing(false);
-        setError(null);
-      } else {
-        setError("Profil yangilanmadi. Iltimos, qaytadan urinib ko'ring.");
-      }
+      await updateUser(updatedProfile);
+      setEditing(false);
+      setError(null);
     } catch (error) {
       console.error("Profil yangilanmadi:", error);
       setError("Xatolik yuz berdi. Iltimos, qaytadan urinib ko'ring.");
@@ -135,13 +118,68 @@ export default function Profile() {
     setLoading(false);
   };
 
+  const handleToggleSetting = (key: "meals" | "water" | "ai", value: boolean) => {
+    if (!user) return;
+    const uid = user.telegramId || "demo_user_123";
+    if (key === "meals") {
+      setNotifMeals(value);
+      localStorage.setItem(`notif_meals_${uid}`, String(value));
+    } else if (key === "water") {
+      setNotifWater(value);
+      localStorage.setItem(`notif_water_${uid}`, String(value));
+    } else {
+      setAiTips(value);
+      localStorage.setItem(`ai_tips_${uid}`, String(value));
+    }
+  };
+
+  const handleExport = () => {
+    if (!user) return;
+    const uid = user.telegramId || "demo_user_123";
+    const data = {
+      exportedAt: new Date().toISOString(),
+      user,
+      settings: {
+        notifications: {
+          meals: notifMeals,
+          water: notifWater,
+        },
+        aiTips,
+      },
+    };
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `profile_export_${uid}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const handleClearProfile = async () => {
+    if (!user) return;
+    const confirmed = window.confirm("Profilni tozalashni xohlaysizmi? Bu amalni bekor qilib bo'lmaydi.");
+    if (!confirmed) return;
+    // Clear local settings keys
+    const uid = user.telegramId || "demo_user_123";
+    localStorage.removeItem(`notif_meals_${uid}`);
+    localStorage.removeItem(`notif_water_${uid}`);
+    localStorage.removeItem(`ai_tips_${uid}`);
+    clearUser();
+  };
+
   const getActivityLabel = (level: string) => {
     switch (level) {
       case "low":
+      case "sedentary":
         return "🛌 Kam faol";
       case "medium":
+      case "moderate":
+      case "light":
         return "🚶 O'rtacha faol";
       case "high":
+      case "active":
+      case "very_active":
         return "🏃 Juda faol";
       default:
         return level;
@@ -182,7 +220,19 @@ export default function Profile() {
     return { label: "Semizlik", color: "text-red-600" };
   };
 
-  if (!profile) {
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <Card className="w-full max-w-md mx-4 theme-card-interactive shadow-xl">
+          <CardContent className="pt-8 pb-6 text-center">
+            <h3 className="text-xl font-bold mb-2 text-foreground">Yuklanmoqda...</h3>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  if (!user) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <Card className="w-full max-w-md mx-4 theme-card-interactive shadow-xl">
@@ -208,8 +258,8 @@ export default function Profile() {
     );
   }
 
-  const bmi = profile.height && profile.weight
-    ? parseFloat(profile.weight) / Math.pow(parseFloat(profile.height) / 100, 2)
+  const bmi = user.height && user.weight
+    ? parseFloat(user.weight) / Math.pow(parseFloat(user.height) / 100, 2)
     : 0;
   const bmiCategory = getBMICategory(bmi);
 
@@ -242,7 +292,12 @@ export default function Profile() {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => setEditing(!editing)}
+                onClick={() => {
+                  if (!editing && user) {
+                    setEditedProfile(user);
+                  }
+                  setEditing(!editing);
+                }}
                 className="border-mint-200 text-mint-600 hover:bg-white/80"
               >
                 <Edit className="h-4 w-4 mr-1" />
@@ -251,7 +306,7 @@ export default function Profile() {
             </div>
           </CardHeader>
           <CardContent className="space-y-4 sm:space-y-6">
-            {editing ? (
+                {editing ? (
               <div className="space-y-4">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
@@ -267,7 +322,26 @@ export default function Profile() {
                       placeholder="Ismingizni kiriting"
                     />
                   </div>
-                  <div>
+                      <div>
+                        <Label>Jins</Label>
+                        <Select
+                          value={editedProfile?.gender || ""}
+                          onValueChange={(value) =>
+                            setEditedProfile((prev) =>
+                              prev ? { ...prev, gender: value } as ContextUserProfile : null,
+                            )
+                          }
+                        >
+                          <SelectTrigger className="mt-1">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="male">Erkak</SelectItem>
+                            <SelectItem value="female">Ayol</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div>
                     <Label>Tug'ilgan yil</Label>
                     <Input
                       type="number"
@@ -280,9 +354,27 @@ export default function Profile() {
                       className="mt-1"
                       placeholder="1990"
                       min="1900"
-                      max="2024"
+                          max={new Date().getFullYear().toString()}
                     />
                   </div>
+                      <div>
+                        <Label>Til</Label>
+                        <Select
+                          value={editedProfile?.language || "uz"}
+                          onValueChange={(value) =>
+                            setEditedProfile((prev) => (prev ? { ...prev, language: value } : null))
+                          }
+                        >
+                          <SelectTrigger className="mt-1">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="uz">🇺🇿 O'zbek</SelectItem>
+                            <SelectItem value="ru">🇷🇺 Русский</SelectItem>
+                            <SelectItem value="en">🇺🇸 English</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
                   <div>
                     <Label>Bo'y (sm)</Label>
                     <Input
@@ -299,7 +391,7 @@ export default function Profile() {
                       max="250"
                     />
                   </div>
-                  <div>
+                      <div>
                     <Label>Vazn (kg)</Label>
                     <Input
                       type="number"
@@ -332,9 +424,9 @@ export default function Profile() {
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="low">🛌 Kam faol</SelectItem>
-                        <SelectItem value="medium">🚶 O'rtacha faol</SelectItem>
-                        <SelectItem value="high">🏃 Juda faol</SelectItem>
+                         <SelectItem value="low">🛌 Kam faol</SelectItem>
+                         <SelectItem value="medium">🚶 O'rtacha faol</SelectItem>
+                         <SelectItem value="high">🏃 Juda faol</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -364,6 +456,35 @@ export default function Profile() {
                       </SelectContent>
                     </Select>
                   </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div>
+                        <Label>Uxlash vaqti</Label>
+                        <Input
+                          type="time"
+                          value={editedProfile?.sleepTime || ""}
+                          onChange={(e) =>
+                            setEditedProfile((prev) =>
+                              prev ? { ...prev, sleepTime: e.target.value } : null,
+                            )
+                          }
+                          className="mt-1"
+                        />
+                      </div>
+                      <div>
+                        <Label>Uyg'onish vaqti</Label>
+                        <Input
+                          type="time"
+                          value={editedProfile?.wakeTime || ""}
+                          onChange={(e) =>
+                            setEditedProfile((prev) =>
+                              prev ? { ...prev, wakeTime: e.target.value } : null,
+                            )
+                          }
+                          className="mt-1"
+                        />
+                      </div>
                 </div>
 
                 {error && (
@@ -390,7 +511,7 @@ export default function Profile() {
                     </span>
                   </div>
                   <p className="text-lg sm:text-xl font-bold text-mint-800">
-                    {profile.name}
+                    {user.name}
                   </p>
                 </div>
 
@@ -402,7 +523,7 @@ export default function Profile() {
                     </span>
                   </div>
                   <p className="text-lg sm:text-xl font-bold text-mint-800">
-                    {profile.age} yosh
+                    {user.age} yosh
                   </p>
                 </div>
 
@@ -414,7 +535,7 @@ export default function Profile() {
                     </span>
                   </div>
                   <p className="text-lg sm:text-xl font-bold text-mint-800">
-                    {profile.height} sm
+                    {user.height} sm
                   </p>
                 </div>
 
@@ -426,7 +547,19 @@ export default function Profile() {
                     </span>
                   </div>
                   <p className="text-lg sm:text-xl font-bold text-mint-800">
-                    {profile.weight} kg
+                    {user.weight} kg
+                  </p>
+                </div>
+
+                <div className="space-y-2 p-3 sm:p-4 bg-white/40 rounded-xl sm:rounded-2xl">
+                  <div className="flex items-center gap-2">
+                    <User className="h-4 w-4 text-mint-600" />
+                    <span className="text-xs sm:text-sm text-mint-600 font-semibold">
+                      Jins
+                    </span>
+                  </div>
+                  <p className="text-lg sm:text-xl font-bold text-mint-800 capitalize">
+                    {user.gender === 'male' ? 'Erkak' : user.gender === 'female' ? 'Ayol' : '—'}
                   </p>
                 </div>
 
@@ -438,7 +571,7 @@ export default function Profile() {
                     </span>
                   </div>
                   <p className="text-sm sm:text-base font-bold text-mint-800">
-                    {getActivityLabel(profile.activityLevel)}
+                    {getActivityLabel(user.activityLevel)}
                   </p>
                 </div>
 
@@ -450,7 +583,7 @@ export default function Profile() {
                     </span>
                   </div>
                   <p className="text-sm sm:text-base font-bold text-mint-800">
-                    {getGoalLabel(profile.goal)}
+                    {getGoalLabel(user.goal)}
                   </p>
                 </div>
               </div>
@@ -482,7 +615,7 @@ export default function Profile() {
               </div>
               <h3 className="font-bold text-lg mb-1">BMR</h3>
               <p className="text-2xl font-bold text-foreground">
-                {profile.bmr}
+                {user.bmr}
               </p>
               <p className="text-sm text-muted-foreground">kcal/kun</p>
             </CardContent>
@@ -495,7 +628,7 @@ export default function Profile() {
               </div>
               <h3 className="font-bold text-lg mb-1">Kunlik Kaloriya</h3>
               <p className="text-2xl font-bold text-foreground">
-                {profile.dailyCalories}
+                {user.dailyCalories}
               </p>
               <p className="text-sm text-muted-foreground">kcal/kun</p>
             </CardContent>
@@ -524,7 +657,7 @@ export default function Profile() {
                 </div>
               </div>
               <Badge variant="secondary">
-                {getLanguageLabel(profile.language)}
+                {getLanguageLabel(user.language)}
               </Badge>
             </div>
 
@@ -540,7 +673,16 @@ export default function Profile() {
                   </p>
                 </div>
               </div>
-              <Switch defaultChecked />
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2 text-sm">
+                  <span>Ovqat</span>
+                  <Switch checked={notifMeals} onCheckedChange={(v) => handleToggleSetting("meals", v)} />
+                </div>
+                <div className="flex items-center gap-2 text-sm">
+                  <span>Suv</span>
+                  <Switch checked={notifWater} onCheckedChange={(v) => handleToggleSetting("water", v)} />
+                </div>
+              </div>
             </div>
 
             <Separator />
@@ -555,7 +697,18 @@ export default function Profile() {
                   </p>
                 </div>
               </div>
-              <Switch defaultChecked />
+              <Switch checked={aiTips} onCheckedChange={(v) => handleToggleSetting("ai", v)} />
+            </div>
+
+            <Separator />
+
+            <div className="flex flex-col sm:flex-row gap-3 justify-end">
+              <Button variant="outline" onClick={handleExport}>
+                Ma'lumotlarni eksport qilish
+              </Button>
+              <Button variant="destructive" onClick={handleClearProfile}>
+                Profilni tozalash
+              </Button>
             </div>
           </CardContent>
         </Card>

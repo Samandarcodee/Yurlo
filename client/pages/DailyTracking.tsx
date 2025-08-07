@@ -205,6 +205,15 @@ export default function DailyTracking() {
       setExerciseData({ type: '', duration: 30, intensity: 'moderate', notes: '' });
       hapticFeedback.notification('success');
       showAlert('Mashq qo\'shildi!');
+
+      // Best-effort push notify
+      try {
+        fetch('/api/notify', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ chat_id: telegramId, template: 'exercise_added' }),
+        });
+      } catch {}
     } catch (error) {
       console.error('Error adding exercise:', error);
       showAlert('Mashq qo\'shilmadi. Qaytadan urinib ko\'ring.');

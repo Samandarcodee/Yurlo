@@ -178,7 +178,7 @@ export const testMealEntryOperations = async (telegramId: string): Promise<boole
       protein: 25.0,
       carbs: 60.0,
       fat: 15.0,
-      meal_type: 'lunch',
+      meal_type: 'lunch' as 'breakfast' | 'lunch' | 'dinner' | 'snack',
       date: new Date().toISOString().split('T')[0]
     };
     

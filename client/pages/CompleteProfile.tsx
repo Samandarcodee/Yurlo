@@ -133,7 +133,7 @@ export default function CompleteProfile() {
 
   const handleFieldSave = async (fieldKey: string) => {
     const field = editableFields.find(f => f.key === fieldKey);
-    const value = formData[fieldKey as keyof typeof formData]?.toString() || '';
+    const value = String((formData as any)[fieldKey] ?? '');
     
     if (field?.validation && !field.validation(value)) {
       showAlert(field.errorMessage || 'Noto\'g\'ri qiymat');

@@ -7,12 +7,20 @@
     "api/telegram-webhook.js": {
       "memory": 128,
       "maxDuration": 10
+    },
+    "api/notify.js": {
+      "memory": 128,
+      "maxDuration": 10
     }
   },
   "rewrites": [
     {
       "source": "/api/telegram-webhook",
       "destination": "/api/telegram-webhook.js"
+    },
+    {
+      "source": "/api/notify",
+      "destination": "/api/notify.js"
     },
     {
       "source": "/(.*)",

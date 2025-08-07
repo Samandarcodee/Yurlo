@@ -338,6 +338,17 @@ export default function StepTracker() {
     if (newAchievements.length > 0) {
       setNewAchievements(newAchievements);
       setAchievements(getUserAchievements(telegramId));
+      // Send push for first new achievement (respect meals notif as generic activity channel)
+      try {
+        const enabled = localStorage.getItem(`notif_meals_${telegramId}`);
+        if (enabled === null || enabled === 'true') {
+          fetch('/api/notify', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ chat_id: telegramId, template: 'steps_goal' }),
+          });
+        }
+      } catch {}
     }
   };
 
