@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "@/contexts/UserContext";
+import { useI18n } from "@/contexts/I18nContext";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -40,6 +41,7 @@ interface OnboardingData {
 export default function Onboarding() {
   const navigate = useNavigate();
   const { updateUser } = useUser();
+  const { t, setLanguage } = useI18n();
   const [currentStep, setCurrentStep] = useState(1);
   const [loading, setLoading] = useState(false);
 
@@ -137,12 +139,15 @@ export default function Onboarding() {
         );
       }
 
+      // Tilni global holatda saqlash
+      setLanguage(userData.language as any);
+
       // Bosh sahifaga o'tish
       console.log("Navigating to home page...");
       navigate("/", { replace: true });
     } catch (error) {
       console.error("Xatolik:", error);
-      alert("Ma'lumotlar saqlanmadi. Iltimos, qayta urinib ko'ring.");
+      alert(t("general.loading"));
     }
     setLoading(false);
   };
@@ -169,7 +174,7 @@ export default function Onboarding() {
         <div className="mb-8">
           <div className="flex justify-between items-center mb-3">
             <span className="text-sm font-medium text-mint-600">
-              Qadam {currentStep} / {totalSteps}
+              {t("onboarding.step")} {currentStep} / {totalSteps}
             </span>
             <span className="text-sm font-medium text-mint-600">
               {Math.round((currentStep / totalSteps) * 100)}%
@@ -186,7 +191,7 @@ export default function Onboarding() {
         <Card className="card-shadow-lg rounded-3xl overflow-hidden">
           <CardHeader className="text-center bg-gradient-to-r from-mint-100 to-water-100 pb-6">
             <CardTitle className="text-2xl font-bold bg-gradient-to-r from-mint-600 to-water-600 bg-clip-text text-transparent">
-              Caloria AI'ga Xush Kelibsiz! 🎉
+              {t("onboarding.title")} 🎉
             </CardTitle>
             <p className="text-sm text-muted-foreground mt-2">
               Sizga moslashtirilgan tavsiyalar uchun ma'lumotlaringizni
@@ -202,9 +207,7 @@ export default function Onboarding() {
                   <div className="inline-block p-3 bg-mint-100 rounded-full mb-3">
                     <User className="h-8 w-8 text-mint-600" />
                   </div>
-                  <h3 className="text-xl font-bold text-foreground">
-                    Asosiy Ma'lumotlar
-                  </h3>
+                  <h3 className="text-xl font-bold text-foreground">{t("onboarding.personalInfo")}</h3>
                 </div>
 
                 <div className="space-y-4">
@@ -222,7 +225,7 @@ export default function Onboarding() {
                   </div>
 
                   <div>
-                    <Label>Jinsingiz</Label>
+                    <Label>{t("onboarding.gender")}</Label>
                     <RadioGroup
                       value={formData.gender}
                       onValueChange={(value) => updateFormData("gender", value)}
@@ -231,7 +234,7 @@ export default function Onboarding() {
                       <div className="flex items-center space-x-2 p-3 border rounded-lg hover:bg-mint-50">
                         <RadioGroupItem value="male" id="male" />
                         <Label htmlFor="male" className="flex-1 cursor-pointer">
-                          👨 Erkak
+                          👨 {t("onboarding.male")}
                         </Label>
                       </div>
                       <div className="flex items-center space-x-2 p-3 border rounded-lg hover:bg-mint-50">
@@ -240,14 +243,14 @@ export default function Onboarding() {
                           htmlFor="female"
                           className="flex-1 cursor-pointer"
                         >
-                          👩 Ayol
+                          👩 {t("onboarding.female")}
                         </Label>
                       </div>
                     </RadioGroup>
                   </div>
 
                   <div>
-                    <Label htmlFor="birthYear">Tug'ilgan yil</Label>
+                    <Label htmlFor="birthYear">{t("onboarding.birthYear")}</Label>
                     <div className="relative mt-1">
                       <Calendar className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                       <Input
@@ -275,14 +278,12 @@ export default function Onboarding() {
                   <div className="inline-block p-3 bg-water-100 rounded-full mb-3">
                     <Ruler className="h-8 w-8 text-water-600" />
                   </div>
-                  <h3 className="text-xl font-bold text-foreground">
-                    Jismoniy O'lchamlar
-                  </h3>
+                  <h3 className="text-xl font-bold text-foreground">{t("onboarding.physical")}</h3>
                 </div>
 
                 <div className="space-y-4">
                   <div>
-                    <Label htmlFor="height">Bo'yingiz (sm)</Label>
+                    <Label htmlFor="height">{t("onboarding.height")}</Label>
                     <div className="relative mt-1">
                       <Ruler className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                       <Input
@@ -301,7 +302,7 @@ export default function Onboarding() {
                   </div>
 
                   <div>
-                    <Label htmlFor="weight">Vazningiz (kg)</Label>
+                    <Label htmlFor="weight">{t("onboarding.weight")}</Label>
                     <div className="relative mt-1">
                       <Weight className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                       <Input
@@ -329,14 +330,12 @@ export default function Onboarding() {
                   <div className="inline-block p-3 bg-health-100 rounded-full mb-3">
                     <Target className="h-8 w-8 text-health-600" />
                   </div>
-                  <h3 className="text-xl font-bold text-foreground">
-                    Maqsad va Faollik
-                  </h3>
+                  <h3 className="text-xl font-bold text-foreground">{t("onboarding.goals")}</h3>
                 </div>
 
                 <div className="space-y-4">
                   <div>
-                    <Label>Faollik darajangiz</Label>
+                    <Label>{t("onboarding.activity")}</Label>
                     <Select
                       value={formData.activityLevel}
                       onValueChange={(value) =>
@@ -347,21 +346,15 @@ export default function Onboarding() {
                         <SelectValue placeholder="Faollik darajasini tanlang" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="low">
-                          🛌 Kam faol (ofis ishi)
-                        </SelectItem>
-                        <SelectItem value="medium">
-                          🚶 O'rtacha faol (haftada 3-4 sport)
-                        </SelectItem>
-                        <SelectItem value="high">
-                          🏃 Juda faol (har kuni sport)
-                        </SelectItem>
+                         <SelectItem value="low">🛌 {t("onboarding.low")}</SelectItem>
+                         <SelectItem value="medium">🚶 {t("onboarding.medium")}</SelectItem>
+                         <SelectItem value="high">🏃 {t("onboarding.high")}</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
 
                   <div>
-                    <Label>Maqsadingiz</Label>
+                    <Label>{t("onboarding.goal")}</Label>
                     <Select
                       value={formData.goal}
                       onValueChange={(value) => updateFormData("goal", value)}
@@ -370,24 +363,16 @@ export default function Onboarding() {
                         <SelectValue placeholder="Maqsadingizni tanlang" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="lose">
-                          📉 Vazn kamaytirish
-                        </SelectItem>
-                        <SelectItem value="maintain">
-                          ⚖️ Vaznni saqlash
-                        </SelectItem>
-                        <SelectItem value="gain">
-                          📈 Vazn ko'paytirish
-                        </SelectItem>
+                         <SelectItem value="lose">📉 {t("onboarding.lose")}</SelectItem>
+                         <SelectItem value="maintain">⚖️ {t("onboarding.maintain")}</SelectItem>
+                         <SelectItem value="gain">📈 {t("onboarding.gain")}</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
 
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <Label htmlFor="sleepTime">
-                        Uxlash vaqti (ixtiyoriy)
-                      </Label>
+                      <Label htmlFor="sleepTime">{t("onboarding.sleepTime")}</Label>
                       <div className="relative mt-1">
                         <Clock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                         <Input
@@ -403,9 +388,7 @@ export default function Onboarding() {
                     </div>
 
                     <div>
-                      <Label htmlFor="wakeTime">
-                        Uyg'onish vaqti (ixtiyoriy)
-                      </Label>
+                      <Label htmlFor="wakeTime">{t("onboarding.wakeTime")}</Label>
                       <div className="relative mt-1">
                         <Clock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                         <Input
@@ -431,14 +414,12 @@ export default function Onboarding() {
                   <div className="inline-block p-3 bg-water-100 rounded-full mb-3">
                     <Globe className="h-8 w-8 text-water-600" />
                   </div>
-                  <h3 className="text-xl font-bold text-foreground">
-                    Tugallash
-                  </h3>
+                  <h3 className="text-xl font-bold text-foreground">{t("onboarding.complete")}</h3>
                 </div>
 
                 <div className="space-y-4">
                   <div>
-                    <Label>Til</Label>
+                    <Label>{t("general.language")}</Label>
                     <Select
                       value={formData.language}
                       onValueChange={(value) =>
@@ -495,7 +476,7 @@ export default function Onboarding() {
                   onClick={prevStep}
                   className="flex-1 h-12 border-mint-200 text-mint-600 hover:bg-mint-50"
                 >
-                  ← Orqaga
+                  ← {t("general.back")}
                 </Button>
               )}
 
@@ -505,7 +486,7 @@ export default function Onboarding() {
                   disabled={!isStepValid()}
                   className="flex-1 h-12 bg-gradient-to-r from-mint-500 to-water-500 hover:from-mint-600 hover:to-water-600 text-white font-semibold"
                 >
-                  Keyingi →
+                  {t("general.next")} →
                 </Button>
               ) : (
                 <Button
@@ -513,7 +494,7 @@ export default function Onboarding() {
                   disabled={!isStepValid() || loading}
                   className="flex-1 h-12 bg-gradient-to-r from-mint-500 to-water-500 hover:from-mint-600 hover:to-water-600 text-white font-semibold"
                 >
-                  {loading ? "Saqlanmoqda..." : "Tugallash ✅"}
+                  {loading ? t("general.loading") : `${t("general.finish")} ✅`}
                 </Button>
               )}
             </div>

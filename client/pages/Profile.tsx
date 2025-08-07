@@ -32,9 +32,11 @@ import {
   Settings as SettingsIcon,
 } from "lucide-react";
 import { useUser, UserProfile as ContextUserProfile } from "@/contexts/UserContext";
+import { useI18n } from "@/contexts/I18nContext";
 
 export default function Profile() {
   const { user, updateUser, isLoading, clearUser } = useUser();
+  const { language, setLanguage, t } = useI18n();
   const [editing, setEditing] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -285,9 +287,7 @@ export default function Profile() {
                 <div className="p-1.5 sm:p-2 bg-white/50 rounded-lg sm:rounded-xl">
                   <User className="h-5 w-5 sm:h-6 sm:w-6" />
                 </div>
-                <span className="text-lg sm:text-xl font-bold">
-                  Profil Ma'lumotlari
-                </span>
+                <span className="text-lg sm:text-xl font-bold">{t("profile.profileInfo")}</span>
               </CardTitle>
               <Button
                 variant="outline"
@@ -301,7 +301,7 @@ export default function Profile() {
                 className="border-mint-200 text-mint-600 hover:bg-white/80"
               >
                 <Edit className="h-4 w-4 mr-1" />
-                {editing ? "Bekor qilish" : "Tahrirlash"}
+                {editing ? t("profile.cancel") : t("profile.edit")}
               </Button>
             </div>
           </CardHeader>
@@ -358,9 +358,9 @@ export default function Profile() {
                     />
                   </div>
                       <div>
-                        <Label>Til</Label>
+                    <Label>{t("general.language")}</Label>
                         <Select
-                          value={editedProfile?.language || "uz"}
+                          value={editedProfile?.language || language}
                           onValueChange={(value) =>
                             setEditedProfile((prev) => (prev ? { ...prev, language: value } : null))
                           }
@@ -646,18 +646,18 @@ export default function Profile() {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <Globe className="h-5 w-5 text-muted-foreground" />
                 <div>
-                  <p className="font-medium">Til</p>
+                      <p className="font-medium">{t("general.language")}</p>
                   <p className="text-sm text-muted-foreground">
                     Interfeys tili
                   </p>
                 </div>
               </div>
               <Badge variant="secondary">
-                {getLanguageLabel(user.language)}
+                    {getLanguageLabel(user.language)}
               </Badge>
             </div>
 

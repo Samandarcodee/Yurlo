@@ -6,6 +6,7 @@ import App from "./App";
 import "./global.css";
 import "./utils/debug"; // Debug utilities for development
 import { ErrorBoundary } from "./components/ErrorBoundary";
+import { I18nProvider } from "./contexts/I18nContext";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -62,9 +63,11 @@ if (root) {
     <React.StrictMode>
       <ErrorBoundary FallbackComponent={MainErrorFallback}>
         <QueryClientProvider client={queryClient}>
-          <BrowserRouter>
-            <App />
-          </BrowserRouter>
+          <I18nProvider>
+            <BrowserRouter>
+              <App />
+            </BrowserRouter>
+          </I18nProvider>
         </QueryClientProvider>
       </ErrorBoundary>
     </React.StrictMode>

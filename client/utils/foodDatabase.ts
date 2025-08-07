@@ -163,6 +163,26 @@ export const UZBEK_FOODS: FoodItem[] = [
     popularity: 98,
   },
   {
+    id: "salat",
+    name: "Fresh Salad",
+    nameUz: "Salat",
+    category: "vegetables",
+    serving: { size: "1 kosa", unit: "kosa", grams: 180 },
+    nutrition: {
+      calories: 120,
+      protein: 4,
+      carbs: 14,
+      fat: 5,
+      fiber: 5,
+      sugar: 6,
+      sodium: 210,
+    },
+    tags: ["salat", "sabzavot", "yengil", "diet"]
+    ,
+    isVerified: true,
+    popularity: 76,
+  },
+  {
     id: "guruch",
     name: "Rice",
     nameUz: "Guruch",
@@ -243,6 +263,25 @@ export const UZBEK_FOODS: FoodItem[] = [
     popularity: 88,
   },
   {
+    id: "banan",
+    name: "Banana",
+    nameUz: "Banan",
+    category: "fruits",
+    serving: { size: "1 dona", unit: "dona", grams: 118 },
+    nutrition: {
+      calories: 105,
+      protein: 1.3,
+      carbs: 27,
+      fat: 0.4,
+      fiber: 3.1,
+      sugar: 14,
+      sodium: 1,
+    },
+    tags: ["meva", "energiya", "kaliy"],
+    isVerified: true,
+    popularity: 91,
+  },
+  {
     id: "uzum",
     name: "Grapes",
     nameUz: "Uzum",
@@ -281,6 +320,25 @@ export const UZBEK_FOODS: FoodItem[] = [
     tags: ["go'sht", "oqsil", "qizil go'sht"],
     isVerified: true,
     popularity: 70,
+  },
+  {
+    id: "tovuqsalat",
+    name: "Chicken Salad",
+    nameUz: "Tovuq salati",
+    category: "protein",
+    serving: { size: "1 kosa", unit: "kosa", grams: 220 },
+    nutrition: {
+      calories: 260,
+      protein: 28,
+      carbs: 10,
+      fat: 12,
+      fiber: 3,
+      sugar: 5,
+      sodium: 430,
+    },
+    tags: ["salat", "oqsil", "yengil"],
+    isVerified: true,
+    popularity: 80,
   },
   {
     id: "tovuqgoshti",
@@ -362,6 +420,25 @@ export const UZBEK_FOODS: FoodItem[] = [
     isVerified: true,
     popularity: 70,
   },
+  {
+    id: "kurt",
+    name: "Qurt",
+    nameUz: "Qurt",
+    category: "snacks",
+    serving: { size: "30g", unit: "gramm", grams: 30 },
+    nutrition: {
+      calories: 120,
+      protein: 10,
+      carbs: 3,
+      fat: 7,
+      fiber: 0,
+      sugar: 2,
+      sodium: 420,
+    },
+    tags: ["milliy", "gazak", "oqsil"],
+    isVerified: true,
+    popularity: 68,
+  },
 
   // Beverages
   {
@@ -382,6 +459,25 @@ export const UZBEK_FOODS: FoodItem[] = [
     tags: ["ichimlik", "choy", "antioksidant"],
     isVerified: true,
     popularity: 95,
+  },
+  {
+    id: "ayran",
+    name: "Ayran",
+    nameUz: "Ayran",
+    category: "beverages",
+    serving: { size: "1 stakan", unit: "stakan", grams: 250 },
+    nutrition: {
+      calories: 80,
+      protein: 5,
+      carbs: 6,
+      fat: 3,
+      fiber: 0,
+      sugar: 5,
+      sodium: 220,
+    },
+    tags: ["ichimlik", "sovutuvchi", "sut"],
+    isVerified: true,
+    popularity: 74,
   },
   {
     id: "suv",
@@ -408,31 +504,40 @@ export const UZBEK_FOODS: FoodItem[] = [
 export const searchFoods = (query: string, limit: number = 10): FoodItem[] => {
   if (!query.trim()) return [];
 
-  const searchTerm = query.toLowerCase().trim();
+  // Normalize string: lowercased, remove spaces/apostrophes, unify g' / gʻ and o' / oʻ etc.
+  const normalize = (s: string) =>
+    s
+      .toLowerCase()
+      .replace(/[`ʼ’']/g, "'")
+      .replace(/gʻ|gʼ|g’/g, "g'")
+      .replace(/oʻ|oʼ|o’/g, "o'")
+      .replace(/ /g, "")
+      .trim();
 
-  const results = UZBEK_FOODS.filter(
-    (food) =>
-      food.nameUz.toLowerCase().includes(searchTerm) ||
-      food.name.toLowerCase().includes(searchTerm) ||
-      food.tags.some((tag) => tag.toLowerCase().includes(searchTerm)) ||
-      food.category.toLowerCase().includes(searchTerm),
-  );
+  const searchTerm = normalize(query);
 
-  // Sort by popularity and relevance
+  const results = UZBEK_FOODS.filter((food) => {
+    const nNameUz = normalize(food.nameUz);
+    const nName = normalize(food.name);
+    const nCategory = normalize(food.category);
+    const tags = food.tags.map((t) => normalize(t));
+    return (
+      nNameUz.includes(searchTerm) ||
+      nName.includes(searchTerm) ||
+      tags.some((t) => t.includes(searchTerm)) ||
+      nCategory.includes(searchTerm)
+    );
+  });
+
+  // Sort by exactness then popularity
   return results
     .sort((a, b) => {
-      // Exact name match gets priority
-      const aExactMatch =
-        a.nameUz.toLowerCase() === searchTerm ||
-        a.name.toLowerCase() === searchTerm;
-      const bExactMatch =
-        b.nameUz.toLowerCase() === searchTerm ||
-        b.name.toLowerCase() === searchTerm;
-
-      if (aExactMatch && !bExactMatch) return -1;
-      if (!aExactMatch && bExactMatch) return 1;
-
-      // Then by popularity
+      const aExact =
+        normalize(a.nameUz) === searchTerm || normalize(a.name) === searchTerm;
+      const bExact =
+        normalize(b.nameUz) === searchTerm || normalize(b.name) === searchTerm;
+      if (aExact && !bExact) return -1;
+      if (!aExact && bExact) return 1;
       return b.popularity - a.popularity;
     })
     .slice(0, limit);
