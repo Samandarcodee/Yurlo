@@ -33,6 +33,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Separator } from '@/components/ui/separator';
 import { useTelegram } from '@/hooks/use-telegram';
 import TelegramUserService, { UserProfile } from '@/services/telegram-user-service';
+import { useI18n } from '@/contexts/I18nContext';
 
 interface OnboardingStep {
   id: string;
@@ -64,6 +65,7 @@ interface OnboardingData {
 
 const TelegramOnboarding: React.FC = () => {
   const { user: telegramUser, cloudStorage, hapticFeedback, showAlert } = useTelegram();
+  const { setLanguage } = useI18n();
   const [currentStep, setCurrentStep] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [onboardingData, setOnboardingData] = useState<Partial<OnboardingData>>({
@@ -440,6 +442,10 @@ const TelegramOnboarding: React.FC = () => {
       };
       
       await userService.updateUserProfile(updates);
+      // Apply chosen language globally
+      if (updates.preferences?.language) {
+        setLanguage(updates.preferences.language as any);
+      }
       
       hapticFeedback.notification('success');
       

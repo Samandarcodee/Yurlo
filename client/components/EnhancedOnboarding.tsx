@@ -2,6 +2,7 @@ import React, { useState, useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useUser } from "@/contexts/UserContext";
+import { useI18n } from "@/contexts/I18nContext";
 import { useTelegram } from "@/hooks/use-telegram";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -203,6 +204,7 @@ export default function EnhancedOnboarding() {
   const navigate = useNavigate();
   const { updateUser } = useUser();
   const { user: telegramUser, hapticFeedback } = useTelegram();
+  const { setLanguage } = useI18n();
 
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -339,6 +341,10 @@ export default function EnhancedOnboarding() {
 
       // Update user context
       updateUser(userProfile);
+      // Sync global language immediately
+      if (userProfile.language) {
+        setLanguage(userProfile.language as any);
+      }
 
       // Celebrate completion
       hapticFeedback.notification("success");

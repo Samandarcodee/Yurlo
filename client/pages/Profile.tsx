@@ -633,13 +633,14 @@ export default function Profile() {
               <div className="flex items-center gap-3">
                 <Globe className="h-5 w-5 text-muted-foreground" />
                 <div>
-                      <p className="font-medium">{t("general.language")}</p>
+                  <p className="font-medium">{t("general.language")}</p>
                   <p className="text-sm text-muted-foreground">{t("profile.interfaceLanguage")}</p>
                 </div>
               </div>
-              <Badge variant="secondary">
-                    {getLanguageLabel(user.language)}
-              </Badge>
+              <div className="flex gap-2 items-center">
+                <Badge variant="secondary" title={t("profile.currentLanguage")}>{getLanguageLabel(language)}</Badge>
+                <Badge variant="outline" title={t("profile.savedLanguage")}>{getLanguageLabel(user.language)}</Badge>
+              </div>
             </div>
 
             <Separator />

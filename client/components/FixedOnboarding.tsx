@@ -13,10 +13,12 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { useUser } from '@/contexts/UserContext';
 import { useTelegram } from '@/hooks/use-telegram';
+import { useI18n } from '@/contexts/I18nContext';
 
 interface OnboardingData {
   name: string;
@@ -33,37 +35,37 @@ interface OnboardingData {
 const onboardingSteps = [
   {
     id: 'welcome',
-    title: 'Xush kelibsiz!',
+    title: 'onboarding.stepTitles.welcome',
     subtitle: 'Yurlo AI bilan sog\'liq va fitnes yo\'lingizni boshlaylik',
     icon: User
   },
   {
     id: 'basic_info',
-    title: 'Asosiy ma\'lumotlar',
+    title: 'onboarding.stepTitles.basicInfo',
     subtitle: 'Sizning shaxsiy ma\'lumotlaringiz',
     icon: User
   },
   {
     id: 'physical_info',
-    title: 'Jismoniy ma\'lumotlar',
+    title: 'onboarding.stepTitles.physicalInfo',
     subtitle: 'Bo\'y va vazn ma\'lumotlari',
     icon: Ruler
   },
   {
     id: 'goals',
-    title: 'Maqsadlaringiz',
+    title: 'onboarding.stepTitles.goals',
     subtitle: 'Nima uchun Yurlo AI dan foydalanmoqchisiz?',
     icon: Target
   },
   {
     id: 'schedule',
-    title: 'Kundalik rejim',
+    title: 'onboarding.stepTitles.schedule',
     subtitle: 'Uyqu va faollik vaqtlari',
     icon: Clock
   },
   {
     id: 'complete',
-    title: 'Tayyor!',
+    title: 'onboarding.stepTitles.complete',
     subtitle: 'Barcha ma\'lumotlar saqlandi',
     icon: Check
   }
@@ -73,6 +75,7 @@ export default function FixedOnboarding() {
   const navigate = useNavigate();
   const { updateUser } = useUser();
   const { user: telegramUser, hapticFeedback, showAlert } = useTelegram();
+  const { t, setLanguage } = useI18n();
   
   const [currentStep, setCurrentStep] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -87,6 +90,10 @@ export default function FixedOnboarding() {
     sleepTime: '22:00',
     wakeTime: '07:00'
   });
+
+  // Language selected on the very first step
+  const initialLang = (telegramUser?.language_code === 'ru' || telegramUser?.language_code === 'en') ? (telegramUser.language_code as 'ru'|'en') : 'uz';
+  const [selectedLanguage, setSelectedLanguage] = useState<'uz'|'ru'|'en'>(initialLang);
 
   const currentStepData = onboardingSteps[currentStep];
   const isLastStep = currentStep === onboardingSteps.length - 1;
@@ -117,21 +124,21 @@ export default function FixedOnboarding() {
         return true;
       case 'basic_info':
         if (!formData.name.trim()) {
-          showAlert('Iltimos, ismingizni kiriting');
+          showAlert(t('onboarding.errors.enterName'));
           return false;
         }
         return true;
       case 'physical_info':
         if (!formData.height || !formData.weight) {
-          showAlert('Iltimos, bo\'y va vaznni kiriting');
+          showAlert(t('onboarding.errors.enterHeightWeight'));
           return false;
         }
         if (parseFloat(formData.height) < 100 || parseFloat(formData.height) > 250) {
-          showAlert('Bo\'y 100-250 sm oralig\'ida bo\'lishi kerak');
+          showAlert(t('onboarding.errors.heightRange'));
           return false;
         }
         if (parseFloat(formData.weight) < 30 || parseFloat(formData.weight) > 300) {
-          showAlert('Vazn 30-300 kg oralig\'ida bo\'lishi kerak');
+          showAlert(t('onboarding.errors.weightRange'));
           return false;
         }
         return true;
@@ -181,7 +188,7 @@ export default function FixedOnboarding() {
         goal: formData.goal,
         sleepTime: formData.sleepTime,
         wakeTime: formData.wakeTime,
-        language: telegramUser?.language_code || 'uz',
+        language: selectedLanguage,
         bmr: Math.round(bmr),
         dailyCalories,
         isFirstTime: false,
@@ -193,13 +200,17 @@ export default function FixedOnboarding() {
       // Update user context with explicit isFirstTime = false
       console.log("Completing onboarding with user data:", userData);
       updateUser(userData);
+      // Apply chosen language globally
+      if (userData.language) {
+        setLanguage(userData.language as any);
+      }
       
       // Clear onboarding flags
       localStorage.removeItem('hasStartedOnboarding');
       localStorage.setItem('completedOnboarding', 'true');
       
       hapticFeedback.notification('success');
-      showAlert('Ma\'lumotlar muvaffaqiyatli saqlandi!');
+      showAlert(t('onboarding.errors.saved'));
       
       // Small delay to ensure data is saved, then navigate
       setTimeout(() => {
@@ -225,11 +236,33 @@ export default function FixedOnboarding() {
               <User className="w-12 h-12 text-white" />
             </div>
             <div>
-              <h2 className="text-2xl font-bold text-white mb-2">Yurlo AI ga xush kelibsiz!</h2>
+               <h2 className="text-2xl font-bold text-white mb-2">{t('onboarding.title')}</h2>
               <p className="text-slate-300">
                 Sog'liq va fitnes yo'lingizda professional yordamchingiz. 
                 Keling, sizni tanishtiraylik!
               </p>
+            </div>
+
+            {/* Language selector on first step */}
+            <div className="max-w-xs mx-auto text-left">
+              <Label className="text-white">{t('general.language')}</Label>
+              <Select
+                value={selectedLanguage}
+                onValueChange={(value) => {
+                  const lang = value as 'uz'|'ru'|'en';
+                  setSelectedLanguage(lang);
+                  setLanguage(lang as any);
+                }}
+              >
+                <SelectTrigger className="mt-2 bg-slate-800 border-slate-600 text-white">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="uz">🇺🇿 O'zbek</SelectItem>
+                  <SelectItem value="ru">🇷🇺 Русский</SelectItem>
+                  <SelectItem value="en">🇺🇸 English</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
           </div>
         );
@@ -238,10 +271,10 @@ export default function FixedOnboarding() {
         return (
           <div className="space-y-6">
             <div>
-              <Label className="text-white">Ismingiz</Label>
+              <Label className="text-white">{t('profile.name')}</Label>
               <Input
                 type="text"
-                placeholder="Ismingizni kiriting"
+                placeholder={t('profile.namePlaceholder')}
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                 className="mt-2 bg-slate-800 border-slate-600 text-white"
@@ -249,7 +282,7 @@ export default function FixedOnboarding() {
             </div>
             
             <div>
-              <Label className="text-white">Jins</Label>
+              <Label className="text-white">{t('onboarding.gender')}</Label>
               <RadioGroup
                 value={formData.gender}
                 onValueChange={(value) => setFormData({ ...formData, gender: value as 'male' | 'female' })}
@@ -257,17 +290,17 @@ export default function FixedOnboarding() {
               >
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="male" id="male" />
-                  <Label htmlFor="male" className="text-white">Erkak</Label>
+                  <Label htmlFor="male" className="text-white">{t('onboarding.male')}</Label>
                 </div>
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="female" id="female" />
-                  <Label htmlFor="female" className="text-white">Ayol</Label>
+                  <Label htmlFor="female" className="text-white">{t('onboarding.female')}</Label>
                 </div>
               </RadioGroup>
             </div>
 
             <div>
-              <Label className="text-white">Tug'ilgan yil</Label>
+              <Label className="text-white">{t('onboarding.birthYear')}</Label>
               <Input
                 type="number"
                 placeholder="1990"
@@ -285,7 +318,7 @@ export default function FixedOnboarding() {
         return (
           <div className="space-y-6">
             <div>
-              <Label className="text-white">Bo'y (sm)</Label>
+              <Label className="text-white">{t('onboarding.height')}</Label>
               <Input
                 type="number"
                 placeholder="170"
@@ -298,7 +331,7 @@ export default function FixedOnboarding() {
             </div>
             
             <div>
-              <Label className="text-white">Vazn (kg)</Label>
+              <Label className="text-white">{t('onboarding.weight')}</Label>
               <Input
                 type="number"
                 placeholder="70"
@@ -312,7 +345,7 @@ export default function FixedOnboarding() {
             </div>
 
             <div>
-              <Label className="text-white">Faollik darajasi</Label>
+              <Label className="text-white">{t('onboarding.activity')}</Label>
               <RadioGroup
                 value={formData.activityLevel}
                 onValueChange={(value) => setFormData({ ...formData, activityLevel: value as any })}
@@ -320,15 +353,15 @@ export default function FixedOnboarding() {
               >
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="low" id="low" />
-                  <Label htmlFor="low" className="text-white">Kam faol (deyarlik sport qilmayman)</Label>
+                  <Label htmlFor="low" className="text-white">{t('onboarding.low')}</Label>
                 </div>
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="medium" id="medium" />
-                  <Label htmlFor="medium" className="text-white">O'rtacha faol (haftada 3-5 marta)</Label>
+                  <Label htmlFor="medium" className="text-white">{t('onboarding.medium')}</Label>
                 </div>
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="high" id="high" />
-                  <Label htmlFor="high" className="text-white">Juda faol (har kuni sport)</Label>
+                  <Label htmlFor="high" className="text-white">{t('onboarding.high')}</Label>
                 </div>
               </RadioGroup>
             </div>
@@ -339,7 +372,7 @@ export default function FixedOnboarding() {
         return (
           <div className="space-y-6">
             <div>
-              <Label className="text-white">Asosiy maqsadingiz</Label>
+              <Label className="text-white">{t('onboarding.goal')}</Label>
               <RadioGroup
                 value={formData.goal}
                 onValueChange={(value) => setFormData({ ...formData, goal: value as any })}
@@ -347,15 +380,15 @@ export default function FixedOnboarding() {
               >
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="lose" id="lose" />
-                  <Label htmlFor="lose" className="text-white">Vazn kamaytirish</Label>
+                  <Label htmlFor="lose" className="text-white">{t('onboarding.lose')}</Label>
                 </div>
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="maintain" id="maintain" />
-                  <Label htmlFor="maintain" className="text-white">Vaznni saqlash</Label>
+                  <Label htmlFor="maintain" className="text-white">{t('onboarding.maintain')}</Label>
                 </div>
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="gain" id="gain" />
-                  <Label htmlFor="gain" className="text-white">Vazn oshirish</Label>
+                  <Label htmlFor="gain" className="text-white">{t('onboarding.gain')}</Label>
                 </div>
               </RadioGroup>
             </div>
@@ -366,7 +399,7 @@ export default function FixedOnboarding() {
         return (
           <div className="space-y-6">
             <div>
-              <Label className="text-white">Uxlash vaqti</Label>
+              <Label className="text-white">{t('onboarding.sleepTime')}</Label>
               <Input
                 type="time"
                 value={formData.sleepTime}
@@ -376,7 +409,7 @@ export default function FixedOnboarding() {
             </div>
             
             <div>
-              <Label className="text-white">Uyg'onish vaqti</Label>
+              <Label className="text-white">{t('onboarding.wakeTime')}</Label>
               <Input
                 type="time"
                 value={formData.wakeTime}
@@ -416,7 +449,7 @@ export default function FixedOnboarding() {
             <div className="flex items-center justify-center mb-4">
               <currentStepData.icon className="w-8 h-8 text-green-400" />
             </div>
-            <CardTitle className="text-white">{currentStepData.title}</CardTitle>
+            <CardTitle className="text-white">{t(currentStepData.title)}</CardTitle>
             <p className="text-slate-300 text-sm">{currentStepData.subtitle}</p>
             
             {/* Progress indicator */}
@@ -454,7 +487,7 @@ export default function FixedOnboarding() {
                 className="text-slate-300 hover:text-white hover:bg-slate-700"
               >
                 <ArrowLeft className="w-4 h-4 mr-2" />
-                Orqaga
+                {t('general.back')}
               </Button>
               
               <Button
@@ -469,7 +502,7 @@ export default function FixedOnboarding() {
                 ) : (
                   <ArrowRight className="w-4 h-4 mr-2" />
                 )}
-                {loading ? 'Saqlanmoqda...' : isLastStep ? 'Boshlash' : 'Keyingisi'}
+                {loading ? t('general.loading') : isLastStep ? t('general.finish') : t('general.next')}
               </Button>
             </div>
           </CardContent>

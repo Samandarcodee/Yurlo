@@ -11,6 +11,7 @@ import {
   shouldUseLocalStorage,
 } from "../utils/environment";
 import { databaseService, UserProfile as DBUserProfile } from "../lib/supabase";
+import { useI18n } from "./I18nContext";
 
 export interface UserProfile {
   telegramId?: string;
@@ -63,6 +64,8 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
 
   // Telegram WebApp hook
   const { user: telegramUser, isReady: isTelegramReady } = useTelegram();
+  // i18n context
+  const { setLanguage } = useI18n();
 
   // Optimized data loading - only once on startup
   useEffect(() => {
@@ -118,6 +121,10 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
 
           setUser(profileData);
           setIsFirstTime(profileData.isFirstTime);
+          // Sync global language with profile
+          if (profileData.language) {
+            setLanguage(profileData.language as any);
+          }
           console.log("User loaded from database successfully. isFirstTime:", profileData.isFirstTime);
         } else {
           // Database'da yo'q bo'lsa localStorage'dan olish (fallback)
@@ -130,6 +137,9 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
               if (profileData && profileData.name && profileData.age) {
                 setUser(profileData);
                 setIsFirstTime(profileData.isFirstTime);
+                if (profileData.language) {
+                  setLanguage(profileData.language as any);
+                }
                 console.log("User loaded from localStorage (fallback). isFirstTime:", profileData.isFirstTime);
               } else {
                 setIsFirstTime(true);
@@ -203,6 +213,10 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
 
     setUser(userData);
     setIsFirstTime(false);
+    // Ensure i18n provider follows saved profile language immediately
+    if (userData.language) {
+      setLanguage(userData.language as any);
+    }
 
     // Database'ga saqlash
     const telegramId = telegramUser?.id?.toString() || "demo_user_123";
