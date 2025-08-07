@@ -28,6 +28,7 @@ import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { Separator } from "@/components/ui/separator";
 import { useUser } from "@/contexts/UserContext";
+import { useI18n } from "@/contexts/I18nContext";
 import { useTelegram } from "@/hooks/use-telegram";
 import {
   getTodayWater,
@@ -50,6 +51,7 @@ import {
 export default function WaterTracker() {
   const { user } = useUser();
   const { user: telegramUser } = useTelegram();
+  const { t } = useI18n();
 
   const [todayWater, setTodayWater] = useState<WaterSession | null>(null);
   const [waterGoals, setWaterGoals] = useState<WaterGoals | null>(null);
@@ -124,7 +126,7 @@ export default function WaterTracker() {
           fetch('/api/notify', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ chat_id: telegramId, template: 'water_goal' }),
+            body: JSON.stringify({ chat_id: telegramId, template: 'water_goal', lang: user?.language || 'uz' }),
           });
         }
       } catch {}
@@ -186,9 +188,7 @@ export default function WaterTracker() {
           <div className="flex items-center justify-between">
             <Link to="/" className="flex items-center space-x-2">
               <ArrowLeft className="h-6 w-6 text-gray-600" />
-              <span className="text-lg font-semibold text-gray-900">
-                Suv Tracker
-              </span>
+              <span className="text-lg font-semibold text-gray-900">{t("pages.water.title")}</span>
             </Link>
             <Badge variant="secondary" className={hydrationStatus.color}>
               {hydrationStatus.icon} {hydrationStatus.label}
@@ -256,8 +256,8 @@ export default function WaterTracker() {
             <Card className="border-0 shadow-lg">
               <CardHeader className="pb-4">
                 <CardTitle className="flex items-center space-x-2">
-                  <Plus className="h-5 w-5 text-blue-600" />
-                  <span>Suv qo'shish</span>
+                   <Plus className="h-5 w-5 text-blue-600" />
+                   <span>{t("pages.water.add")}</span>
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -629,7 +629,7 @@ export default function WaterTracker() {
               <CardHeader>
                 <CardTitle className="flex items-center space-x-2">
                   <Calendar className="h-5 w-5 text-blue-600" />
-                  <span>So'nggi 7 kun</span>
+                   <span>{t("pages.water.history7")}</span>
                 </CardTitle>
               </CardHeader>
               <CardContent>

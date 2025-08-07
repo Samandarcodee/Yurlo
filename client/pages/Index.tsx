@@ -23,6 +23,7 @@ import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { useUser } from "@/contexts/UserContext";
 import { useTelegram } from "@/hooks/use-telegram";
+import { useI18n } from "@/contexts/I18nContext";
 import { useMemo, useEffect, useState } from "react";
 import {
   getTodayTracking,
@@ -111,6 +112,7 @@ const CircularProgress: React.FC<CircularProgressProps> = ({
 export default function Index() {
   const { user } = useUser();
   const { user: telegramUser } = useTelegram();
+  const { t } = useI18n();
   const [todayTracking, setTodayTracking] = useState<DailyTracking | null>(
     null,
   );
@@ -395,12 +397,8 @@ export default function Index() {
         {/* Enhanced Header */}
         <div className="responsive-flex justify-between py-6">
           <div>
-            <p className="responsive-text text-lg font-semibold text-foreground">
-              Bugun, {todayDate}
-            </p>
-            <p className="text-muted-foreground text-sm">
-              Salom, {userData.name}!
-            </p>
+            <p className="responsive-text text-lg font-semibold text-foreground">{t('general.today')}, {todayDate}</p>
+            <p className="text-muted-foreground text-sm">{t('pages.home.hello')}, {userData.name}!</p>
           </div>
           <div className="w-10 h-10 bg-muted rounded-full flex items-center justify-center">
             <Bell className="w-5 h-5 text-muted-foreground" />
@@ -424,12 +422,8 @@ export default function Index() {
                     <div className="text-5xl sm:text-6xl font-bold bg-gradient-to-r from-primary via-primary/80 to-primary/60 bg-clip-text text-transparent leading-none">
                       {Math.round(userData.caloriesBurned)}
                     </div>
-                    <div className="text-sm font-semibold text-muted-foreground/80 uppercase tracking-wide">
-                      Bugun yo'qilgan kaloriya
-                    </div>
-                    <div className="text-xs text-muted-foreground px-3 py-1 bg-muted/50 rounded-full">
-                      maqsad: {userData.caloriesTarget} kcal
-                    </div>
+                    <div className="text-sm font-semibold text-muted-foreground/80 uppercase tracking-wide">{t('pages.home.burnedToday')}</div>
+                    <div className="text-xs text-muted-foreground px-3 py-1 bg-muted/50 rounded-full">{t('pages.home.goal')} {userData.caloriesTarget} kcal</div>
                   </div>
                 </CircularProgress>
                 
@@ -450,7 +444,7 @@ export default function Index() {
           {/* Enhanced Nutrition Breakdown with better visual design */}
           <Card className="w-full max-w-md mb-8 bg-gradient-to-r from-card to-muted/20 border border-border/30 shadow-lg">
             <CardContent className="p-6">
-              <h3 className="text-center font-semibold text-foreground mb-4 text-lg">Oziq-ovqat tarkibi</h3>
+              <h3 className="text-center font-semibold text-foreground mb-4 text-lg">{t('pages.home.nutrition')}</h3>
               <div className="grid grid-cols-3 gap-4">
                 <div className="text-center group hover:scale-105 transition-transform duration-200">
                   <div className="flex flex-col items-center space-y-3">
@@ -547,9 +541,7 @@ export default function Index() {
             <CardContent className="p-6">
               <div className="flex items-center justify-between mb-4">
                 <div>
-                  <h3 className="heading-responsive text-foreground">
-                    Maqsadga jarayon
-                  </h3>
+                  <h3 className="heading-responsive text-foreground">{t('pages.home.progress')}</h3>
                   <p className="text-sm text-muted-foreground">
                     {Math.round(userData.caloriesEaten)} kcal dan{" "}
                     {userData.caloriesTarget} kcal
@@ -562,11 +554,7 @@ export default function Index() {
                     )}
                     %
                   </p>
-                  <p className="text-xs text-muted-foreground">
-                    {userData.caloriesTarget -
-                      Math.round(userData.caloriesEaten)}{" "}
-                    kcal qoldi
-                  </p>
+                  <p className="text-xs text-muted-foreground">{userData.caloriesTarget - Math.round(userData.caloriesEaten)} kcal {t('pages.home.left')}</p>
                 </div>
               </div>
 
@@ -604,14 +592,12 @@ export default function Index() {
           <Card className="card-professional">
             <CardContent className="p-6">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="heading-responsive text-foreground">
-                  Bu hafta o'rtacha
-                </h3>
+                <h3 className="heading-responsive text-foreground">{t('pages.home.averageWeek')}</h3>
                 <Link
                   to="/analytics"
                   className="text-primary text-sm font-medium hover:text-primary/80 transition-colors"
                 >
-                  Batafsil
+                  {t('pages.home.details')}
                 </Link>
               </div>
 
@@ -646,10 +632,10 @@ export default function Index() {
         {/* Weekly Statistics */}
         <div className="pb-20">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="heading-responsive text-foreground">Kuzatuvlar</h2>
+            <h2 className="heading-responsive text-foreground">{t('pages.home.tracking')}</h2>
             <Link to="/analytics">
               <button className="text-sm text-primary font-medium hover:text-primary/80 transition-colors">
-                Batafsil
+                {t('pages.home.details')}
               </button>
             </Link>
           </div>
@@ -680,9 +666,7 @@ export default function Index() {
                 </div>
                 <div className="space-y-1">
                   <div className="flex items-center justify-between">
-                    <p className="text-xs text-muted-foreground font-medium">
-                      Qadamlar
-                    </p>
+                    <p className="text-xs text-muted-foreground font-medium">{t('pages.home.steps')}</p>
                     <button
                       onClick={(e) => {
                         e.preventDefault();
@@ -700,17 +684,8 @@ export default function Index() {
                       : "0"}
                   </p>
                   <div className="flex items-center justify-between">
-                    <p className="text-xs text-green-600 dark:text-green-400 font-medium">
-                      Maqsad:{" "}
-                      {userData.stepGoal
-                        ? userData.stepGoal.toLocaleString()
-                        : "10,000"}
-                    </p>
-                    <p className="text-xs text-blue-600 dark:text-blue-400">
-                      {userData.todayDistance
-                        ? `${userData.todayDistance.toFixed(1)} km`
-                        : "0 km"}
-                    </p>
+                    <p className="text-xs text-green-600 dark:text-green-400 font-medium">{t('pages.home.targetShort')}: {userData.stepGoal ? userData.stepGoal.toLocaleString() : "10,000"}</p>
+                    <p className="text-xs text-blue-600 dark:text-blue-400">{userData.todayDistance ? `${userData.todayDistance.toFixed(1)} ${t('pages.home.distanceKm')}` : `0 ${t('pages.home.distanceKm')}`}</p>
                   </div>
 
                   {/* Progress bar */}
@@ -796,9 +771,7 @@ export default function Index() {
                 </div>
                 <div className="space-y-1">
                   <div className="flex items-center justify-between">
-                    <p className="text-xs text-muted-foreground font-medium">
-                      Mashqlar
-                    </p>
+                    <p className="text-xs text-muted-foreground font-medium">{t('pages.home.workouts')}</p>
                     <button
                       onClick={(e) => {
                         e.preventDefault();
@@ -814,12 +787,8 @@ export default function Index() {
                     {userData.weeklyWorkoutMinutes} min
                   </p>
                   <div className="flex items-center justify-between">
-                    <p className="text-xs text-orange-600 dark:text-orange-400 font-medium">
-                      Haftalik jami
-                    </p>
-                    <p className="text-xs text-muted-foreground">
-                      Maqsad: {userData.weeklyWorkoutTarget}min
-                    </p>
+                    <p className="text-xs text-orange-600 dark:text-orange-400 font-medium">{t('pages.home.weekTotal')}</p>
+                    <p className="text-xs text-muted-foreground">{t('pages.home.targetShort')}: {userData.weeklyWorkoutTarget}min</p>
                   </div>
 
                   {/* Progress bar */}
@@ -876,20 +845,13 @@ export default function Index() {
                       <Plus className="w-3 h-3 text-white" />
                     </button>
                   </div>
-                  <p className="text-lg font-bold text-foreground">
-                    {userData.todayWater?.toFixed(1) || 0}/
-                    {userData.waterTarget} stakan
-                  </p>
+                  <p className="text-lg font-bold text-foreground">{userData.todayWater?.toFixed(1) || 0}/{userData.waterTarget}</p>
                   <div className="flex items-center justify-between">
                     <p className="text-xs text-blue-600 dark:text-blue-400 font-medium">
-                      {userData.waterGoalReached
-                        ? "Maqsadga erishildi!"
-                        : "Ichishda davom eting"}
+                      {userData.waterGoalReached ? t('pages.home.waterGoalReached') : t('pages.home.keepDrinking')}
                     </p>
                     <p className="text-xs text-muted-foreground">
-                      {userData.waterGoalReached
-                        ? "✅"
-                        : `${(userData.waterTarget - (userData.todayWater || 0)).toFixed(1)} qoldi`}
+                      {userData.waterGoalReached ? "✅" : `${(userData.waterTarget - (userData.todayWater || 0)).toFixed(1)} ${t('pages.home.waterLeftSuffix')}`}
                     </p>
                   </div>
 

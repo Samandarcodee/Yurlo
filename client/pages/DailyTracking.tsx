@@ -37,6 +37,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { useTelegram } from '@/hooks/use-telegram';
+import { useI18n } from '@/contexts/I18nContext';
 import DailyTrackingService, { DailyMetrics, WeeklySummary } from '@/services/daily-tracking-service';
 import TelegramUserService from '@/services/telegram-user-service';
 
@@ -57,6 +58,7 @@ const SLEEP_QUALITY_OPTIONS = [
 
 export default function DailyTracking() {
   const { user: telegramUser, hapticFeedback, showAlert, cloudStorage } = useTelegram();
+  const { t } = useI18n();
   
   // Services
   const [trackingService] = useState(() => 
@@ -211,7 +213,7 @@ export default function DailyTracking() {
         fetch('/api/notify', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ chat_id: telegramId, template: 'exercise_added' }),
+          body: JSON.stringify({ chat_id: telegramId, template: 'exercise_added', lang: (await (await import('@/contexts/UserContext')).useUser)?.().user?.language || 'uz' }),
         });
       } catch {}
     } catch (error) {
@@ -242,7 +244,7 @@ export default function DailyTracking() {
         <div className="sticky top-0 z-50 bg-background/95 backdrop-blur-xl border-b border-border/30 p-4">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-2xl font-bold text-foreground">Kundalik tracking</h1>
+              <h1 className="text-2xl font-bold text-foreground">{t('pages.daily.title')}</h1>
               <p className="text-sm text-muted-foreground">
                 {new Date().toLocaleDateString('uz-UZ', { 
                   weekday: 'long', 

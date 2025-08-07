@@ -34,6 +34,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useUser } from "@/contexts/UserContext";
+import { useI18n } from "@/contexts/I18nContext";
 import { useTelegram } from "@/hooks/use-telegram";
 import {
   getTodaySteps,
@@ -213,6 +214,7 @@ export default function StepTracker() {
   const { user } = useUser();
   const { user: telegramUser } = useTelegram();
   const navigate = useNavigate();
+  const { t } = useI18n();
 
   const [activeTab, setActiveTab] = useState<
     "dashboard" | "challenges" | "achievements" | "goals"
@@ -345,7 +347,7 @@ export default function StepTracker() {
           fetch('/api/notify', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ chat_id: telegramId, template: 'steps_goal' }),
+            body: JSON.stringify({ chat_id: telegramId, template: 'steps_goal', lang: user?.language || 'uz' }),
           });
         }
       } catch {}
@@ -400,7 +402,7 @@ export default function StepTracker() {
                 <ArrowLeft className="w-5 h-5" />
               </Button>
             </Link>
-            <h1 className="text-xl font-bold">Qadam Tracker</h1>
+            <h1 className="text-xl font-bold">{t("pages.steps.title")}</h1>
             <Button
               variant="ghost"
               size="sm"
@@ -506,7 +508,7 @@ export default function StepTracker() {
                 <CardHeader className="pb-3">
                   <CardTitle className="flex items-center space-x-2">
                     <Plus className="w-5 h-5" />
-                    <span>Tezkor qo'shish</span>
+                    <span>{t("pages.steps.quickAdd")}</span>
                   </CardTitle>
                 </CardHeader>
                 <CardContent>

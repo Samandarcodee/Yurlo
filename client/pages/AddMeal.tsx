@@ -37,6 +37,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
 import { useUser } from "@/contexts/UserContext";
+import { useI18n } from "@/contexts/I18nContext";
 import { useTelegram } from "@/hooks/use-telegram";
 import {
   updateTodayTracking,
@@ -71,6 +72,7 @@ export default function AddMeal() {
   const { user } = useUser();
   const { user: telegramUser } = useTelegram();
   const navigate = useNavigate();
+  const { t } = useI18n();
 
   // Basic states
   const [addMode, setAddMode] = useState<AddMode>("quick");
@@ -287,6 +289,7 @@ export default function AddMeal() {
             body: JSON.stringify({
               chat_id: telegramId,
               template: 'meal_saved',
+              lang: user.language || 'uz'
             }),
           });
         }
@@ -340,8 +343,8 @@ export default function AddMeal() {
               </Button>
             </Link>
             <div className="text-center">
-              <h1 className="text-xl font-bold">Ovqat Qo'shish</h1>
-              <p className="text-white/80 text-sm">Sog'liq kuzatuvi</p>
+              <h1 className="text-xl font-bold">{t("pages.addMeal.title")}</h1>
+              <p className="text-white/80 text-sm">{t("pages.addMeal.subtitle")}</p>
             </div>
             <div className="w-12"></div>
           </div>
@@ -352,7 +355,7 @@ export default function AddMeal() {
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center space-x-2">
                   <Flame className="w-4 h-4 text-orange-300" />
-                  <span className="text-sm text-white/90 font-medium">Bugungi jarayon</span>
+                   <span className="text-sm text-white/90 font-medium">{t("general.today")}</span>
                 </div>
                 <span className="text-sm font-bold bg-white/20 px-3 py-1 rounded-full">
                   {todayTracking.caloriesConsumed}/{nutritionGoals.calories} kal
@@ -555,7 +558,7 @@ export default function AddMeal() {
                   <div className="relative">
                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
                     <Input
-                      placeholder="Ovqat nomini kiriting..."
+                      placeholder="Search food..."
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       className="pl-10"
@@ -860,12 +863,12 @@ export default function AddMeal() {
               {/* Meal Details */}
               <Card>
                 <CardHeader className="pb-3">
-                  <CardTitle className="text-lg">Ovqat tafsilotlari</CardTitle>
+                   <CardTitle className="text-lg">{t("pages.addMeal.title")}</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   {/* Custom Name */}
                   <div>
-                    <Label htmlFor="custom-name">Ovqat nomi (ixtiyoriy)</Label>
+                     <Label htmlFor="custom-name">Name (optional)</Label>
                     <Input
                       id="custom-name"
                       placeholder={selectedFood.food.nameUz}
@@ -882,7 +885,7 @@ export default function AddMeal() {
 
                   {/* Meal Time */}
                   <div>
-                    <Label>Ovqat vaqti</Label>
+                     <Label>Meal time</Label>
                     <Select
                       value={mealTime}
                       onValueChange={(value: MealType) => setMealTime(value)}
@@ -901,7 +904,7 @@ export default function AddMeal() {
 
                   {/* Notes */}
                   <div>
-                    <Label htmlFor="notes">Izohlar (ixtiyoriy)</Label>
+                     <Label htmlFor="notes">Notes (optional)</Label>
                     <Textarea
                       id="notes"
                       placeholder="Ovqat haqida qo'shimcha ma'lumot..."
@@ -928,7 +931,7 @@ export default function AddMeal() {
                   ) : (
                     <>
                       <Utensils className="w-5 h-5 mr-2" />
-                      Ovqatni Saqlash ({finalNutrition.calories} kal)
+                      {t("pages.addMeal.save")} ({finalNutrition.calories} kal)
                     </>
                   )}
                 </Button>
