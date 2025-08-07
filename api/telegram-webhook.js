@@ -314,7 +314,7 @@ export default async function handler(req, res) {
           // Register user to prevent duplicate registration
           await registerUser(userData.telegram_id);
 
-          // New user welcome message with full onboarding
+          // New user welcome message with full onboarding (without exposing personal details)
           const newUserMessage = `🌟 <b>Salom ${firstName}! Caloria AI'ga xush kelibsiz!</b>
 
 🎉 <b>Birinchi marta foydalanayapsiz!</b>
@@ -330,13 +330,6 @@ export default async function handler(req, res) {
 • 😴 Uyqu sifati monitoring
 • 📊 Professional analytics
 • 💡 Shaxsiy AI tavsiyalar
-
-<b>👤 Sizning ma'lumotlaringiz:</b>
-• ID: <code>${userData.telegram_id}</code>
-• Ism: ${userData.first_name}${userData.last_name ? ` ${userData.last_name}` : ""}
-• Username: ${userData.username ? `@${userData.username}` : "Belgilanmagan"}
-• Til: ${userData.language_code.toUpperCase()}
-${userData.is_premium ? "• ⭐ Premium foydalanuvchi" : ""}
 
 <b>🚀 Boshlash uchun Mini App'ni oching va profilingizni to'ldiring!</b>
 

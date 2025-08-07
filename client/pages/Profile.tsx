@@ -32,7 +32,7 @@ import {
   Settings as SettingsIcon,
 } from "lucide-react";
 import { useUser, UserProfile as ContextUserProfile } from "@/contexts/UserContext";
-import { useI18n } from "@/contexts/I18nContext";
+import { useI18n, type Language } from "@/contexts/I18nContext";
 
 export default function Profile() {
   const { user, updateUser, isLoading, clearUser } = useUser();
@@ -111,6 +111,10 @@ export default function Profile() {
       };
 
       await updateUser(updatedProfile);
+      // Sync global i18n language with saved profile language
+      if (updatedProfile.language) {
+        setLanguage(updatedProfile.language as Language);
+      }
       setEditing(false);
       setError(null);
     } catch (error) {
@@ -227,7 +231,7 @@ export default function Profile() {
       <div className="min-h-screen bg-background flex items-center justify-center">
         <Card className="w-full max-w-md mx-4 theme-card-interactive shadow-xl">
           <CardContent className="pt-8 pb-6 text-center">
-            <h3 className="text-xl font-bold mb-2 text-foreground">Yuklanmoqda...</h3>
+            <h3 className="text-xl font-bold mb-2 text-foreground">{t("general.loading")}</h3>
           </CardContent>
         </Card>
       </div>
@@ -245,13 +249,11 @@ export default function Profile() {
               </div>
               <div className="absolute -top-1 -right-1 w-4 h-4 bg-yellow-500 rounded-full animate-pulse border-2 border-background"></div>
             </div>
-            <h3 className="text-xl font-bold mb-2 text-foreground">Profil topilmadi</h3>
-            <p className="text-muted-foreground mb-6 leading-relaxed">
-              Iltimos, avval ro'yxatdan o'ting
-            </p>
+            <h3 className="text-xl font-bold mb-2 text-foreground">{t("profile.notFound")}</h3>
+            <p className="text-muted-foreground mb-6 leading-relaxed">{t("profile.pleaseRegister")}</p>
             <Link to="/onboarding">
               <Button className="w-full bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 shadow-lg hover:shadow-xl transition-all duration-200">
-                Ro'yxatdan o'tish
+                {t("profile.register")}
               </Button>
             </Link>
           </CardContent>
@@ -273,7 +275,7 @@ export default function Profile() {
           <div className="relative inline-block">
             <div className="p-4 sm:p-6 bg-gradient-to-br from-primary/10 via-primary/5 to-accent/10 dark:from-primary/20 dark:via-primary/10 dark:to-accent/20 rounded-3xl border border-border/30 backdrop-blur-sm shadow-lg">
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-primary via-primary/80 to-accent bg-clip-text text-transparent">
-                Shaxsiy Kabinet 👤
+                {t("profile.title")} 👤
               </h1>
             </div>
           </div>
@@ -310,7 +312,7 @@ export default function Profile() {
               <div className="space-y-4">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <Label>Ism</Label>
+                    <Label>{t("profile.name")}</Label>
                     <Input
                       value={editedProfile?.name || ""}
                       onChange={(e) =>
@@ -319,11 +321,11 @@ export default function Profile() {
                         )
                       }
                       className="mt-1"
-                      placeholder="Ismingizni kiriting"
+                      placeholder={t("profile.namePlaceholder")}
                     />
                   </div>
                       <div>
-                        <Label>Jins</Label>
+                        <Label>{t("profile.gender")}</Label>
                         <Select
                           value={editedProfile?.gender || ""}
                           onValueChange={(value) =>
@@ -336,13 +338,13 @@ export default function Profile() {
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="male">Erkak</SelectItem>
-                            <SelectItem value="female">Ayol</SelectItem>
+                            <SelectItem value="male">{t("onboarding.male")}</SelectItem>
+                            <SelectItem value="female">{t("onboarding.female")}</SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
                       <div>
-                    <Label>Tug'ilgan yil</Label>
+                    <Label>{t("onboarding.birthYear")}</Label>
                     <Input
                       type="number"
                       value={editedProfile?.birthYear || ""}
@@ -361,9 +363,10 @@ export default function Profile() {
                     <Label>{t("general.language")}</Label>
                         <Select
                           value={editedProfile?.language || language}
-                          onValueChange={(value) =>
-                            setEditedProfile((prev) => (prev ? { ...prev, language: value } : null))
-                          }
+                          onValueChange={(value) => {
+                            setEditedProfile((prev) => (prev ? { ...prev, language: value } : null));
+                            setLanguage(value as Language);
+                          }}
                         >
                           <SelectTrigger className="mt-1">
                             <SelectValue />
@@ -376,7 +379,7 @@ export default function Profile() {
                         </Select>
                       </div>
                   <div>
-                    <Label>Bo'y (sm)</Label>
+                    <Label>{t("onboarding.height")}</Label>
                     <Input
                       type="number"
                       value={editedProfile?.height || ""}
@@ -392,7 +395,7 @@ export default function Profile() {
                     />
                   </div>
                       <div>
-                    <Label>Vazn (kg)</Label>
+                    <Label>{t("onboarding.weight")}</Label>
                     <Input
                       type="number"
                       value={editedProfile?.weight || ""}
@@ -411,7 +414,7 @@ export default function Profile() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <Label>Faollik darajasi</Label>
+                    <Label>{t("onboarding.activity")}</Label>
                     <Select
                       value={editedProfile?.activityLevel || ""}
                       onValueChange={(value) =>
@@ -424,14 +427,14 @@ export default function Profile() {
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                         <SelectItem value="low">🛌 Kam faol</SelectItem>
-                         <SelectItem value="medium">🚶 O'rtacha faol</SelectItem>
-                         <SelectItem value="high">🏃 Juda faol</SelectItem>
+                         <SelectItem value="low">🛌 {t("onboarding.low")}</SelectItem>
+                         <SelectItem value="medium">🚶 {t("onboarding.medium")}</SelectItem>
+                         <SelectItem value="high">🏃 {t("onboarding.high")}</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
                   <div>
-                    <Label>Maqsad</Label>
+                    <Label>{t("onboarding.goal")}</Label>
                     <Select
                       value={editedProfile?.goal || ""}
                       onValueChange={(value) =>
@@ -444,15 +447,9 @@ export default function Profile() {
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="lose">
-                          📉 Vazn kamaytirish
-                        </SelectItem>
-                        <SelectItem value="maintain">
-                          ⚖️ Vaznni saqlash
-                        </SelectItem>
-                        <SelectItem value="gain">
-                          📈 Vazn ko'paytirish
-                        </SelectItem>
+                        <SelectItem value="lose">📉 {t("onboarding.lose")}</SelectItem>
+                        <SelectItem value="maintain">⚖️ {t("onboarding.maintain")}</SelectItem>
+                        <SelectItem value="gain">📈 {t("onboarding.gain")}</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -460,7 +457,7 @@ export default function Profile() {
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
-                        <Label>Uxlash vaqti</Label>
+                        <Label>{t("onboarding.sleepTime")}</Label>
                         <Input
                           type="time"
                           value={editedProfile?.sleepTime || ""}
@@ -473,7 +470,7 @@ export default function Profile() {
                         />
                       </div>
                       <div>
-                        <Label>Uyg'onish vaqti</Label>
+                        <Label>{t("onboarding.wakeTime")}</Label>
                         <Input
                           type="time"
                           value={editedProfile?.wakeTime || ""}
@@ -498,7 +495,7 @@ export default function Profile() {
                   className="w-full h-12 bg-gradient-to-r from-mint-500 to-water-500 hover:from-mint-600 hover:to-water-600"
                 >
                   <Save className="h-4 w-4 mr-2" />
-                  {loading ? "Saqlanmoqda..." : "Saqlash"}
+                  {loading ? t("general.loading") : t("general.save")}
                 </Button>
               </div>
             ) : (
@@ -506,9 +503,7 @@ export default function Profile() {
                 <div className="space-y-2 p-3 sm:p-4 bg-white/40 rounded-xl sm:rounded-2xl">
                   <div className="flex items-center gap-2">
                     <User className="h-4 w-4 text-mint-600" />
-                    <span className="text-xs sm:text-sm text-mint-600 font-semibold">
-                      Ism
-                    </span>
+                    <span className="text-xs sm:text-sm text-mint-600 font-semibold">{t("profile.name")}</span>
                   </div>
                   <p className="text-lg sm:text-xl font-bold text-mint-800">
                     {user.name}
@@ -518,57 +513,47 @@ export default function Profile() {
                 <div className="space-y-2 p-3 sm:p-4 bg-white/40 rounded-xl sm:rounded-2xl">
                   <div className="flex items-center gap-2">
                     <Calendar className="h-4 w-4 text-mint-600" />
-                    <span className="text-xs sm:text-sm text-mint-600 font-semibold">
-                      Yosh
-                    </span>
+                    <span className="text-xs sm:text-sm text-mint-600 font-semibold">{t("profile.age")}</span>
                   </div>
                   <p className="text-lg sm:text-xl font-bold text-mint-800">
-                    {user.age} yosh
+                    {user.age} {t("units.years")}
                   </p>
                 </div>
 
                 <div className="space-y-2 p-3 sm:p-4 bg-white/40 rounded-xl sm:rounded-2xl">
                   <div className="flex items-center gap-2">
                     <Ruler className="h-4 w-4 text-mint-600" />
-                    <span className="text-xs sm:text-sm text-mint-600 font-semibold">
-                      Bo'y
-                    </span>
+                    <span className="text-xs sm:text-sm text-mint-600 font-semibold">{t("profile.height")}</span>
                   </div>
                   <p className="text-lg sm:text-xl font-bold text-mint-800">
-                    {user.height} sm
+                    {user.height} {t("units.cm")}
                   </p>
                 </div>
 
                 <div className="space-y-2 p-3 sm:p-4 bg-white/40 rounded-xl sm:rounded-2xl">
                   <div className="flex items-center gap-2">
                     <Weight className="h-4 w-4 text-mint-600" />
-                    <span className="text-xs sm:text-sm text-mint-600 font-semibold">
-                      Vazn
-                    </span>
+                    <span className="text-xs sm:text-sm text-mint-600 font-semibold">{t("profile.weight")}</span>
                   </div>
                   <p className="text-lg sm:text-xl font-bold text-mint-800">
-                    {user.weight} kg
+                    {user.weight} {t("units.kg")}
                   </p>
                 </div>
 
                 <div className="space-y-2 p-3 sm:p-4 bg-white/40 rounded-xl sm:rounded-2xl">
                   <div className="flex items-center gap-2">
                     <User className="h-4 w-4 text-mint-600" />
-                    <span className="text-xs sm:text-sm text-mint-600 font-semibold">
-                      Jins
-                    </span>
+                    <span className="text-xs sm:text-sm text-mint-600 font-semibold">{t("profile.gender")}</span>
                   </div>
                   <p className="text-lg sm:text-xl font-bold text-mint-800 capitalize">
-                    {user.gender === 'male' ? 'Erkak' : user.gender === 'female' ? 'Ayol' : '—'}
+                    {user.gender === 'male' ? t("onboarding.male") : user.gender === 'female' ? t("onboarding.female") : '—'}
                   </p>
                 </div>
 
                 <div className="space-y-2 p-3 sm:p-4 bg-white/40 rounded-xl sm:rounded-2xl">
                   <div className="flex items-center gap-2">
                     <Activity className="h-4 w-4 text-mint-600" />
-                    <span className="text-xs sm:text-sm text-mint-600 font-semibold">
-                      Faollik
-                    </span>
+                    <span className="text-xs sm:text-sm text-mint-600 font-semibold">{t("profile.activity")}</span>
                   </div>
                   <p className="text-sm sm:text-base font-bold text-mint-800">
                     {getActivityLabel(user.activityLevel)}
@@ -578,9 +563,7 @@ export default function Profile() {
                 <div className="space-y-2 p-3 sm:p-4 bg-white/40 rounded-xl sm:rounded-2xl">
                   <div className="flex items-center gap-2">
                     <Target className="h-4 w-4 text-mint-600" />
-                    <span className="text-xs sm:text-sm text-mint-600 font-semibold">
-                      Maqsad
-                    </span>
+                    <span className="text-xs sm:text-sm text-mint-600 font-semibold">{t("profile.goal")}</span>
                   </div>
                   <p className="text-sm sm:text-base font-bold text-mint-800">
                     {getGoalLabel(user.goal)}
@@ -617,7 +600,7 @@ export default function Profile() {
               <p className="text-2xl font-bold text-foreground">
                 {user.bmr}
               </p>
-              <p className="text-sm text-muted-foreground">kcal/kun</p>
+              <p className="text-sm text-muted-foreground">{t("units.kcalPerDay")}</p>
             </CardContent>
           </Card>
 
@@ -626,11 +609,11 @@ export default function Profile() {
               <div className="inline-block p-3 bg-mint-100 rounded-full mb-3">
                 <BarChart3 className="h-6 w-6 text-mint-600" />
               </div>
-              <h3 className="font-bold text-lg mb-1">Kunlik Kaloriya</h3>
+              <h3 className="font-bold text-lg mb-1">{t("profile.dailyCaloriesTitle")}</h3>
               <p className="text-2xl font-bold text-foreground">
                 {user.dailyCalories}
               </p>
-              <p className="text-sm text-muted-foreground">kcal/kun</p>
+              <p className="text-sm text-muted-foreground">{t("units.kcalPerDay")}</p>
             </CardContent>
           </Card>
         </div>
@@ -642,7 +625,7 @@ export default function Profile() {
               <div className="p-1.5 sm:p-2 bg-water-100 rounded-lg sm:rounded-xl">
                 <SettingsIcon className="h-5 w-5 sm:h-6 sm:w-6 text-water-600" />
               </div>
-              <span className="text-lg sm:text-xl font-bold">Sozlamalar</span>
+              <span className="text-lg sm:text-xl font-bold">{t("profile.settings")}</span>
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -651,9 +634,7 @@ export default function Profile() {
                 <Globe className="h-5 w-5 text-muted-foreground" />
                 <div>
                       <p className="font-medium">{t("general.language")}</p>
-                  <p className="text-sm text-muted-foreground">
-                    Interfeys tili
-                  </p>
+                  <p className="text-sm text-muted-foreground">{t("profile.interfaceLanguage")}</p>
                 </div>
               </div>
               <Badge variant="secondary">
@@ -667,19 +648,17 @@ export default function Profile() {
               <div className="flex items-center gap-3">
                 <Bell className="h-5 w-5 text-muted-foreground" />
                 <div>
-                  <p className="font-medium">Bildirishnomalar</p>
-                  <p className="text-sm text-muted-foreground">
-                    Ovqat va suv eslatmalari
-                  </p>
+                  <p className="font-medium">{t("profile.notifications")}</p>
+                  <p className="text-sm text-muted-foreground">{t("profile.notificationsSubtitle")}</p>
                 </div>
               </div>
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-2 text-sm">
-                  <span>Ovqat</span>
+                  <span>{t("profile.meals")}</span>
                   <Switch checked={notifMeals} onCheckedChange={(v) => handleToggleSetting("meals", v)} />
                 </div>
                 <div className="flex items-center gap-2 text-sm">
-                  <span>Suv</span>
+                  <span>{t("profile.water")}</span>
                   <Switch checked={notifWater} onCheckedChange={(v) => handleToggleSetting("water", v)} />
                 </div>
               </div>
@@ -691,10 +670,8 @@ export default function Profile() {
               <div className="flex items-center gap-3">
                 <Brain className="h-5 w-5 text-muted-foreground" />
                 <div>
-                  <p className="font-medium">AI Maslahatlar</p>
-                  <p className="text-sm text-muted-foreground">
-                    Shaxsiy AI tavsiyalari
-                  </p>
+                  <p className="font-medium">{t("profile.aiTipsTitle")}</p>
+                  <p className="text-sm text-muted-foreground">{t("profile.aiTipsDescription")}</p>
                 </div>
               </div>
               <Switch checked={aiTips} onCheckedChange={(v) => handleToggleSetting("ai", v)} />
@@ -703,12 +680,8 @@ export default function Profile() {
             <Separator />
 
             <div className="flex flex-col sm:flex-row gap-3 justify-end">
-              <Button variant="outline" onClick={handleExport}>
-                Ma'lumotlarni eksport qilish
-              </Button>
-              <Button variant="destructive" onClick={handleClearProfile}>
-                Profilni tozalash
-              </Button>
+              <Button variant="outline" onClick={handleExport}>{t("profile.exportData")}</Button>
+              <Button variant="destructive" onClick={handleClearProfile}>{t("profile.clearProfile")}</Button>
             </div>
           </CardContent>
         </Card>
