@@ -9,17 +9,33 @@ class UnifiedDataService {
     apiCall: () => Promise<T>,
     fallbackCall: () => Promise<T>
   ): Promise<T> {
-    try {
-      // Try API first
-      return await apiCall();
-    } catch (error) {
-      console.warn('API call failed, falling back to Supabase:', error);
+    // In development mode, try Supabase first since API might not be available
+    if (import.meta.env.DEV) {
       try {
-        // Fallback to Supabase
+        // Try Supabase first in development
         return await fallbackCall();
-      } catch (fallbackError) {
-        console.error('Both API and Supabase failed:', fallbackError);
-        throw fallbackError;
+      } catch (error) {
+        console.warn('Supabase call failed, trying API:', error);
+        try {
+          // Fallback to API
+          return await apiCall();
+        } catch (apiError) {
+          console.error('Both Supabase and API failed:', apiError);
+          throw apiError;
+        }
+      }
+    } else {
+      // In production, try API first
+      try {
+        return await apiCall();
+      } catch (error) {
+        console.warn('API call failed, falling back to Supabase:', error);
+        try {
+          return await fallbackCall();
+        } catch (fallbackError) {
+          console.error('Both API and Supabase failed:', fallbackError);
+          throw fallbackError;
+        }
       }
     }
   }

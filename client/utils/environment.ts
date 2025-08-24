@@ -1,19 +1,24 @@
 // Environment utilities for detecting if API is available
 
 export const isApiAvailable = (): boolean => {
-  // Always assume API is available in production with Vercel
-  // The API will be available at /api/* endpoints
-  return true;
+  // In development, API might not be available, so we'll use Supabase directly
+  // In production, API is always available at /api/* endpoints
+  return import.meta.env.PROD;
 };
 
 export const getApiUrl = (): string => {
-  // API is always available at /api relative to the current domain
+  // In development, use localhost:8080/api
+  // In production, use relative /api
+  if (import.meta.env.DEV) {
+    return "http://localhost:8080/api";
+  }
   return "/api";
 };
 
 export const shouldUseLocalStorage = (): boolean => {
-  // Only use localStorage as fallback, not as primary storage
-  return false;
+  // In development, we can use localStorage as fallback
+  // In production, never use localStorage
+  return import.meta.env.DEV;
 };
 
 // Static deployment detection
