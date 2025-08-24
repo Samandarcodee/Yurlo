@@ -1,28 +1,19 @@
 // Environment utilities for detecting if API is available
 
 export const isApiAvailable = (): boolean => {
-  // Development mode detection
-  const isDev =
-    import.meta.env.DEV ||
-    import.meta.env.MODE === "development" ||
-    window.location.hostname === "localhost" ||
-    window.location.hostname === "127.0.0.1" ||
-    window.location.port === "8080";
-
-  return isDev;
+  // Always assume API is available in production with Vercel
+  // The API will be available at /api/* endpoints
+  return true;
 };
 
 export const getApiUrl = (): string => {
-  if (isApiAvailable()) {
-    return "/api"; // Development URL
-  }
-
-  // Production'da API yo'q
-  return "";
+  // API is always available at /api relative to the current domain
+  return "/api";
 };
 
 export const shouldUseLocalStorage = (): boolean => {
-  return !isApiAvailable();
+  // Only use localStorage as fallback, not as primary storage
+  return false;
 };
 
 // Static deployment detection
@@ -30,8 +21,7 @@ export const isStaticDeployment = (): boolean => {
   return (
     window.location.hostname.includes("vercel.app") ||
     window.location.hostname.includes("netlify.app") ||
-    window.location.hostname.includes("github.io") ||
-    !isApiAvailable()
+    window.location.hostname.includes("github.io")
   );
 };
 
@@ -44,5 +34,6 @@ export const logEnvironmentInfo = (): void => {
     isApiAvailable: isApiAvailable(),
     isStaticDeployment: isStaticDeployment(),
     shouldUseLocalStorage: shouldUseLocalStorage(),
+    apiUrl: getApiUrl(),
   });
 };

@@ -8,9 +8,8 @@ import React, {
 import { useTelegram } from "../hooks/use-telegram";
 import {
   logEnvironmentInfo,
-  shouldUseLocalStorage,
 } from "../utils/environment";
-import { databaseService, UserProfile as DBUserProfile } from "../lib/supabase";
+import { unifiedDataService } from "../services/unified-data-service";
 import { useI18n } from "./I18nContext";
 
 export interface UserProfile {
@@ -82,7 +81,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
         console.log("Telegram user ID:", telegramId);
 
         // Database'dan foydalanuvchi ma'lumotlarini olish
-        const dbProfile = await databaseService.getUserProfile(telegramId);
+        const dbProfile = await unifiedDataService.getUserProfile(telegramId);
         
         if (dbProfile) {
           // Database'dan kelgan ma'lumotlarni formatlash
@@ -242,13 +241,13 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
       };
 
       // Database'da mavjud bo'lsa yangilash, yo'q bo'lsa yaratish
-      const existingProfile = await databaseService.getUserProfile(telegramId);
+      const existingProfile = await unifiedDataService.getUserProfile(telegramId);
       
       if (existingProfile) {
-        await databaseService.updateUserProfile(telegramId, dbProfile);
+        await unifiedDataService.updateUserProfile(telegramId, dbProfile);
         console.log("User data updated in database successfully");
       } else {
-        await databaseService.createUserProfile(dbProfile);
+        await unifiedDataService.createUserProfile(dbProfile);
         console.log("User data created in database successfully");
       }
 
