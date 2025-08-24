@@ -11,6 +11,7 @@ import {
 } from "../utils/environment";
 import { unifiedDataService } from "../services/unified-data-service";
 import { useI18n } from "./I18nContext";
+import { clearAllStoredData, resetUserData } from "../utils/storage";
 
 export interface UserProfile {
   telegramId?: string;
@@ -39,6 +40,7 @@ interface UserContextType {
   updateUser: (userData: UserProfile) => void;
   clearUser: () => void;
   refreshUser: () => Promise<void>;
+  resetUserData: () => void; // New function
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -293,6 +295,13 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
     }
   };
 
+  const resetUserData = () => {
+    clearAllStoredData();
+    setUser(null);
+    setIsFirstTime(true);
+    console.log("All user data reset to default.");
+  };
+
   const value: UserContextType = {
     user,
     isLoading,
@@ -300,6 +309,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
     updateUser,
     clearUser,
     refreshUser,
+    resetUserData,
   };
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;

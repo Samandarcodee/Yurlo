@@ -6,12 +6,16 @@ import {
   HelpCircle,
   LogOut,
   Palette,
+  Trash2,
+  AlertTriangle,
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { useTheme } from "@/contexts/ThemeContext";
+import { useUser } from "@/contexts/UserContext";
+import { useState } from "react";
 
 
 function ThemeIndicator() {
@@ -23,6 +27,25 @@ function ThemeIndicator() {
 }
 
 export default function Settings() {
+  const { resetUserData } = useUser();
+  const [isResetting, setIsResetting] = useState(false);
+
+  const handleResetData = async () => {
+    if (confirm("Haqiqatan ham barcha ma'lumotlarni o'chirmoqchimisiz? Bu amalni qaytarib bo'lmaydi!")) {
+      setIsResetting(true);
+      try {
+        resetUserData();
+        alert("Barcha ma'lumotlar muvaffaqiyatli o'chirildi!");
+        // Reload the page to show reset state
+        window.location.reload();
+      } catch (error) {
+        alert("Xatolik yuz berdi: " + error);
+      } finally {
+        setIsResetting(false);
+      }
+    }
+  };
+
   return (
     <div className="p-4 space-y-6">
       {/* Header */}
@@ -205,6 +228,51 @@ export default function Settings() {
             </div>
             <Switch />
           </div>
+        </CardContent>
+      </Card>
+
+      {/* Data Reset Section */}
+      <Card className="border-red-200 bg-red-50/50">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2 text-red-700">
+            <Trash2 className="h-5 w-5" />
+            Ma'lumotlarni Tozalash
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="flex items-start gap-3">
+            <AlertTriangle className="h-5 w-5 text-red-600 mt-0.5" />
+            <div className="space-y-2">
+              <p className="text-sm text-red-700">
+                Bu amal barcha saqlangan ma'lumotlarni o'chiradi:
+              </p>
+              <ul className="text-xs text-red-600 space-y-1 ml-4">
+                <li>• Kaloriya ma'lumotlari</li>
+                <li>• Ovqat yozuvlari</li>
+                <li>• Uyqu va qadamlar</li>
+                <li>• Foydalanuvchi profili</li>
+                <li>• Barcha sozlamalar</li>
+              </ul>
+            </div>
+          </div>
+          <Button 
+            variant="destructive" 
+            className="w-full"
+            onClick={handleResetData}
+            disabled={isResetting}
+          >
+            {isResetting ? (
+              <>
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                O'chirilmoqda...
+              </>
+            ) : (
+              <>
+                <Trash2 className="h-4 w-4 mr-2" />
+                Barcha Ma'lumotlarni O'chirish
+              </>
+            )}
+          </Button>
         </CardContent>
       </Card>
 

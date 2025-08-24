@@ -54,3 +54,62 @@ export const Storage = {
     return userData !== null && userData.name && userData.age;
   }
 };
+
+// Clear all stored data
+export const clearAllStoredData = (): void => {
+  try {
+    // Clear localStorage
+    localStorage.clear();
+    
+    // Clear specific keys if they exist
+    const keysToRemove = [
+      'userProfile',
+      'calorieData',
+      'mealEntries',
+      'sleepSessions',
+      'stepSessions',
+      'waterIntake',
+      'workoutSessions',
+      'yurlo_user_data',
+      'yurlo_calories',
+      'yurlo_meals',
+      'yurlo_sleep',
+      'yurlo_steps'
+    ];
+    
+    keysToRemove.forEach(key => {
+      localStorage.removeItem(key);
+      sessionStorage.removeItem(key);
+    });
+    
+    console.log('✅ All stored data cleared successfully');
+  } catch (error) {
+    console.error('❌ Error clearing stored data:', error);
+  }
+};
+
+// Reset user data to initial state
+export const resetUserData = (): void => {
+  try {
+    clearAllStoredData();
+    
+    // Reset to default values
+    const defaultData = {
+      calories: 0,
+      goal: 2200,
+      meals: [],
+      sleep: [],
+      steps: [],
+      water: []
+    };
+    
+    // Set default values
+    Object.entries(defaultData).forEach(([key, value]) => {
+      localStorage.setItem(`yurlo_${key}`, JSON.stringify(value));
+    });
+    
+    console.log('✅ User data reset to defaults');
+  } catch (error) {
+    console.error('❌ Error resetting user data:', error);
+  }
+};
